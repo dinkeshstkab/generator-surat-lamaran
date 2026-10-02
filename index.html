@@ -284,11 +284,11 @@
                                 <!-- Preset Quick Buttons -->
                                 <div class="flex flex-wrap gap-1.5 mb-3">
                                     <span class="text-[11px] text-slate-400 flex items-center mr-1">Tambah Cepat:</span>
-                                    <button type="button" onclick="addPresetAttachment('Pasfoto 4x6')" class="px-2 py-0.5 bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-600 rounded text-xs border border-slate-200 transition-colors">+ Pasfoto</button>
-                                    <button type="button" onclick="addPresetAttachment('Fotokopi Ijazah Terakhir')" class="px-2 py-0.5 bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-600 rounded text-xs border border-slate-200 transition-colors">+ Ijazah</button>
-                                    <button type="button" onclick="addPresetAttachment('Fotokopi Transkrip Nilai')" class="px-2 py-0.5 bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-600 rounded text-xs border border-slate-200 transition-colors">+ Transkrip</button>
-                                    <button type="button" onclick="addPresetAttachment('Curriculum Vitae (CV)')" class="px-2 py-0.5 bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-600 rounded text-xs border border-slate-200 transition-colors">+ CV</button>
-                                    <button type="button" onclick="addPresetAttachment('Fotokopi KTP')" class="px-2 py-0.5 bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-600 rounded text-xs border border-slate-200 transition-colors">+ KTP</button>
+                                    <button type="button" onclick="addPresetAttachment('Ijazah Terakhir')" class="px-2 py-0.5 bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-600 rounded text-xs border border-slate-200 transition-colors">+ Ijazah</button>
+                                    <button type="button" onclick="addPresetAttachment('Kartu Tanda Penduduk (KTP)')" class="px-2 py-0.5 bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-600 rounded text-xs border border-slate-200 transition-colors">+ KTP</button>
+                                    <button type="button" onclick="addPresetAttachment('Kartu Keluarga (KK)')" class="px-2 py-0.5 bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-600 rounded text-xs border border-slate-200 transition-colors">+ KK</button>
+                                    <button type="button" onclick="addPresetAttachment('Kartu BPJS (Ketenagakerjaan/Kesehatan')" class="px-2 py-0.5 bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-600 rounded text-xs border border-slate-200 transition-colors">+ BPJS</button>
+                                    <button type="button" onclick="addPresetAttachment('NPWP')" class="px-2 py-0.5 bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-600 rounded text-xs border border-slate-200 transition-colors">+ NPWP</button>
                                 </div>
 
                                 <!-- Container list lampiran dinamis -->
@@ -635,7 +635,7 @@
             document.getElementById('pv-tempatTanggal').innerText = `${tempatSurat}, ${tanggalFormatted}`;
             document.getElementById('pv-jumlahLampiran').innerText = jumlahLampiran;
             document.getElementById('pv-perihal').innerText = perihal;
-            document.getElementById('pv-penerima').innerText = penerima.startsWith('Kepada Yth.') ? penerima : `Kepada Yth. ${penerima}`;
+            document.getElementById('pv-penerima').innerText = penerima.startsWith('Kepada Yth.') ? penerima : `${penerima}`;
             document.getElementById('pv-namaInstansi').innerText = namaInstansi;
             document.getElementById('pv-kotaPerusahaan').innerText = kotaPerusahaan;
 
