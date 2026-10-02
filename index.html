@@ -31,7 +31,7 @@
                     },
                     fontFamily: {
                         sans: ['Plus Jakarta Sans', 'sans-serif'],
-                        serif: ['Tinos', 'Times New Roman', 'serif']
+                        serif: ['Times New Roman', 'Tinos', 'Georgia', 'serif']
                     }
                 }
             }
@@ -55,20 +55,25 @@
             background: #94a3b8;
         }
 
-        /* Paper Preview Styling (F4 / Folio Standard) */
+        /* Paper Preview Styling (F4 / Folio Standard: 210mm x 330mm) */
         .a4-paper {
             width: 210mm;
             min-height: 330mm;
-            padding: 15mm 15mm 15mm 20mm; /* Reduced margins to guarantee 1-page fit */
+            padding: 15mm 15mm 15mm 20mm; /* Compact margins for 1-page fit */
             margin: 0 auto;
-            background: white;
+            background-color: #ffffff !important;
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
-            font-family: 'Tinos', 'Times New Roman', serif;
+            font-family: 'Times New Roman', Times, Georgia, serif !important;
             font-size: 11.5pt;
             line-height: 1.45;
-            color: #000;
+            color: #000000 !important;
             box-sizing: border-box;
             position: relative;
+        }
+
+        /* Ensure all child text within paper is explicitly black */
+        .a4-paper * {
+            color: #000000 !important;
         }
 
         /* CSS Print Stylesheet for direct printing */
@@ -118,18 +123,9 @@
 
                 <!-- Action Buttons Top Nav -->
                 <div class="flex items-center space-x-2 sm:space-x-3">
-                    <button onclick="loadDemoData()" class="px-3 py-1.5 text-xs sm:text-sm font-medium text-sky-700 bg-sky-50 hover:bg-sky-100 rounded-lg transition-colors flex items-center gap-1.5 border border-sky-200">
-                        <i class="fa-solid fa-wand-magic-sparkles text-sky-600"></i>
-                        <span class="hidden sm:inline">Isi Contoh Data</span>
-                        <span class="sm:hidden">Contoh</span>
-                    </button>
                     <button onclick="resetForm()" class="px-3 py-1.5 text-xs sm:text-sm font-medium text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors flex items-center gap-1.5">
                         <i class="fa-solid fa-rotate-right"></i>
-                        <span class="hidden sm:inline">Reset Form</span>
-                    </button>
-                    <button onclick="openGithubModal()" class="px-3 py-1.5 text-xs sm:text-sm font-medium text-slate-700 bg-white hover:bg-slate-50 rounded-lg border border-slate-300 transition-colors flex items-center gap-1.5 shadow-sm">
-                        <i class="fa-brands fa-github text-base"></i>
-                        <span class="hidden md:inline">Panduan GitHub</span>
+                        <span>Reset Form</span>
                     </button>
                 </div>
             </div>
@@ -287,7 +283,7 @@
                                     <button type="button" onclick="addPresetAttachment('Ijazah Terakhir')" class="px-2 py-0.5 bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-600 rounded text-xs border border-slate-200 transition-colors">+ Ijazah</button>
                                     <button type="button" onclick="addPresetAttachment('Kartu Tanda Penduduk (KTP)')" class="px-2 py-0.5 bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-600 rounded text-xs border border-slate-200 transition-colors">+ KTP</button>
                                     <button type="button" onclick="addPresetAttachment('Kartu Keluarga (KK)')" class="px-2 py-0.5 bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-600 rounded text-xs border border-slate-200 transition-colors">+ KK</button>
-                                    <button type="button" onclick="addPresetAttachment('Kartu BPJS (Ketenagakerjaan/Kesehatan')" class="px-2 py-0.5 bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-600 rounded text-xs border border-slate-200 transition-colors">+ BPJS</button>
+                                    <button type="button" onclick="addPresetAttachment('Kartu BPJS')" class="px-2 py-0.5 bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-600 rounded text-xs border border-slate-200 transition-colors">+ BPJS</button>
                                     <button type="button" onclick="addPresetAttachment('NPWP')" class="px-2 py-0.5 bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-600 rounded text-xs border border-slate-200 transition-colors">+ NPWP</button>
                                 </div>
 
@@ -334,7 +330,7 @@
 
                 <!-- PREVIEW CONTAINER / PRINT WRAPPER -->
                 <div class="w-full overflow-x-auto pb-6 print-area flex justify-center">
-                    <div id="letterPaper" class="a4-paper text-slate-950 shadow-2xl rounded-sm">
+                    <div id="letterPaper" class="a4-paper shadow-2xl rounded-sm">
                         
                         <!-- Header Kanan (Tempat & Tanggal) -->
                         <div class="text-right mb-4">
@@ -463,55 +459,6 @@
 
         </div>
     </main>
-
-    <!-- GitHub Modal Guide -->
-    <div id="githubModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden no-print">
-        <div class="bg-white rounded-2xl max-w-lg w-full shadow-2xl overflow-hidden border border-slate-100 flex flex-col max-h-[90vh]">
-            <div class="bg-slate-900 text-white p-5 flex items-center justify-between">
-                <div class="flex items-center space-x-2.5">
-                    <i class="fa-brands fa-github text-2xl"></i>
-                    <h3 class="font-bold text-base">Cara Deploy ke GitHub Pages</h3>
-                </div>
-                <button onclick="closeGithubModal()" class="text-slate-400 hover:text-white transition-colors">
-                    <i class="fa-solid fa-xmark text-lg"></i>
-                </button>
-            </div>
-            
-            <div class="p-6 overflow-y-auto space-y-4 text-sm text-slate-600">
-                <p>Ikuti langkah mudah berikut untuk mempublikasikan website ini secara gratis di internet menggunakan GitHub Pages:</p>
-
-                <ol class="space-y-3 list-decimal list-inside text-slate-800">
-                    <li class="pl-1">
-                        <strong class="text-slate-900">Buat Repositori Baru:</strong>
-                        <p class="text-xs text-slate-500 mt-0.5 pl-5">Buka <a href="https://github.com/new" target="_blank" class="text-sky-600 underline">github.com/new</a>, beri nama repository (misal: <code class="bg-slate-100 px-1 rounded text-sky-700">surat-lamaran</code>), lalu pilih Public dan klik <strong>Create repository</strong>.</p>
-                    </li>
-                    <li class="pl-1">
-                        <strong class="text-slate-900">Upload File HTML:</strong>
-                        <p class="text-xs text-slate-500 mt-0.5 pl-5">Simpan kode halaman web ini sebagai file bernama <code class="bg-amber-50 text-amber-800 font-semibold px-1 rounded">index.html</code> di komputer Anda. Di GitHub, klik link <i>"uploading an existing file"</i> lalu drag file <code class="bg-amber-50 text-amber-800 font-semibold px-1 rounded">index.html</code> tersebut.</p>
-                    </li>
-                    <li class="pl-1">
-                        <strong class="text-slate-900">Commit Changes:</strong>
-                        <p class="text-xs text-slate-500 mt-0.5 pl-5">Klik tombol hijau <strong>Commit changes</strong> di bagian bawah halaman GitHub.</p>
-                    </li>
-                    <li class="pl-1">
-                        <strong class="text-slate-900">Aktifkan GitHub Pages:</strong>
-                        <p class="text-xs text-slate-500 mt-0.5 pl-5">Masuk ke tab <strong>Settings</strong> &rarr; menu <strong>Pages</strong> di sebelah kiri. Pada bagian <i>Branch</i>, ubah dari <i>None</i> menjadi <b>main</b> (atau <i>master</i>), lalu klik <strong>Save</strong>.</p>
-                    </li>
-                </ol>
-
-                <div class="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-800 text-xs flex items-start gap-2">
-                    <i class="fa-solid fa-circle-check text-emerald-600 text-sm mt-0.5"></i>
-                    <span><strong>Selesai!</strong> Dalam 1-2 menit, website Anda sudah aktif dan dapat diakses publik melalui link unik GitHub Pages Anda!</span>
-                </div>
-            </div>
-
-            <div class="p-4 bg-slate-50 border-t border-slate-100 text-right">
-                <button onclick="closeGithubModal()" class="px-5 py-2 bg-slate-800 hover:bg-slate-900 text-white font-medium text-xs rounded-xl transition-colors">
-                    Tutup Panduan
-                </button>
-            </div>
-        </div>
-    </div>
 
     <!-- Notification Toast -->
     <div id="toast" class="fixed bottom-5 right-5 bg-slate-900 text-white text-xs font-medium px-4 py-3 rounded-xl shadow-2xl flex items-center space-x-2 translate-y-20 opacity-0 transition-all duration-300 z-50 no-print">
@@ -681,37 +628,6 @@
             });
         }
 
-        // Load Demo Data for Quick Testing
-        function loadDemoData() {
-            document.getElementById('tempatSurat').value = 'Barabai';
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('tanggalSurat').value = today;
-            document.getElementById('jumlahLampiran').value = '5 (lima) berkas';
-            document.getElementById('penerima').value = 'Kepada Yth. Kepala Dinas Kesehatan';
-            document.getElementById('namaInstansi').value = 'Dinas Kesehatan Kabupaten Hulu Sungai Tengah';
-            document.getElementById('kotaPerusahaan').value = 'Barabai';
-            document.getElementById('alamatInstansi').value = 'Jl. Perintis Kemerdekaan No. 12, Barabai';
-
-            document.getElementById('namaPelamar').value = 'M. Riswan, A.Md.Kep.';
-            document.getElementById('ttlPelamar').value = 'Barabai, 14 Mei 1997';
-            document.getElementById('alamatPelamar').value = 'Jl. Murakata RT 05 / RW 02, Kec. Barabai, Kab. HST';
-            document.getElementById('jkPelamar').value = 'Laki-laki';
-            document.getElementById('pendidikanPelamar').value = 'D-III Keperawatan';
-            document.getElementById('phonePelamar').value = '0821-5544-3322';
-            document.getElementById('emailPelamar').value = 'riswan.keperawatan@email.com';
-
-            attachments = [
-                'Pasfoto terbaru ukuran 4x6 latar belakang merah (2 lembar)',
-                'Fotokopi Ijazah D-III Keperawatan legalisir',
-                'Fotokopi Transkrip Nilai legalisir',
-                'Fotokopi Surat Tanda Registrasi (STR) Aktif',
-                'Curriculum Vitae (CV) / Daftar Riwayat Hidup'
-            ];
-
-            renderAttachmentInputs();
-            showToast('Contoh data berhasil dimuat!');
-        }
-
         // Reset Form
         function resetForm() {
             document.getElementById('letterForm').reset();
@@ -733,7 +649,7 @@
             showToast('Form telah dikosongkan.');
         }
 
-        // Download as PDF using html2pdf.js
+        // Download as PDF using html2pdf.js with canvas scroll fix & standard font fallback
         function downloadPDF() {
             const element = document.getElementById('letterPaper');
             const nama = document.getElementById('namaPelamar').value || 'Pelamar';
@@ -741,11 +657,25 @@
 
             showToast('Menyiapkan file PDF...', 'info');
 
+            // Scroll print container to top to prevent canvas render misalignment
+            const printArea = document.querySelector('.print-area');
+            if (printArea) printArea.scrollTop = 0;
+            window.scrollTo(0, 0);
+
             const opt = {
                 margin:       0,
                 filename:     `Surat_Lamaran_Kerja_${cleanName}.pdf`,
                 image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true, logging: false },
+                html2canvas:  { 
+                    scale: 2, 
+                    useCORS: true, 
+                    allowTaint: true,
+                    logging: false,
+                    scrollX: 0,
+                    scrollY: 0,
+                    backgroundColor: '#ffffff',
+                    letterRendering: true
+                },
                 jsPDF:        { unit: 'mm', format: [210, 330], orientation: 'portrait' }
             };
 
@@ -754,7 +684,7 @@
             }).catch(err => {
                 console.error(err);
                 showToast('Gagal mengunduh PDF. Mengalihkan ke mode cetak...', 'error');
-                setTimeout(() => window.print(), 1000);
+                setTimeout(() => window.print(), 800);
             });
         }
 
@@ -787,15 +717,6 @@
                 showToast('Gagal menyalin teks', 'error');
             }
             document.body.removeChild(textArea);
-        }
-
-        // Github Modal Helper
-        function openGithubModal() {
-            document.getElementById('githubModal').classList.remove('hidden');
-        }
-
-        function closeGithubModal() {
-            document.getElementById('githubModal').classList.add('hidden');
         }
 
         // Toast Notification Helper
