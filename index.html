@@ -181,8 +181,8 @@
                                     <input type="text" id="perihal" value="Lamaran Pekerjaan" oninput="updateLetter()" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-200 bg-slate-50 text-slate-600 cursor-not-allowed outline-none" readonly>
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Jumlah Lampiran <span class="text-red-500">*</span></label>
-                                    <input type="text" id="jumlahLampiran" value="1 (satu) berkas" oninput="updateLetter()" placeholder="Misal: 5 lembar / 1 berkas" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-all outline-none">
+                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Jumlah Lampiran <span class="text-sky-600 font-normal">(Otomatis)</span></label>
+                                    <input type="text" id="jumlahLampiran" value="5 (lima) berkas" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-200 bg-slate-50 text-slate-700 font-medium cursor-not-allowed outline-none" readonly>
                                 </div>
                             </div>
 
@@ -193,22 +193,10 @@
                                 <p class="text-[11px] text-slate-400 mt-1">Otomatis diawali dengan "Kepada Yth."</p>
                             </div>
 
-                            <!-- Nama Instansi / Perusahaan -->
+                            <!-- Kota Instansi -->
                             <div>
-                                <label class="block text-xs font-semibold text-slate-700 mb-1">Nama Instansi / Perusahaan <span class="text-red-500">*</span></label>
-                                <input type="text" id="namaInstansi" placeholder="Misal: Dinas Kesehatan Kabupaten Hulu Sungai Tengah" oninput="updateLetter()" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-all outline-none">
-                            </div>
-
-                            <!-- Kota Instansi & Alamat Instansi -->
-                            <div class="grid grid-cols-1 gap-3">
-                                <div>
-                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Kota Tujuan Perusahaan/Instansi <span class="text-red-500">*</span></label>
-                                    <input type="text" id="kotaPerusahaan" placeholder="Misal: Barabai" oninput="updateLetter()" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-all outline-none">
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Alamat Lengkap Instansi (Opsional)</label>
-                                    <textarea id="alamatInstansi" rows="2" placeholder="Misal: Jl. Perintis Kemerdekaan No. 12" oninput="updateLetter()" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-all outline-none resize-none"></textarea>
-                                </div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">Kota Tujuan Perusahaan/Instansi <span class="text-red-500">*</span></label>
+                                <input type="text" id="kotaPerusahaan" placeholder="Misal: Barabai" oninput="updateLetter()" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-all outline-none">
                             </div>
                         </div>
                     </div>
@@ -281,10 +269,9 @@
                                 <div class="flex flex-wrap gap-1.5 mb-3">
                                     <span class="text-[11px] text-slate-400 flex items-center mr-1">Tambah Cepat:</span>
                                     <button type="button" onclick="addPresetAttachment('Ijazah Terakhir')" class="px-2 py-0.5 bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-600 rounded text-xs border border-slate-200 transition-colors">+ Ijazah</button>
-                                    <button type="button" onclick="addPresetAttachment('Fotokopi Kartu Tanda Penduduk (KTP)')" class="px-2 py-0.5 bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-600 rounded text-xs border border-slate-200 transition-colors">+ KTP</button>
-                                    <button type="button" onclick="addPresetAttachment('Fotokopi Kartu Keluarga (KK)')" class="px-2 py-0.5 bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-600 rounded text-xs border border-slate-200 transition-colors">+ KK</button>
-                                    <button type="button" onclick="addPresetAttachment('Fotokopi Kartu BPJS Ketenagakerjaan')" class="px-2 py-0.5 bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-600 rounded text-xs border border-slate-200 transition-colors">+ BPJS KK</button>
-                                    <button type="button" onclick="addPresetAttachment('Fotokopi Kartu BPJS Kesehatan')" class="px-2 py-0.5 bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-600 rounded text-xs border border-slate-200 transition-colors">+ BPJS KS</button>
+                                    <button type="button" onclick="addPresetAttachment('Kartu Tanda Penduduk (KTP)')" class="px-2 py-0.5 bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-600 rounded text-xs border border-slate-200 transition-colors">+ KTP</button>
+                                    <button type="button" onclick="addPresetAttachment('Kartu Keluarga (KK)')" class="px-2 py-0.5 bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-600 rounded text-xs border border-slate-200 transition-colors">+ KK</button>
+                                    <button type="button" onclick="addPresetAttachment('Kartu BPJS')" class="px-2 py-0.5 bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-600 rounded text-xs border border-slate-200 transition-colors">+ BPJS</button>
                                     <button type="button" onclick="addPresetAttachment('NPWP')" class="px-2 py-0.5 bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-600 rounded text-xs border border-slate-200 transition-colors">+ NPWP</button>
                                 </div>
 
@@ -354,8 +341,6 @@
                         <div class="mb-4 space-y-0.5">
                             <p>Kepada Yth.</p>
                             <p id="pv-penerima" class="font-bold">[Penerima / Jabatan]</p>
-                            <p id="pv-namaInstansi">[Nama Instansi / Perusahaan]</p>
-                            <p id="pv-alamatInstansi">[Alamat Instansi]</p>
                             <p>di -</p>
                             <p class="pl-4 font-semibold" id="pv-kotaPerusahaan">Barabai</p>
                         </div>
@@ -368,7 +353,7 @@
                         <!-- Paragraf Utama -->
                         <div class="mb-3 text-justify leading-relaxed">
                             <p>
-                                Dengan ini saya bermaksud untuk mengajukan permohonan kepada Bapak/Ibu, untuk dapat diterima menjadi pegawai kontrak di lingkup <span id="pv-instansiBody" class="font-semibold">[Nama Instansi]</span>. Saya memiliki kualifikasi yang relevan, dedikasi tinggi, serta komitmen untuk memberikan kontribusi terbaik bagi <span id="pv-instansiBody2" class="font-semibold">[Nama Instansi]</span>.
+                                Dengan ini saya bermaksud untuk mengajukan permohonan kepada Bapak/Ibu, untuk dapat diterima menjadi pegawai kontrak di lingkup Dinas Kesehatan. Saya memiliki kualifikasi yang relevan, dedikasi tinggi, serta komitmen untuk memberikan kontribusi terbaik bagi Dinas Kesehatan.
                             </p>
                         </div>
 
@@ -477,6 +462,22 @@
             'NPWP'
         ];
 
+        // Convert number to Indonesian text helper
+        function numberToWordsIndonesian(num) {
+            const words = ['', 'satu', 'dua', 'tiga', 'empat', 'lima', 'enam', 'tujuh', 'delapan', 'sembilan', 'sepuluh', 'sebelas'];
+            if (num <= 11) return words[num];
+            return num.toString();
+        }
+
+        // Calculate automatic attachment string
+        function getAutoJumlahLampiran() {
+            const validAttachments = attachments.filter(item => item && item.trim() !== '');
+            const count = validAttachments.length;
+            if (count === 0) return '0 berkas';
+            const word = numberToWordsIndonesian(count);
+            return `${count} (${word}) berkas`;
+        }
+
         // Format Indonesian Date Helper
         function formatIndonesianDate(dateString) {
             if (!dateString) return '';
@@ -564,11 +565,13 @@
             const tanggalSuratRaw = document.getElementById('tanggalSurat').value;
             const tanggalFormatted = formatIndonesianDate(tanggalSuratRaw);
             const perihal = document.getElementById('perihal').value || 'Lamaran Pekerjaan';
-            const jumlahLampiran = document.getElementById('jumlahLampiran').value || '1 (satu) berkas';
+            
+            // Auto Calculate Jumlah Lampiran
+            const autoLampiran = getAutoJumlahLampiran();
+            document.getElementById('jumlahLampiran').value = autoLampiran;
+
             const penerima = document.getElementById('penerima').value || '[Penerima / Jabatan]';
-            const namaInstansi = document.getElementById('namaInstansi').value || '[Nama Instansi / Perusahaan]';
             const kotaPerusahaan = document.getElementById('kotaPerusahaan').value || 'Barabai';
-            const alamatInstansi = document.getElementById('alamatInstansi').value;
 
             // Form 2 Data
             const namaPelamar = document.getElementById('namaPelamar').value || '[Nama Pelamar]';
@@ -581,22 +584,10 @@
 
             // Update DOM Elements in Live Preview
             document.getElementById('pv-tempatTanggal').innerText = `${tempatSurat}, ${tanggalFormatted}`;
-            document.getElementById('pv-jumlahLampiran').innerText = jumlahLampiran;
+            document.getElementById('pv-jumlahLampiran').innerText = autoLampiran;
             document.getElementById('pv-perihal').innerText = perihal;
             document.getElementById('pv-penerima').innerText = penerima.startsWith('Kepada Yth.') ? penerima : `${penerima}`;
-            document.getElementById('pv-namaInstansi').innerText = namaInstansi;
             document.getElementById('pv-kotaPerusahaan').innerText = kotaPerusahaan;
-
-            const pvAlamatInstansi = document.getElementById('pv-alamatInstansi');
-            if (alamatInstansi && alamatInstansi.trim() !== '') {
-                pvAlamatInstansi.innerText = alamatInstansi;
-                pvAlamatInstansi.style.display = 'block';
-            } else {
-                pvAlamatInstansi.style.display = 'none';
-            }
-
-            document.getElementById('pv-instansiBody').innerText = namaInstansi;
-            document.getElementById('pv-instansiBody2').innerText = namaInstansi;
 
             document.getElementById('pv-nama').innerText = namaPelamar;
             document.getElementById('pv-ttl').innerText = ttlPelamar;
@@ -636,7 +627,6 @@
             document.getElementById('tanggalSurat').value = today;
             document.getElementById('tempatSurat').value = 'Barabai';
             document.getElementById('perihal').value = 'Lamaran Pekerjaan';
-            document.getElementById('jumlahLampiran').value = '1 (satu) berkas';
 
             attachments = [
                 'Ijazah Terakhir',
