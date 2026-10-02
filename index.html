@@ -1,236 +1,325 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Generator Surat Lamaran Kerja</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <style>
     :root {
-      --primary: #0284c7;
-      --primary-hover: #0369a1;
+      --primary: #2563eb;
       --bg: #f8fafc;
       --card: #ffffff;
       --text: #1e293b;
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-    body { background-color: var(--bg); color: var(--text); padding: 20px; }
-    .container { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-    
-    .form-container { background: var(--card); padding: 25px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); height: fit-content; }
-    h2 { margin-bottom: 15px; color: var(--primary); font-size: 1.2rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; }
-    .form-group { margin-bottom: 12px; }
-    label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 4px; }
-    input, select, textarea { width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem; }
-    input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary); }
-    
-    .btn-submit { width: 100%; background: var(--primary); color: white; border: none; padding: 12px; border-radius: 6px; font-size: 1rem; font-weight: bold; cursor: pointer; margin-top: 15px; transition: 0.2s; }
-    .btn-submit:hover { background: var(--primary-hover); }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    @media (max-width: 900px) {
+      .container { grid-template-columns: 1fr; }
+    }
+    .form-card {
+      background: var(--card);
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      height: fit-content;
+    }
+    h2 {
+      margin-top: 0;
+      color: var(--primary);
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 8px;
+      font-size: 1.2rem;
+    }
+    .form-group {
+      margin-bottom: 12px;
+    }
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 4px;
+      font-size: 0.85rem;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      box-sizing: border-box;
+      font-size: 0.9rem;
+    }
+    .btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      width: 100%;
+      margin-top: 15px;
+      font-size: 1rem;
+    }
+    .btn:hover { background: #1d4ed8; }
 
-    .preview-container { background: #525659; padding: 20px; border-radius: 12px; display: flex; flex-direction: column; align-items: center; }
-    
-    /* Document Layout A4 */
-    #surat-paper {
+    /* Layout Dokumen PDF (A4) */
+    .preview-wrapper {
+      background: #525659;
+      padding: 20px;
+      border-radius: 12px;
+      overflow-x: auto;
+    }
+    #letter-paper {
       background: white;
       width: 210mm;
       min-height: 297mm;
-      padding: 20mm 25mm;
-      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+      padding: 20mm 20mm 20mm 25mm; /* Format Margin Surat */
+      box-sizing: border-box;
+      margin: 0 auto;
       font-family: 'Times New Roman', Times, serif;
       font-size: 12pt;
       line-height: 1.5;
       color: #000;
-      position: relative;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
     }
-
-    .surat-header { display: flex; justify-content: space-between; margin-bottom: 20px; }
-    .surat-tujuan { margin-bottom: 20px; }
-    .surat-isi { text-align: justify; margin-bottom: 15px; text-indent: 30px; }
-    .table-biodata { margin: 10px 0 15px 30px; border-collapse: collapse; width: 90%; }
-    .table-biodata td { padding: 2px 4px; vertical-align: top; }
-    .surat-ttd { margin-top: 40px; float: right; text-align: center; width: 220px; page-break-inside: avoid; }
-    .box-materai { border: 1px dashed #999; width: 80px; height: 50px; display: flex; align-items: center; justify-content: center; font-size: 8pt; color: #666; margin: 15px auto; }
+    .header-table {
+      width: 100%;
+      margin-bottom: 20px;
+    }
+    .header-table td { vertical-align: top; }
+    .biodata-table {
+      width: 100%;
+      margin: 10px 0 10px 20px;
+    }
+    .biodata-table td { padding: 2px 0; vertical-align: top; }
+    .attachment-list {
+      margin-top: 5px;
+      padding-left: 40px;
+    }
     
-    @media (max-width: 900px) {
-      .container { grid-template-columns: 1fr; }
-      #surat-paper { width: 100%; min-height: auto; padding: 15px; transform: none; }
-      .preview-container { overflow-x: auto; }
+    /* Area Materai & TTD */
+    .footer-sign {
+      margin-top: 40px;
+      width: 100%;
+      display: table;
+      table-layout: fixed;
     }
+    .sign-col {
+      display: table-cell;
+      vertical-align: top;
+      text-align: center;
+      width: 50%;
+    }
+    .materai-box {
+      border: 1px dashed #999;
+      width: 120px;
+      height: 60px;
+      margin: 10px auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 8pt;
+      color: #666;
+    }
+    .signature-space { height: 70px; }
   </style>
 </head>
 <body>
 
 <div class="container">
-  <!-- Form Input -->
-  <div class="form-container">
-    <h2>Form 1: Data Surat & Perusahaan</h2>
+  <!-- FORM INPUT -->
+  <div class="form-card">
+    <h2>Form 1: Tujuan & Lampiran</h2>
     <div class="form-group">
       <label>Jumlah Lampiran</label>
-      <input type="text" id="lampiran" value="1 (Satu) Berkas" oninput="updateSurat()">
+      <input type="text" id="inLampiran" value="1 (satu) Berkas" oninput="updateLetter()">
     </div>
     <div class="form-group">
-      <label>Penerima / Jabatan (Kepada Yth.)</label>
-      <input type="text" id="penerima" placeholder="Kepala Dinas Kesehatan / Bapak/Ibu HRD" oninput="updateSurat()">
+      <label>Penerima / Jabatan</label>
+      <input type="text" id="inPenerima" value="Kepada Yth. Kepala Dinas Kesehatan" oninput="updateLetter()">
     </div>
     <div class="form-group">
       <label>Kota Perusahaan/Instansi</label>
-      <input type="text" id="kotaPerusahaan" value="Barabai" oninput="updateSurat()">
+      <input type="text" id="inKotaPerusahaan" value="Barabai" oninput="updateLetter()">
     </div>
     <div class="form-group">
-      <label>Alamat Lengkap Perusahaan/Instansi</label>
-      <input type="text" id="alamatPerusahaan" placeholder="Jl. Raya No. 123" oninput="updateSurat()">
+      <label>Alamat Lengkap Tujuan</label>
+      <input type="text" id="inAlamatPerusahaan" value="Jl. H. Damanhuri No. 55" oninput="updateLetter()">
     </div>
 
-    <h2>Form 2: Data Diri Pelamar</h2>
+    <h2>Form 2: Data Diri</h2>
     <div class="form-group">
       <label>Nama Lengkap (dengan Gelar)</label>
-      <input type="text" id="nama" placeholder="Ahmad Sanusi, S.Kep." oninput="updateSurat()">
+      <input type="text" id="inNama" placeholder="Ahmad, S.Kep." oninput="updateLetter()">
     </div>
     <div class="form-group">
       <label>Tempat, Tanggal Lahir</label>
-      <input type="text" id="ttl" placeholder="Barabai, 12 Januari 1998" oninput="updateSurat()">
+      <input type="text" id="inTTL" placeholder="Barabai, 15 Januari 1998" oninput="updateLetter()">
     </div>
     <div class="form-group">
       <label>Alamat Lengkap</label>
-      <input type="text" id="alamat" placeholder="Jl. Kemerdekaan No. 45, Barabai" oninput="updateSurat()">
+      <input type="text" id="inAlamat" placeholder="Jl. Veteran No. 12, Barabai" oninput="updateLetter()">
     </div>
     <div class="form-group">
       <label>Jenis Kelamin</label>
-      <select id="jk" onchange="updateSurat()">
+      <select id="inJK" onchange="updateLetter()">
         <option value="Laki-laki">Laki-laki</option>
         <option value="Perempuan">Perempuan</option>
       </select>
     </div>
     <div class="form-group">
       <label>Pendidikan Terakhir</label>
-      <input type="text" id="pendidikan" placeholder="S1 Keperawatan" oninput="updateSurat()">
+      <input type="text" id="inPendidikan" placeholder="S1 Keperawatan" oninput="updateLetter()">
     </div>
     <div class="form-group">
       <label>No. HP / WhatsApp</label>
-      <input type="text" id="hp" placeholder="081234567890" oninput="updateSurat()">
+      <input type="text" id="inHP" placeholder="081234567890" oninput="updateLetter()">
     </div>
     <div class="form-group">
       <label>Email (Opsional)</label>
-      <input type="text" id="email" placeholder="nama@email.com" oninput="updateSurat()">
-    </div>
-    <div class="form-group">
-      <label>Daftar Lampiran (Gunakan koma atau baris baru)</label>
-      <textarea id="daftarLampiran" rows="3" placeholder="1. Fotokopi Ijazah&#10;2. Fotokopi KTP" oninput="updateSurat()"></textarea>
+      <input type="text" id="inEmail" placeholder="nama@email.com" oninput="updateLetter()">
     </div>
 
-    <button class="btn-submit" onclick="downloadPDF()">Cetak / Simpan PDF</button>
+    <h2>Daftar Lampiran (Satu per baris)</h2>
+    <div class="form-group">
+      <textarea id="inLampiranList" rows="4" oninput="updateLetter()">Fotokopi Ijazah & Transkrip Nilai
+Fotokopi KTP
+Pasfoto Terbaru 4x6
+Surat Pengalaman Kerja</textarea>
+    </div>
+
+    <button class="btn" onclick="generatePDF()">Cetak / Simpan PDF</button>
   </div>
 
-  <!-- Pratinjau Dokumen -->
-  <div class="preview-container">
-    <div id="surat-paper">
-      <div class="surat-header">
-        <div>
-          Lampiran : <span id="out-lampiran">1 (Satu) Berkas</span><br>
-          Perihal : <b>Lamaran Pekerjaan</b>
-        </div>
-        <div>
-          Barabai, <span id="out-tanggal"></span>
-        </div>
-      </div>
+  <!-- PREVIEW SURAT -->
+  <div class="preview-wrapper">
+    <div id="letter-paper">
+      <table class="header-table">
+        <tr>
+          <td style="width: 60%;">
+            Lampiran : <span id="outLampiran">1 (satu) Berkas</span><br>
+            Perihal : Lamaran Pekerjaan
+          </td>
+          <td style="text-align: right;">
+            Barabai, <span id="outTanggal"></span>
+          </td>
+        </tr>
+      </table>
 
-      <div class="surat-tujuan">
-        Kepada Yth.<br>
-        <span id="out-penerima">[Jabatan/Penerima]</span><br>
-        <span id="out-alamatPerusahaan">[Alamat Perusahaan]</span><br>
+      <p>
+        <span id="outPenerima">Kepada Yth.</span><br>
         Di -<br>
-        &nbsp;&nbsp;&nbsp;&nbsp;<span id="out-kotaPerusahaan">Barabai</span>
-      </div>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="outKotaPerusahaan">Barabai</span>
+      </p>
 
-      <p style="margin-bottom: 10px;">Dengan hormat,</p>
-      
-      <p class="surat-isi">
+      <p style="margin-top: 20px;">Dengan hormat,</p>
+      <p style="text-align: justify; text-indent: 30px;">
         Dengan ini saya bermaksud untuk mengajukan permohonan kepada Bapak/Ibu, untuk dapat diterima menjadi pegawai kontrak di lingkup Dinas Kesehatan. Saya memiliki kualifikasi yang relevan, dedikasi tinggi, serta komitmen untuk memberikan kontribusi terbaik bagi Dinas Kesehatan.
       </p>
 
       <p>Berikut adalah data diri singkat saya:</p>
-      
-      <table class="table-biodata">
-        <tr><td width="32%">Nama Lengkap</td><td width="3%">:</td><td id="out-nama">-</td></tr>
-        <tr><td>Tempat, Tanggal Lahir</td><td>:</td><td id="out-ttl">-</td></tr>
-        <tr><td>Alamat</td><td>:</td><td id="out-alamat">-</td></tr>
-        <tr><td>Jenis Kelamin</td><td>:</td><td id="out-jk">Laki-laki</td></tr>
-        <tr><td>Pendidikan Terakhir</td><td>:</td><td id="out-pendidikan">-</td></tr>
-        <tr><td>No. HP / WhatsApp</td><td>:</td><td id="out-hp">-</td></tr>
-        <tr><td>Email</td><td>:</td><td id="out-email">-</td></tr>
+      <table class="biodata-table">
+        <tr><td style="width: 30%;">Nama Lengkap</td><td style="width: 3%;">:</td><td><span id="outNama">-</span></td></tr>
+        <tr><td>Tempat, Tgl. Lahir</td><td>:</td><td><span id="outTTL">-</span></td></tr>
+        <tr><td>Alamat</td><td>:</td><td><span id="outAlamat">-</span></td></tr>
+        <tr><td>Jenis Kelamin</td><td>:</td><td><span id="outJK">Laki-laki</span></td></tr>
+        <tr><td>Pendidikan Terakhir</td><td>:</td><td><span id="outPendidikan">-</span></td></tr>
+        <tr><td>No. HP / WA</td><td>:</td><td><span id="outHP">-</span></td></tr>
+        <tr id="rowEmail"><td>Email</td><td>:</td><td><span id="outEmail">-</span></td></tr>
       </table>
 
       <p>Sebagai bahan pertimbangan Bapak/Ibu, bersama surat ini saya lampirkan:</p>
-      <div id="out-daftarLampiran" style="margin-left: 30px; margin-bottom: 15px;">-</div>
+      <ol class="attachment-list" id="outLampiranList"></ol>
 
-      <p class="surat-isi">
+      <p style="text-align: justify; text-indent: 30px; margin-top: 15px;">
         Demikian surat lamaran kerja ini saya sampaikan. Atas perhatian dan kesempatan yang Bapak/Ibu berikan, saya ucapkan terima kasih.
       </p>
 
-      <div class="surat-ttd">
-        Hormat saya,
-        <div class="box-materai">Materai<br>Rp 10.000</div>
-        <br>
-        <b><span id="out-nama-ttd">( Nama Lengkap )</span></b>
+      <!-- BAGIAN MATERAI & TTD -->
+      <div class="footer-sign">
+        <div class="sign-col">
+          <br>
+          <div class="materai-box">Materai 10.000</div>
+        </div>
+        <div class="sign-col">
+          Hormat saya,
+          <div class="signature-space"></div>
+          <b><span id="outNamaTtd">(Nama Lengkap)</span></b>
+        </div>
       </div>
+
     </div>
   </div>
 </div>
 
 <script>
-  // Format Tanggal Otomatis ke Bahasa Indonesia
-  function getTanggalSekarang() {
-    const d = new Date();
-    const bulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
-    return `${d.getDate()} ${bulan[d.getMonth()]} ${d.getFullYear()}`;
-  }
+  // Set Tanggal Otomatis Hari Ini
+  const today = new Date();
+  const options = { day: 'numeric', month: 'Long', year: 'numeric' };
+  document.getElementById('outTanggal').innerText = today.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
 
-  document.getElementById('out-tanggal').innerText = getTanggalSekarang();
+  function updateLetter() {
+    document.getElementById('outLampiran').innerText = document.getElementById('inLampiran').value || '-';
+    document.getElementById('outPenerima').innerText = document.getElementById('inPenerima').value || 'Kepada Yth.';
+    document.getElementById('outKotaPerusahaan').innerText = document.getElementById('inKotaPerusahaan').value || '';
+    
+    document.getElementById('outNama').innerText = document.getElementById('inNama').value || '-';
+    document.getElementById('outNamaTtd').innerText = document.getElementById('inNama').value || '(Nama Lengkap)';
+    document.getElementById('outTTL').innerText = document.getElementById('inTTL').value || '-';
+    document.getElementById('outAlamat').innerText = document.getElementById('inAlamat').value || '-';
+    document.getElementById('outJK').innerText = document.getElementById('inJK').value;
+    document.getElementById('outPendidikan').innerText = document.getElementById('inPendidikan').value || '-';
+    document.getElementById('outHP').innerText = document.getElementById('inHP').value || '-';
 
-  // Sinkronisasi data form ke pratinjau
-  function updateSurat() {
-    document.getElementById('out-lampiran').innerText = document.getElementById('lampiran').value || '-';
-    document.getElementById('out-penerima').innerText = document.getElementById('penerima').value || '[Nama/Jabatan Penerima]';
-    document.getElementById('out-kotaPerusahaan').innerText = document.getElementById('kotaPerusahaan').value || 'Barabai';
-    document.getElementById('out-alamatPerusahaan').innerText = document.getElementById('alamatPerusahaan').value || '[Alamat Perusahaan]';
-    
-    const namaVal = document.getElementById('nama').value || '[Nama Lengkap]';
-    document.getElementById('out-nama').innerText = namaVal;
-    document.getElementById('out-nama-ttd').innerText = namaVal;
-    
-    document.getElementById('out-ttl').innerText = document.getElementById('ttl').value || '-';
-    document.getElementById('out-alamat').innerText = document.getElementById('alamat').value || '-';
-    document.getElementById('out-jk').innerText = document.getElementById('jk').value;
-    document.getElementById('out-pendidikan').innerText = document.getElementById('pendidikan').value || '-';
-    document.getElementById('out-hp').innerText = document.getElementById('hp').value || '-';
-    
-    const emailVal = document.getElementById('email').value;
-    document.getElementById('out-email').innerText = emailVal ? emailVal : '-';
-
-    const lampiranInput = document.getElementById('daftarLampiran').value;
-    if (lampiranInput.trim() !== '') {
-      const listItems = lampiranInput.split('\n').map(item => item.trim()).filter(item => item !== '');
-      document.getElementById('out-daftarLampiran').innerHTML = listItems.map(i => `<div>${i}</div>`).join('');
+    const emailVal = document.getElementById('inEmail').value;
+    const rowEmail = document.getElementById('rowEmail');
+    if (emailVal.trim() === '') {
+      rowEmail.style.display = 'none';
     } else {
-      document.getElementById('out-daftarLampiran').innerText = '-';
+      rowEmail.style.display = 'table-row';
+      document.getElementById('outEmail').innerText = emailVal;
     }
+
+    // Process List Lampiran
+    const listRaw = document.getElementById('inLampiranList').value.split('\n');
+    const outList = document.getElementById('outLampiranList');
+    outList.innerHTML = '';
+    listRaw.forEach(item => {
+      if(item.trim() !== '') {
+        const li = document.createElement('li');
+        li.innerText = item;
+        outList.appendChild(li);
+      }
+    });
   }
 
-  // Fungsi Cetak ke PDF
-  function downloadPDF() {
-    const element = document.getElementById('surat-paper');
-    const namaFile = document.getElementById('nama').value || 'Surat_Lamaran';
-    
+  // Generate PDF
+  function generatePDF() {
+    const element = document.getElementById('letter-paper');
     const opt = {
       margin:       0,
-      filename:     `Surat_Lamaran_${namaFile}.pdf`,
+      filename:     'Surat_Lamaran_Kerja.pdf',
       image:        { type: 'jpeg', quality: 0.98 },
       html2canvas:  { scale: 2 },
       jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
-
     html2pdf().set(opt).from(element).save();
   }
+
+  // Run initial sync
+  updateLetter();
 </script>
 
 </body>
