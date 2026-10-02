@@ -58,17 +58,18 @@
         /* Paper Preview Styling (F4 / Folio Standard: 210mm x 330mm) */
         .a4-paper {
             width: 210mm;
-            min-height: 330mm;
-            padding: 15mm 15mm 15mm 20mm; /* Compact margins for 1-page fit */
+            height: 328mm;
+            padding: 12mm 15mm 12mm 20mm; /* Compact margins for 1-page fit */
             margin: 0 auto;
             background-color: #ffffff !important;
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
             font-family: 'Times New Roman', Times, Georgia, serif !important;
-            font-size: 11.5pt;
-            line-height: 1.45;
+            font-size: 11pt;
+            line-height: 1.4;
             color: #000000 !important;
             box-sizing: border-box;
             position: relative;
+            overflow: hidden;
         }
 
         /* Ensure all child text within paper is explicitly black */
@@ -78,7 +79,9 @@
 
         /* CSS Print Stylesheet for direct printing */
         @media print {
-            body {
+            html, body {
+                height: 330mm !important;
+                overflow: hidden !important;
                 background: white !important;
                 padding: 0 !important;
                 margin: 0 !important;
@@ -94,9 +97,13 @@
             }
             .a4-paper {
                 box-shadow: none !important;
-                padding: 15mm 15mm 15mm 20mm !important;
+                padding: 12mm 15mm 12mm 20mm !important;
                 width: 210mm !important;
-                min-height: 330mm !important;
+                height: 328mm !important;
+                max-height: 328mm !important;
+                overflow: hidden !important;
+                page-break-after: avoid !important;
+                page-break-inside: avoid !important;
             }
             @page {
                 size: 210mm 330mm; /* Standard F4 / Folio Size */
@@ -271,7 +278,8 @@
                                     <button type="button" onclick="addPresetAttachment('Ijazah Terakhir')" class="px-2 py-0.5 bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-600 rounded text-xs border border-slate-200 transition-colors">+ Ijazah</button>
                                     <button type="button" onclick="addPresetAttachment('Kartu Tanda Penduduk (KTP)')" class="px-2 py-0.5 bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-600 rounded text-xs border border-slate-200 transition-colors">+ KTP</button>
                                     <button type="button" onclick="addPresetAttachment('Kartu Keluarga (KK)')" class="px-2 py-0.5 bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-600 rounded text-xs border border-slate-200 transition-colors">+ KK</button>
-                                    <button type="button" onclick="addPresetAttachment('Kartu BPJS')" class="px-2 py-0.5 bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-600 rounded text-xs border border-slate-200 transition-colors">+ BPJS</button>
+                                    <button type="button" onclick="addPresetAttachment('Kartu BPJS Ketenagakerjaan')" class="px-2 py-0.5 bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-600 rounded text-xs border border-slate-200 transition-colors">+ BPJSKK</button>
+                                    <button type="button" onclick="addPresetAttachment('Kartu BPJS Kesehatan')" class="px-2 py-0.5 bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-600 rounded text-xs border border-slate-200 transition-colors">+ BPJSKS</button>
                                     <button type="button" onclick="addPresetAttachment('NPWP')" class="px-2 py-0.5 bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-600 rounded text-xs border border-slate-200 transition-colors">+ NPWP</button>
                                 </div>
 
@@ -321,12 +329,12 @@
                     <div id="letterPaper" class="a4-paper shadow-2xl rounded-sm">
                         
                         <!-- Header Kanan (Tempat & Tanggal) -->
-                        <div class="text-right mb-4">
+                        <div class="text-right mb-2.5">
                             <p id="pv-tempatTanggal">Barabai, 2 Oktober 2026</p>
                         </div>
 
                         <!-- Lampiran & Perihal -->
-                        <div class="mb-4 space-y-0.5">
+                        <div class="mb-2.5 space-y-0.5">
                             <div class="grid grid-cols-12 max-w-xs">
                                 <div class="col-span-4">Lampiran</div>
                                 <div class="col-span-8">: <span id="pv-jumlahLampiran">1 (satu) berkas</span></div>
@@ -338,7 +346,7 @@
                         </div>
 
                         <!-- Penerima / Tujuan -->
-                        <div class="mb-4 space-y-0.5">
+                        <div class="mb-2.5 space-y-0.5">
                             <p>Kepada Yth.</p>
                             <p id="pv-penerima" class="font-bold">[Penerima / Jabatan]</p>
                             <p>di -</p>
@@ -346,24 +354,24 @@
                         </div>
 
                         <!-- Salam Pembuka -->
-                        <div class="mb-3">
+                        <div class="mb-2">
                             <p>Dengan hormat,</p>
                         </div>
 
                         <!-- Paragraf Utama -->
-                        <div class="mb-3 text-justify leading-relaxed">
+                        <div class="mb-2.5 text-justify leading-relaxed">
                             <p>
                                 Dengan ini saya bermaksud untuk mengajukan permohonan kepada Bapak/Ibu, untuk dapat diterima menjadi pegawai kontrak di lingkup Dinas Kesehatan. Saya memiliki kualifikasi yang relevan, dedikasi tinggi, serta komitmen untuk memberikan kontribusi terbaik bagi Dinas Kesehatan.
                             </p>
                         </div>
 
                         <!-- Data Diri Header -->
-                        <div class="mb-1.5">
+                        <div class="mb-1">
                             <p>Berikut adalah data diri singkat saya:</p>
                         </div>
 
                         <!-- Data Diri Table List with exact Colon alignment -->
-                        <div class="mb-3 pl-4 space-y-1 text-sm sm:text-base">
+                        <div class="mb-2.5 pl-4 space-y-0.5 text-sm sm:text-base">
                             <div class="grid grid-cols-12">
                                 <div class="col-span-4 sm:col-span-3">1. Nama Lengkap</div>
                                 <div class="col-span-8 sm:col-span-9 flex">
@@ -416,21 +424,21 @@
                         </div>
 
                         <!-- Paragraf Pertimbangan & Lampiran List -->
-                        <div class="mb-3">
-                            <p class="mb-1.5">Sebagai bahan pertimbangan Bapak/Ibu, bersama surat ini saya lampirkan:</p>
+                        <div class="mb-2.5">
+                            <p class="mb-1">Sebagai bahan pertimbangan Bapak/Ibu, bersama surat ini saya lampirkan:</p>
                             <ol id="pv-attachmentList" class="list-decimal list-inside pl-4 space-y-0.5">
                                 <!-- Dynamic Rendered Attachments -->
                             </ol>
                         </div>
 
                         <!-- Paragraf Penutup -->
-                        <div class="mb-6 text-justify leading-relaxed">
+                        <div class="mb-4 text-justify leading-relaxed">
                             <p>Demikian surat lamaran kerja ini saya sampaikan. Atas perhatian dan kesempatan yang Bapak/Ibu berikan, saya ucapkan terima kasih.</p>
                         </div>
 
                         <!-- Tanda Tangan Block -->
                         <div class="flex justify-end">
-                            <div class="text-center w-60 space-y-12">
+                            <div class="text-center w-60 space-y-8">
                                 <p>Hormat saya,</p>
                                 <div>
                                     <p id="pv-namaTtd" class="font-bold underline decoration-1 text-slate-900">[Nama Lengkap]</p>
@@ -668,7 +676,8 @@
                     backgroundColor: '#ffffff',
                     letterRendering: true
                 },
-                jsPDF:        { unit: 'mm', format: [210, 330], orientation: 'portrait' }
+                jsPDF:        { unit: 'mm', format: [210, 330], orientation: 'portrait' },
+                pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
             };
 
             html2pdf().set(opt).from(element).save().then(() => {
