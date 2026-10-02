@@ -1,327 +1,825 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Generator Surat Lamaran Kerja</title>
-  <!-- Tailwind CSS via CDN untuk tampilan modern -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- html2pdf.js untuk cetak/unduh PDF -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-  <style>
-    /* Ukuran kertas A4 standar surat resmi */
-    .a4-page {
-      width: 210mm;
-      min-height: 297mm;
-      padding: 20mm;
-      background: white;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      margin: 0 auto;
-      font-family: 'Times New Roman', Times, serif;
-      font-size: 12pt;
-      line-height: 1.5;
-      color: #000;
-    }
-    @media print {
-      body { background: none; }
-      .no-print { display: none !important; }
-      .a4-page { box-shadow: none; margin: 0; padding: 15mm; }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generator Surat Lamaran Kerja Otomatis</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Tinos:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- html2pdf.js library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0284c7',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        serif: ['Tinos', 'Times New Roman', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Scrollbar for smooth app UI feel */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* Paper Preview Styling */
+        .a4-paper {
+            width: 210mm;
+            min-height: 297mm;
+            padding: 25mm 20mm 20mm 25mm; /* Standard formal letter margins */
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            font-family: 'Tinos', 'Times New Roman', serif;
+            font-size: 12pt;
+            line-height: 1.5;
+            color: #000;
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        /* CSS Print Stylesheet for direct printing */
+        @media print {
+            body {
+                background: white !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .print-area {
+                padding: 0 !important;
+                margin: 0 !important;
+                box-shadow: none !important;
+                width: 100% !important;
+            }
+            .a4-paper {
+                box-shadow: none !important;
+                padding: 20mm 20mm 20mm 25mm !important;
+                width: 100% !important;
+                min-height: auto !important;
+            }
+            @page {
+                size: A4;
+                margin: 0;
+            }
+        }
+    </style>
 </head>
-<body class="bg-slate-100 min-h-screen text-slate-800">
+<body class="bg-slate-100 font-sans text-slate-800 antialiased min-h-screen flex flex-col">
 
-  <!-- Header Aplikasi -->
-  <header class="bg-indigo-700 text-white py-6 shadow-md no-print">
-    <div class="max-w-6xl mx-auto px-4 text-center">
-      <h1 class="text-2xl font-bold">Generator Surat Lamaran Kerja</h1>
-      <p class="text-indigo-200 text-sm mt-1">Isi formulir di bawah ini untuk membuat surat lamaran secara otomatis</p>
-    </div>
-  </header>
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-30 no-print">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo & Title -->
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-sky-600 to-blue-500 flex items-center justify-center text-white shadow-md shadow-sky-500/20">
+                        <i class="fa-solid fa-file-signature text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-lg font-bold text-slate-900 leading-tight">Generator Surat Lamaran</h1>
+                        <p class="text-xs text-slate-500 hidden sm:block">Buat surat lamaran kerja resmi & rapi secara instan</p>
+                    </div>
+                </div>
 
-  <!-- Konten Utama: Form & Pratinjau -->
-  <main class="max-w-7xl mx-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-2 gap-8">
-    
-    <!-- Kolom Input (Formulir) -->
-    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 no-print space-y-6">
-      
-      <!-- Form 1: Data Surat & Tujuan -->
-      <div>
-        <h2 class="text-lg font-semibold text-indigo-700 border-b pb-2 mb-4">1. Informasi Surat & Tujuan</h2>
-        <div class="space-y-3">
-          <div>
-            <label class="block text-xs font-medium text-slate-600">Tempat & Tanggal Surat</label>
-            <input type="text" id="in_tempat_tanggal" class="w-full mt-1 p-2 border rounded bg-slate-100 text-slate-600 font-medium" readonly>
-          </div>
-          <div>
-            <label class="block text-xs font-medium text-slate-600">Perihal</label>
-            <input type="text" value="Lamaran Pekerjaan" class="w-full mt-1 p-2 border rounded bg-slate-100 text-slate-600 font-medium" readonly>
-          </div>
-          <div>
-            <label class="block text-xs font-medium text-slate-600">Jumlah Lampiran (Contoh: 5 Lembar / 1 Berkas)</label>
-            <input type="text" id="in_lampiran" placeholder="Misal: 1 (satu) Berkas" class="w-full mt-1 p-2 border rounded focus:ring-2 focus:ring-indigo-500 outline-none">
-          </div>
-          <div>
-            <label class="block text-xs font-medium text-slate-600">Penerima / Jabatan (Kepada Yth.)</label>
-            <input type="text" id="in_penerima" placeholder="Kepala Dinas Kesehatan Kab. HST" class="w-full mt-1 p-2 border rounded focus:ring-2 focus:ring-indigo-500 outline-none">
-          </div>
-          <div>
-            <label class="block text-xs font-medium text-slate-600">Kota Perusahaan / Instansi</label>
-            <input type="text" id="in_kota_perusahaan" placeholder="Barabai" class="w-full mt-1 p-2 border rounded focus:ring-2 focus:ring-indigo-500 outline-none">
-          </div>
-          <div>
-            <label class="block text-xs font-medium text-slate-600">Alamat Lengkap Tujuan</label>
-            <textarea id="in_alamat_perusahaan" rows="2" placeholder="Jl. Perintis Kemerdekaan No. 1" class="w-full mt-1 p-2 border rounded focus:ring-2 focus:ring-indigo-500 outline-none"></textarea>
-          </div>
+                <!-- Action Buttons Top Nav -->
+                <div class="flex items-center space-x-2 sm:space-x-3">
+                    <button onclick="loadDemoData()" class="px-3 py-1.5 text-xs sm:text-sm font-medium text-sky-700 bg-sky-50 hover:bg-sky-100 rounded-lg transition-colors flex items-center gap-1.5 border border-sky-200">
+                        <i class="fa-solid fa-wand-magic-sparkles text-sky-600"></i>
+                        <span class="hidden sm:inline">Isi Contoh Data</span>
+                        <span class="sm:hidden">Contoh</span>
+                    </button>
+                    <button onclick="resetForm()" class="px-3 py-1.5 text-xs sm:text-sm font-medium text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors flex items-center gap-1.5">
+                        <i class="fa-solid fa-rotate-right"></i>
+                        <span class="hidden sm:inline">Reset Form</span>
+                    </button>
+                    <button onclick="openGithubModal()" class="px-3 py-1.5 text-xs sm:text-sm font-medium text-slate-700 bg-white hover:bg-slate-50 rounded-lg border border-slate-300 transition-colors flex items-center gap-1.5 shadow-sm">
+                        <i class="fa-brands fa-github text-base"></i>
+                        <span class="hidden md:inline">Panduan GitHub</span>
+                    </button>
+                </div>
+            </div>
         </div>
-      </div>
+    </header>
 
-      <!-- Form 2: Data Diri -->
-      <div>
-        <h2 class="text-lg font-semibold text-indigo-700 border-b pb-2 mb-4">2. Data Diri Pelamar</h2>
-        <div class="space-y-3">
-          <div>
-            <label class="block text-xs font-medium text-slate-600">Nama Lengkap (dengan Gelar bila ada)</label>
-            <input type="text" id="in_nama" placeholder="Ahmad Sanusi, S.Kep." class="w-full mt-1 p-2 border rounded focus:ring-2 focus:ring-indigo-500 outline-none">
-          </div>
-          <div>
-            <label class="block text-xs font-medium text-slate-600">Tempat, Tanggal Lahir</label>
-            <input type="text" id="in_ttl" placeholder="Barabai, 15 Agustus 1998" class="w-full mt-1 p-2 border rounded focus:ring-2 focus:ring-indigo-500 outline-none">
-          </div>
-          <div>
-            <label class="block text-xs font-medium text-slate-600">Alamat Lengkap Domisili</label>
-            <textarea id="in_alamat_pelamar" rows="2" placeholder="Jl. M. Ramli No. 12, Barabai" class="w-full mt-1 p-2 border rounded focus:ring-2 focus:ring-indigo-500 outline-none"></textarea>
-          </div>
-          <div>
-            <label class="block text-xs font-medium text-slate-600">Jenis Kelamin</label>
-            <select id="in_jk" class="w-full mt-1 p-2 border rounded focus:ring-2 focus:ring-indigo-500 outline-none">
-              <option value="Laki-laki">Laki-laki</option>
-              <option value="Perempuan">Perempuan</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-xs font-medium text-slate-600">Pendidikan Terakhir</label>
-            <input type="text" id="in_pendidikan" placeholder="S1 Keperawatan" class="w-full mt-1 p-2 border rounded focus:ring-2 focus:ring-indigo-500 outline-none">
-          </div>
-          <div>
-            <label class="block text-xs font-medium text-slate-600">No. HP / WhatsApp (Aktif)</label>
-            <input type="text" id="in_hp" placeholder="081234567890" class="w-full mt-1 p-2 border rounded focus:ring-2 focus:ring-indigo-500 outline-none">
-          </div>
-          <div>
-            <label class="block text-xs font-medium text-slate-600">Email (Opsional)</label>
-            <input type="email" id="in_email" placeholder="contoh@email.com" class="w-full mt-1 p-2 border rounded focus:ring-2 focus:ring-indigo-500 outline-none">
-          </div>
-        </div>
-      </div>
-
-      <!-- Lampiran Dokumen -->
-      <div>
-        <h2 class="text-lg font-semibold text-indigo-700 border-b pb-2 mb-4">3. Daftar Lampiran Dokumen</h2>
-        <p class="text-xs text-slate-500 mb-2">Tuliskan item yang dilampirkan dipisahkan dengan koma atau baris baru:</p>
-        <textarea id="in_lampiran_list" rows="4" class="w-full p-2 border rounded focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="1. Fotokopi Ijazah dan Transkrip Nilai&#10;2. Fotokopi KTP&#10;3. Pasfoto 4x6&#10;4. Surat Keterangan Sehat"></textarea>
-      </div>
-
-      <!-- Tombol Aksi -->
-      <div class="pt-4 flex gap-3">
-        <button onclick="downloadPDF()" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 px-4 rounded-lg shadow transition flex items-center justify-center gap-2">
-          <span>Simpan PDF</span>
-        </button>
-        <button onclick="window.print()" class="flex-1 bg-slate-800 hover:bg-slate-900 text-white font-medium py-3 px-4 rounded-lg shadow transition flex items-center justify-center gap-2">
-          <span>Cetak Surat</span>
-        </button>
-      </div>
-
-    </div>
-
-    <!-- Kolom Live Preview (Format A4) -->
-    <div class="overflow-x-auto pb-8">
-      <div id="surat-preview" class="a4-page shadow-2xl rounded-sm">
-        
-        <!-- Header Tempat & Tanggal -->
-        <div class="text-right mb-6">
-          <span id="out_tempat_tanggal">[Barabai, Tanggal Hari Ini]</span>
-        </div>
-
-        <!-- Data Perihal & Lampiran -->
-        <div class="mb-6">
-          <table class="border-collapse">
-            <tr>
-              <td class="pr-4">Perihal</td>
-              <td class="pr-2">:</td>
-              <td class="font-bold">Lamaran Pekerjaan</td>
-            </tr>
-            <tr>
-              <td class="pr-4">Lampiran</td>
-              <td class="pr-2">:</td>
-              <td id="out_lampiran">[Jumlah Lampiran]</td>
-            </tr>
-          </table>
-        </div>
-
-        <!-- Tujuan Surat -->
-        <div class="mb-6">
-          <p>Kepada Yth.</p>
-          <p id="out_penerima" class="font-bold">[Penerima / Jabatan]</p>
-          <p id="out_alamat_perusahaan">[Alamat Lengkap Instansi]</p>
-          <p>di-</p>
-          <p class="pl-4 font-semibold" id="out_kota_perusahaan">[Kota Perusahaan]</p>
-        </div>
-
-        <!-- Isi Surat -->
-        <div class="space-y-4 text-justify">
-          <p>Dengan hormat,</p>
-          <p>
-            Dengan ini saya bermaksud untuk mengajukan permohonan kepada Bapak/Ibu, untuk dapat diterima menjadi pegawai kontrak di lingkup Dinas Kesehatan. Saya memiliki kualifikasi yang relevan, dedikasi tinggi, serta komitmen untuk memberikan kontribusi terbaik bagi Dinas Kesehatan.
-          </p>
-          <p>Berikut adalah data diri singkat saya:</p>
-
-          <!-- Tabel Data Diri -->
-          <table class="w-full ml-4 border-collapse">
-            <tr>
-              <td class="w-44 py-1">Nama Lengkap</td>
-              <td class="w-4">:</td>
-              <td id="out_nama" class="font-medium">[Nama Lengkap]</td>
-            </tr>
-            <tr>
-              <td class="py-1">Tempat, Tanggal Lahir</td>
-              <td>:</td>
-              <td id="out_ttl">[Tempat, Tanggal Lahir]</td>
-            </tr>
-            <tr>
-              <td class="py-1" style="vertical-align: top;">Alamat</td>
-              <td style="vertical-align: top;">:</td>
-              <td id="out_alamat_pelamar">[Alamat Pelamar]</td>
-            </tr>
-            <tr>
-              <td class="py-1">Jenis Kelamin</td>
-              <td>:</td>
-              <td id="out_jk">[Jenis Kelamin]</td>
-            </tr>
-            <tr>
-              <td class="py-1">Pendidikan Terakhir</td>
-              <td>:</td>
-              <td id="out_pendidikan">[Pendidikan Terakhir]</td>
-            </tr>
-            <tr>
-              <td class="py-1">No. HP / WhatsApp</td>
-              <td>:</td>
-              <td id="out_hp">[No. HP]</td>
-            </tr>
-            <tr>
-              <td class="py-1">Email</td>
-              <td>:</td>
-              <td id="out_email">[Email]</td>
-            </tr>
-          </table>
-
-          <p>Sebagai bahan pertimbangan Bapak/Ibu, bersama surat ini saya lampirkan:</p>
-          
-          <!-- Daftar Lampiran -->
-          <div id="out_lampiran_list" class="ml-4 whitespace-pre-line">
-[Daftar Lampiran]
-          </div>
-
-          <p>
-            Demikian surat lamaran kerja ini saya sampaikan. Atas perhatian dan kesempatan yang Bapak/Ibu berikan, saya ucapkan terima kasih.
-          </p>
-        </div>
-
-        <!-- Tanda Tangan & Materai -->
-        <div class="mt-12 flex justify-end">
-          <div class="text-center w-64">
-            <p>Hormat saya,</p>
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             
-            <!-- Area Materai dan Tanda Tangan -->
-            <div class="my-4 flex items-center justify-center gap-4 h-28">
-              <!-- Kotak Materai -->
-              <div class="w-20 h-24 border-2 border-dashed border-slate-400 rounded flex items-center justify-center text-center p-1 bg-slate-50">
-                <span class="text-[9pt] text-slate-500 font-sans leading-tight">Materai<br>Rp 10.000</span>
-              </div>
+            <!-- LEFT COLUMN: FORM INPUTS (Lg 5 Cols) -->
+            <div class="lg:col-span-5 space-y-6 no-print">
+                
+                <!-- Notice Banner -->
+                <div class="bg-gradient-to-r from-sky-500 to-blue-600 rounded-2xl p-4 text-white shadow-lg shadow-sky-500/10 flex items-center justify-between">
+                    <div class="space-y-1">
+                        <p class="text-xs font-medium text-sky-100 uppercase tracking-wider">Langkah Mudah</p>
+                        <h2 class="text-sm font-bold">Isi form di bawah, hasil surat langsung jadi!</h2>
+                    </div>
+                    <div class="bg-white/10 p-2.5 rounded-xl backdrop-blur-sm">
+                        <i class="fa-solid fa-bolt text-xl text-yellow-300"></i>
+                    </div>
+                </div>
+
+                <!-- FORM CONTAINER -->
+                <form id="letterForm" onsubmit="return false;" class="space-y-6">
+
+                    <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden">
+                        <div class="bg-slate-50/80 px-5 py-4 border-b border-slate-200 flex items-center justify-between">
+                            <div class="flex items-center space-x-2.5">
+                                <span class="w-7 h-7 rounded-lg bg-sky-100 text-sky-700 font-bold text-xs flex items-center justify-center">1</span>
+                                <h2 class="font-bold text-slate-800 text-sm">Informasi Surat & Instansi</h2>
+                            </div>
+                            <span class="text-xs text-slate-400">Form 1 dari 2</span>
+                        </div>
+
+                        <div class="p-5 space-y-4">
+                            <!-- Tempat & Tanggal Surat -->
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Tempat Surat <span class="text-red-500">*</span></label>
+                                    <input type="text" id="tempatSurat" value="Barabai" oninput="updateLetter()" placeholder="Kota pembuatan" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-all outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Tanggal Surat <span class="text-red-500">*</span></label>
+                                    <input type="date" id="tanggalSurat" oninput="updateLetter()" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-all outline-none">
+                                </div>
+                            </div>
+
+                            <!-- Perihal & Jumlah Lampiran -->
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Perihal</label>
+                                    <input type="text" id="perihal" value="Lamaran Pekerjaan" oninput="updateLetter()" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-200 bg-slate-50 text-slate-600 cursor-not-allowed outline-none" readonly>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Jumlah Lampiran <span class="text-red-500">*</span></label>
+                                    <input type="text" id="jumlahLampiran" value="1 (satu) berkas" oninput="updateLetter()" placeholder="Misal: 5 lembar / 1 berkas" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-all outline-none">
+                                </div>
+                            </div>
+
+                            <!-- Penerima / Jabatan -->
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">Penerima / Jabatan <span class="text-red-500">*</span></label>
+                                <input type="text" id="penerima" placeholder="Misal: Kepala Dinas Kesehatan" oninput="updateLetter()" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-all outline-none">
+                                <p class="text-[11px] text-slate-400 mt-1">Otomatis diawali dengan "Kepada Yth."</p>
+                            </div>
+
+                            <!-- Nama Instansi / Perusahaan -->
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">Nama Instansi / Perusahaan <span class="text-red-500">*</span></label>
+                                <input type="text" id="namaInstansi" placeholder="Misal: Dinas Kesehatan Kabupaten Hulu Sungai Tengah" oninput="updateLetter()" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-all outline-none">
+                            </div>
+
+                            <!-- Kota Instansi & Alamat Instansi -->
+                            <div class="grid grid-cols-1 gap-3">
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Kota Tujuan Perusahaan/Instansi <span class="text-red-500">*</span></label>
+                                    <input type="text" id="kotaPerusahaan" placeholder="Misal: Barabai" oninput="updateLetter()" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-all outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Alamat Lengkap Instansi (Opsional)</label>
+                                    <textarea id="alamatInstansi" rows="2" placeholder="Misal: Jl. Perintis Kemerdekaan No. 12" oninput="updateLetter()" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-all outline-none resize-none"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden">
+                        <div class="bg-slate-50/80 px-5 py-4 border-b border-slate-200 flex items-center justify-between">
+                            <div class="flex items-center space-x-2.5">
+                                <span class="w-7 h-7 rounded-lg bg-sky-100 text-sky-700 font-bold text-xs flex items-center justify-center">2</span>
+                                <h2 class="font-bold text-slate-800 text-sm">Data Diri Pelamar & Lampiran</h2>
+                            </div>
+                            <span class="text-xs text-slate-400">Form 2 dari 2</span>
+                        </div>
+
+                        <div class="p-5 space-y-4">
+                            <!-- Nama Lengkap dengan Gelar -->
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">Nama Lengkap (dengan Gelar jika ada) <span class="text-red-500">*</span></label>
+                                <input type="text" id="namaPelamar" placeholder="Misal: Ahmad Fauzi, S.Kep." oninput="updateLetter()" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-all outline-none">
+                            </div>
+
+                            <!-- Tempat, Tanggal Lahir -->
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">Tempat, Tanggal Lahir <span class="text-red-500">*</span></label>
+                                <input type="text" id="ttlPelamar" placeholder="Misal: Barabai, 15 Januari 1998" oninput="updateLetter()" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-all outline-none">
+                            </div>
+
+                            <!-- Alamat Lengkap -->
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">Alamat Lengkap <span class="text-red-500">*</span></label>
+                                <textarea id="alamatPelamar" rows="2" placeholder="Misal: Jl. Murakata No. 45 RT 03/RW 02, Barabai" oninput="updateLetter()" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-all outline-none resize-none"></textarea>
+                            </div>
+
+                            <!-- Jenis Kelamin & Pendidikan Terakhir -->
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Jenis Kelamin <span class="text-red-500">*</span></label>
+                                    <select id="jkPelamar" onchange="updateLetter()" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-all outline-none bg-white">
+                                        <option value="Laki-laki">Laki-laki</option>
+                                        <option value="Perempuan">Perempuan</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Pendidikan Terakhir <span class="text-red-500">*</span></label>
+                                    <input type="text" id="pendidikanPelamar" placeholder="Misal: S-1 Keperawatan" oninput="updateLetter()" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-all outline-none">
+                                </div>
+                            </div>
+
+                            <!-- No HP & Email -->
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-700 mb-1">No. HP / WhatsApp <span class="text-red-500">*</span></label>
+                                    <input type="tel" id="phonePelamar" placeholder="0812-3456-7890" oninput="updateLetter()" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-all outline-none">
+                                    <p class="text-[10px] text-amber-600 mt-1 font-medium"><i class="fa-solid fa-circle-info mr-0.5"></i> Pastikan nomor selalu aktif</p>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Email <span class="text-slate-400 font-normal">(Opsional)</span></label>
+                                    <input type="email" id="emailPelamar" placeholder="nama@email.com" oninput="updateLetter()" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-all outline-none">
+                                </div>
+                            </div>
+
+                            <div class="pt-2 border-t border-slate-100">
+                                <div class="flex items-center justify-between mb-2">
+                                    <label class="block text-xs font-semibold text-slate-700">Daftar Dokumen Lampiran</label>
+                                    <button type="button" onclick="addAttachment()" class="text-xs font-semibold text-sky-600 hover:text-sky-700 flex items-center gap-1">
+                                        <i class="fa-solid fa-plus text-[10px]"></i> Tambah
+                                    </button>
+                                </div>
+
+                                <!-- Preset Quick Buttons -->
+                                <div class="flex flex-wrap gap-1.5 mb-3">
+                                    <span class="text-[11px] text-slate-400 flex items-center mr-1">Tambah Cepat:</span>
+                                    <button type="button" onclick="addPresetAttachment('Pasfoto 4x6')" class="px-2 py-0.5 bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-600 rounded text-xs border border-slate-200 transition-colors">+ Pasfoto</button>
+                                    <button type="button" onclick="addPresetAttachment('Fotokopi Ijazah Terakhir')" class="px-2 py-0.5 bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-600 rounded text-xs border border-slate-200 transition-colors">+ Ijazah</button>
+                                    <button type="button" onclick="addPresetAttachment('Fotokopi Transkrip Nilai')" class="px-2 py-0.5 bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-600 rounded text-xs border border-slate-200 transition-colors">+ Transkrip</button>
+                                    <button type="button" onclick="addPresetAttachment('Curriculum Vitae (CV)')" class="px-2 py-0.5 bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-600 rounded text-xs border border-slate-200 transition-colors">+ CV</button>
+                                    <button type="button" onclick="addPresetAttachment('Fotokopi KTP')" class="px-2 py-0.5 bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-600 rounded text-xs border border-slate-200 transition-colors">+ KTP</button>
+                                </div>
+
+                                <!-- Container list lampiran dinamis -->
+                                <div id="attachmentContainer" class="space-y-2">
+                                    <!-- Dynamic Items Loaded via JS -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Export & Copy Action Buttons -->
+                <div class="p-4 bg-white rounded-2xl border border-slate-200/80 shadow-sm space-y-3">
+                    <button onclick="downloadPDF()" class="w-full py-3 px-4 bg-gradient-to-r from-sky-600 to-blue-600 hover:from-sky-700 hover:to-blue-700 text-white font-bold rounded-xl shadow-lg shadow-sky-500/20 flex items-center justify-center gap-2 transition-all transform active:scale-[0.99]">
+                        <i class="fa-solid fa-file-pdf text-lg"></i>
+                        <span>Download PDF Resmi</span>
+                    </button>
+                    
+                    <div class="grid grid-cols-2 gap-3">
+                        <button onclick="window.print()" class="py-2.5 px-3 bg-slate-800 hover:bg-slate-900 text-white font-semibold rounded-xl flex items-center justify-center gap-2 text-xs transition-colors">
+                            <i class="fa-solid fa-print"></i>
+                            <span>Cetak Langsung</span>
+                        </button>
+                        <button onclick="copyLetterText()" class="py-2.5 px-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl flex items-center justify-center gap-2 text-xs transition-colors border border-slate-200">
+                            <i class="fa-regular fa-copy"></i>
+                            <span id="copyBtnText">Salin Teks Surat</span>
+                        </button>
+                    </div>
+                </div>
+
             </div>
 
-            <p id="out_nama_ttd" class="font-bold underline decoration-1 underline-offset-2">[Nama Lengkap]</p>
-          </div>
-        </div>
+            <!-- RIGHT COLUMN: LIVE PREVIEW LETTER (Lg 7 Cols) -->
+            <div class="lg:col-span-7 flex flex-col items-center">
+                
+                <div class="w-full mb-3 flex items-center justify-between no-print px-1">
+                    <div class="flex items-center space-x-2">
+                        <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                        <span class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Live Preview Real-time</span>
+                    </div>
+                    <span class="text-xs text-slate-400">Ukuran Standar A4</span>
+                </div>
 
-      </div>
+                <!-- PREVIEW CONTAINER / PRINT WRAPPER -->
+                <div class="w-full overflow-x-auto pb-6 print-area flex justify-center">
+                    <div id="letterPaper" class="a4-paper text-slate-950 shadow-2xl rounded-sm">
+                        
+                        <!-- Header Kanan (Tempat & Tanggal) -->
+                        <div class="text-right mb-6">
+                            <p id="pv-tempatTanggal">Barabai, 2 Oktober 2026</p>
+                        </div>
+
+                        <!-- Lampiran & Perihal -->
+                        <div class="mb-6 space-y-1">
+                            <div class="grid grid-cols-12 max-w-xs">
+                                <div class="col-span-4">Lampiran</div>
+                                <div class="col-span-8">: <span id="pv-jumlahLampiran">1 (satu) berkas</span></div>
+                            </div>
+                            <div class="grid grid-cols-12 max-w-xs font-medium">
+                                <div class="col-span-4">Perihal</div>
+                                <div class="col-span-8">: <span id="pv-perihal">Lamaran Pekerjaan</span></div>
+                            </div>
+                        </div>
+
+                        <!-- Penerima / Tujuan -->
+                        <div class="mb-6 space-y-0.5">
+                            <p>Kepada Yth.</p>
+                            <p id="pv-penerima" class="font-bold">[Penerima / Jabatan]</p>
+                            <p id="pv-namaInstansi">[Nama Instansi / Perusahaan]</p>
+                            <p id="pv-alamatInstansi">[Alamat Instansi]</p>
+                            <p>di -</p>
+                            <p class="pl-4 font-semibold" id="pv-kotaPerusahaan">Barabai</p>
+                        </div>
+
+                        <!-- Salam Pembuka -->
+                        <div class="mb-4">
+                            <p>Dengan hormat,</p>
+                        </div>
+
+                        <!-- Paragraf Utama -->
+                        <div class="mb-4 text-justify leading-relaxed">
+                            <p>
+                                Dengan ini saya bermaksud untuk mengajukan permohonan kepada Bapak/Ibu, untuk dapat diterima menjadi pegawai kontrak di lingkup <span id="pv-instansiBody" class="font-semibold">[Nama Instansi]</span>. Saya memiliki kualifikasi yang relevan, dedikasi tinggi, serta komitmen untuk memberikan kontribusi terbaik bagi <span id="pv-instansiBody2" class="font-semibold">[Nama Instansi]</span>.
+                            </p>
+                        </div>
+
+                        <!-- Data Diri Header -->
+                        <div class="mb-2">
+                            <p>Berikut adalah data diri singkat saya:</p>
+                        </div>
+
+                        <!-- Data Diri Table List with exact Colon alignment -->
+                        <div class="mb-4 pl-4 space-y-1.5 text-sm sm:text-base">
+                            <div class="grid grid-cols-12">
+                                <div class="col-span-4 sm:col-span-3">1. Nama Lengkap</div>
+                                <div class="col-span-8 sm:col-span-9 flex">
+                                    <span class="mr-2">:</span>
+                                    <span id="pv-nama" class="font-bold">[Nama Pelamar]</span>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-12">
+                                <div class="col-span-4 sm:col-span-3">2. Tempat, Tgl Lahir</div>
+                                <div class="col-span-8 sm:col-span-9 flex">
+                                    <span class="mr-2">:</span>
+                                    <span id="pv-ttl">[Tempat, Tanggal Lahir]</span>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-12">
+                                <div class="col-span-4 sm:col-span-3">3. Alamat Lengkap</div>
+                                <div class="col-span-8 sm:col-span-9 flex">
+                                    <span class="mr-2">:</span>
+                                    <span id="pv-alamat">[Alamat Lengkap]</span>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-12">
+                                <div class="col-span-4 sm:col-span-3">4. Jenis Kelamin</div>
+                                <div class="col-span-8 sm:col-span-9 flex">
+                                    <span class="mr-2">:</span>
+                                    <span id="pv-jk">Laki-laki</span>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-12">
+                                <div class="col-span-4 sm:col-span-3">5. Pendidikan Terakhir</div>
+                                <div class="col-span-8 sm:col-span-9 flex">
+                                    <span class="mr-2">:</span>
+                                    <span id="pv-pendidikan">[Pendidikan Terakhir]</span>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-12">
+                                <div class="col-span-4 sm:col-span-3">6. No. HP / WhatsApp</div>
+                                <div class="col-span-8 sm:col-span-9 flex">
+                                    <span class="mr-2">:</span>
+                                    <span id="pv-phone">[Nomor HP/WA]</span>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-12" id="pv-emailContainer">
+                                <div class="col-span-4 sm:col-span-3">7. Email</div>
+                                <div class="col-span-8 sm:col-span-9 flex">
+                                    <span class="mr-2">:</span>
+                                    <span id="pv-email">-</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Paragraf Pertimbangan & Lampiran List -->
+                        <div class="mb-4">
+                            <p class="mb-2">Sebagai bahan pertimbangan Bapak/Ibu, bersama surat ini saya lampirkan:</p>
+                            <ol id="pv-attachmentList" class="list-decimal list-inside pl-4 space-y-0.5">
+                                <!-- Dynamic Rendered Attachments -->
+                            </ol>
+                        </div>
+
+                        <!-- Paragraf Penutup -->
+                        <div class="mb-8 text-justify leading-relaxed">
+                            <p>Demikian surat lamaran kerja ini saya sampaikan. Atas perhatian dan kesempatan yang Bapak/Ibu berikan, saya ucapkan terima kasih.</p>
+                        </div>
+
+                        <!-- Tanda Tangan Block -->
+                        <div class="flex justify-end">
+                            <div class="text-center w-64 space-y-16">
+                                <p>Hormat saya,</p>
+                                <div>
+                                    <p id="pv-namaTtd" class="font-bold underline decoration-1 text-slate-900">[Nama Lengkap]</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+
+    <!-- GitHub Modal Guide -->
+    <div id="githubModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden no-print">
+        <div class="bg-white rounded-2xl max-w-lg w-full shadow-2xl overflow-hidden border border-slate-100 flex flex-col max-h-[90vh]">
+            <div class="bg-slate-900 text-white p-5 flex items-center justify-between">
+                <div class="flex items-center space-x-2.5">
+                    <i class="fa-brands fa-github text-2xl"></i>
+                    <h3 class="font-bold text-base">Cara Deploy ke GitHub Pages</h3>
+                </div>
+                <button onclick="closeGithubModal()" class="text-slate-400 hover:text-white transition-colors">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            
+            <div class="p-6 overflow-y-auto space-y-4 text-sm text-slate-600">
+                <p>Ikuti langkah mudah berikut untuk mempublikasikan website ini secara gratis di internet menggunakan GitHub Pages:</p>
+
+                <ol class="space-y-3 list-decimal list-inside text-slate-800">
+                    <li class="pl-1">
+                        <strong class="text-slate-900">Buat Repositori Baru:</strong>
+                        <p class="text-xs text-slate-500 mt-0.5 pl-5">Buka <a href="https://github.com/new" target="_blank" class="text-sky-600 underline">github.com/new</a>, beri nama repository (misal: <code class="bg-slate-100 px-1 rounded text-sky-700">surat-lamaran</code>), lalu pilih Public dan klik <strong>Create repository</strong>.</p>
+                    </li>
+                    <li class="pl-1">
+                        <strong class="text-slate-900">Upload File HTML:</strong>
+                        <p class="text-xs text-slate-500 mt-0.5 pl-5">Simpan kode halaman web ini sebagai file bernama <code class="bg-amber-50 text-amber-800 font-semibold px-1 rounded">index.html</code> di komputer Anda. Di GitHub, klik link <i>"uploading an existing file"</i> lalu drag file <code class="bg-amber-50 text-amber-800 font-semibold px-1 rounded">index.html</code> tersebut.</p>
+                    </li>
+                    <li class="pl-1">
+                        <strong class="text-slate-900">Commit Changes:</strong>
+                        <p class="text-xs text-slate-500 mt-0.5 pl-5">Klik tombol hijau <strong>Commit changes</strong> di bagian bawah halaman GitHub.</p>
+                    </li>
+                    <li class="pl-1">
+                        <strong class="text-slate-900">Aktifkan GitHub Pages:</strong>
+                        <p class="text-xs text-slate-500 mt-0.5 pl-5">Masuk ke tab <strong>Settings</strong> &rarr; menu <strong>Pages</strong> di sebelah kiri. Pada bagian <i>Branch</i>, ubah dari <i>None</i> menjadi <b>main</b> (atau <i>master</i>), lalu klik <strong>Save</strong>.</p>
+                    </li>
+                </ol>
+
+                <div class="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-800 text-xs flex items-start gap-2">
+                    <i class="fa-solid fa-circle-check text-emerald-600 text-sm mt-0.5"></i>
+                    <span><strong>Selesai!</strong> Dalam 1-2 menit, website Anda sudah aktif dan dapat diakses publik melalui link unik GitHub Pages Anda!</span>
+                </div>
+            </div>
+
+            <div class="p-4 bg-slate-50 border-t border-slate-100 text-right">
+                <button onclick="closeGithubModal()" class="px-5 py-2 bg-slate-800 hover:bg-slate-900 text-white font-medium text-xs rounded-xl transition-colors">
+                    Tutup Panduan
+                </button>
+            </div>
+        </div>
     </div>
 
-  </main>
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-5 right-5 bg-slate-900 text-white text-xs font-medium px-4 py-3 rounded-xl shadow-2xl flex items-center space-x-2 translate-y-20 opacity-0 transition-all duration-300 z-50 no-print">
+        <i id="toastIcon" class="fa-solid fa-circle-check text-emerald-400"></i>
+        <span id="toastMsg">Pesan Notifikasi</span>
+    </div>
 
-  <!-- JavaScript Logika & Sinkronisasi Live -->
-  <script>
-    // Format Tanggal Otomatis (Format Indonesia)
-    function setTanggalBarabai() {
-      const hariIni = new Date();
-      const opsiTanggal = { day: 'numeric', month: 'Long', year: 'numeric' };
-      // Menggunakan locale Indonesia
-      const tanggalFormatted = hariIni.toLocaleDateString('id-ID', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric'
-      });
-      const tempatTanggal = `Barabai, ${tanggalFormatted}`;
-      
-      document.getElementById('in_tempat_tanggal').value = tempatTanggal;
-      document.getElementById('out_tempat_tanggal').innerText = tempatTanggal;
-    }
+    <script>
+        // Default Dynamic Attachments Array
+        let attachments = [
+            'Pasfoto 4x6 latar belakang merah (2 lembar)',
+            'Fotokopi Ijazah Terakhir dan Transkrip Nilai Legalisir',
+            'Fotokopi Kartu Tanda Penduduk (KTP)',
+            'Daftar Riwayat Hidup (Curriculum Vitae)',
+            'Surat Keterangan Sehat dari Dokter'
+        ];
 
-    // Fungsi pemutus sinkronisasi input ke preview
-    function bindInputToOutput(inputId, outputId, fallbackText = '') {
-      const inputEl = document.getElementById(inputId);
-      const outputEl = document.getElementById(outputId);
+        // Format Indonesian Date Helper
+        function formatIndonesianDate(dateString) {
+            if (!dateString) return '';
+            const months = [
+                'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+                'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+            ];
+            const d = new Date(dateString);
+            if (isNaN(d.getTime())) return dateString;
+            return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+        }
 
-      inputEl.addEventListener('input', () => {
-        const val = inputEl.value.trim();
-        outputEl.innerText = val !== '' ? val : fallbackText;
-      });
-    }
+        // Initialize App on Page Load
+        window.addEventListener('DOMContentLoaded', () => {
+            // Set today's date as default in datepicker
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('tanggalSurat').value = today;
 
-    // Inisialisasi Event Listener
-    window.addEventListener('DOMContentLoaded', () => {
-      setTanggalBarabai();
+            // Render dynamic attachments input list & preview
+            renderAttachmentInputs();
+            updateLetter();
+        });
 
-      bindInputToOutput('in_lampiran', 'out_lampiran', '[Jumlah Lampiran]');
-      bindInputToOutput('in_penerima', 'out_penerima', '[Penerima / Jabatan]');
-      bindInputToOutput('in_alamat_perusahaan', 'out_alamat_perusahaan', '[Alamat Lengkap Instansi]');
-      bindInputToOutput('in_kota_perusahaan', 'out_kota_perusahaan', '[Kota Perusahaan]');
-      
-      bindInputToOutput('in_ttl', 'out_ttl', '[Tempat, Tanggal Lahir]');
-      bindInputToOutput('in_alamat_pelamar', 'out_alamat_pelamar', '[Alamat Pelamar]');
-      bindInputToOutput('in_jk', 'out_jk', 'Laki-laki');
-      bindInputToOutput('in_pendidikan', 'out_pendidikan', '[Pendidikan Terakhir]');
-      bindInputToOutput('in_hp', 'out_hp', '[No. HP]');
-      bindInputToOutput('in_email', 'out_email', '-');
-      bindInputToOutput('in_lampiran_list', 'out_lampiran_list', '[Daftar Lampiran]');
+        // Render Dynamic Attachment Input Items
+        function renderAttachmentInputs() {
+            const container = document.getElementById('attachmentContainer');
+            container.innerHTML = '';
 
-      // Khusus Nama (Terhubung ke 2 tempat: data diri & bawah tanda tangan)
-      const inputNama = document.getElementById('in_nama');
-      const outputNama = document.getElementById('out_nama');
-      const outputNamaTtd = document.getElementById('out_nama_ttd');
+            attachments.forEach((item, index) => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'flex items-center gap-2';
+                itemDiv.innerHTML = `
+                    <span class="text-xs text-slate-400 font-medium w-4 text-right">${index + 1}.</span>
+                    <input type="text" value="${escapeHtml(item)}" oninput="updateAttachment(${index}, this.value)" class="flex-grow text-xs px-2.5 py-1.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 outline-none">
+                    <button type="button" onclick="removeAttachment(${index})" class="text-slate-400 hover:text-red-500 transition-colors p-1" title="Hapus">
+                        <i class="fa-solid fa-trash-can text-xs"></i>
+                    </button>
+                `;
+                container.appendChild(itemDiv);
+            });
 
-      inputNama.addEventListener('input', () => {
-        const val = inputNama.value.trim();
-        const textDisplay = val !== '' ? val : '[Nama Lengkap]';
-        outputNama.innerText = textDisplay;
-        outputNamaTtd.innerText = textDisplay;
-      });
-    });
+            updateLetter();
+        }
 
-    // Fungsi Unduh PDF
-    function downloadPDF() {
-      const element = document.getElementById('surat-preview');
-      const namaPelamar = document.getElementById('in_nama').value.trim() || 'Pelamar';
-      
-      const opt = {
-        margin:       0,
-        filename:     `Surat_Lamaran_Kerja_${namaPelamar.replace(/\s+/g, '_')}.pdf`,
-        image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, useCORS: true },
-        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-      };
+        function addAttachment() {
+            attachments.push('Dokumen Lampiran Baru');
+            renderAttachmentInputs();
+        }
 
-      html2pdf().set(opt).from(element).save();
-    }
-  </script>
+        function addPresetAttachment(text) {
+            attachments.push(text);
+            renderAttachmentInputs();
+            showToast(`Menambahkan ${text}`);
+        }
+
+        function updateAttachment(index, value) {
+            attachments[index] = value;
+            updateLetter();
+        }
+
+        function removeAttachment(index) {
+            if (attachments.length <= 1) {
+                showToast('Minimal harus ada 1 dokumen lampiran', 'error');
+                return;
+            }
+            attachments.splice(index, 1);
+            renderAttachmentInputs();
+        }
+
+        // Escape HTML string to prevent script injection
+        function escapeHtml(text) {
+            if (!text) return '';
+            return text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        // Update Live Preview Engine
+        function updateLetter() {
+            // Form 1 Data
+            const tempatSurat = document.getElementById('tempatSurat').value || 'Barabai';
+            const tanggalSuratRaw = document.getElementById('tanggalSurat').value;
+            const tanggalFormatted = formatIndonesianDate(tanggalSuratRaw);
+            const perihal = document.getElementById('perihal').value || 'Lamaran Pekerjaan';
+            const jumlahLampiran = document.getElementById('jumlahLampiran').value || '1 (satu) berkas';
+            const penerima = document.getElementById('penerima').value || '[Penerima / Jabatan]';
+            const namaInstansi = document.getElementById('namaInstansi').value || '[Nama Instansi / Perusahaan]';
+            const kotaPerusahaan = document.getElementById('kotaPerusahaan').value || 'Barabai';
+            const alamatInstansi = document.getElementById('alamatInstansi').value;
+
+            // Form 2 Data
+            const namaPelamar = document.getElementById('namaPelamar').value || '[Nama Pelamar]';
+            const ttlPelamar = document.getElementById('ttlPelamar').value || '[Tempat, Tanggal Lahir]';
+            const alamatPelamar = document.getElementById('alamatPelamar').value || '[Alamat Lengkap]';
+            const jkPelamar = document.getElementById('jkPelamar').value;
+            const pendidikanPelamar = document.getElementById('pendidikanPelamar').value || '[Pendidikan Terakhir]';
+            const phonePelamar = document.getElementById('phonePelamar').value || '[Nomor HP/WA]';
+            const emailPelamar = document.getElementById('emailPelamar').value;
+
+            // Update DOM Elements in Live Preview
+            document.getElementById('pv-tempatTanggal').innerText = `${tempatSurat}, ${tanggalFormatted}`;
+            document.getElementById('pv-jumlahLampiran').innerText = jumlahLampiran;
+            document.getElementById('pv-perihal').innerText = perihal;
+            document.getElementById('pv-penerima').innerText = penerima.startsWith('Kepada Yth.') ? penerima : `Kepada Yth. ${penerima}`;
+            document.getElementById('pv-namaInstansi').innerText = namaInstansi;
+            document.getElementById('pv-kotaPerusahaan').innerText = kotaPerusahaan;
+
+            const pvAlamatInstansi = document.getElementById('pv-alamatInstansi');
+            if (alamatInstansi && alamatInstansi.trim() !== '') {
+                pvAlamatInstansi.innerText = alamatInstansi;
+                pvAlamatInstansi.style.display = 'block';
+            } else {
+                pvAlamatInstansi.style.display = 'none';
+            }
+
+            document.getElementById('pv-instansiBody').innerText = namaInstansi;
+            document.getElementById('pv-instansiBody2').innerText = namaInstansi;
+
+            document.getElementById('pv-nama').innerText = namaPelamar;
+            document.getElementById('pv-ttl').innerText = ttlPelamar;
+            document.getElementById('pv-alamat').innerText = alamatPelamar;
+            document.getElementById('pv-jk').innerText = jkPelamar;
+            document.getElementById('pv-pendidikan').innerText = pendidikanPelamar;
+            document.getElementById('pv-phone').innerText = phonePelamar;
+
+            // Optional Email Row Logic
+            const emailContainer = document.getElementById('pv-emailContainer');
+            if (emailPelamar && emailPelamar.trim() !== '') {
+                document.getElementById('pv-email').innerText = emailPelamar;
+                emailContainer.style.display = 'grid';
+            } else {
+                emailContainer.style.display = 'none';
+            }
+
+            // Tanda Tangan
+            document.getElementById('pv-namaTtd').innerText = namaPelamar;
+
+            // Render Attachments List Preview
+            const pvAttachmentList = document.getElementById('pv-attachmentList');
+            pvAttachmentList.innerHTML = '';
+            attachments.forEach(item => {
+                if (item && item.trim() !== '') {
+                    const li = document.createElement('li');
+                    li.innerText = item;
+                    pvAttachmentList.appendChild(li);
+                }
+            });
+        }
+
+        // Load Demo Data for Quick Testing
+        function loadDemoData() {
+            document.getElementById('tempatSurat').value = 'Barabai';
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('tanggalSurat').value = today;
+            document.getElementById('jumlahLampiran').value = '5 (lima) berkas';
+            document.getElementById('penerima').value = 'Kepada Yth. Kepala Dinas Kesehatan';
+            document.getElementById('namaInstansi').value = 'Dinas Kesehatan Kabupaten Hulu Sungai Tengah';
+            document.getElementById('kotaPerusahaan').value = 'Barabai';
+            document.getElementById('alamatInstansi').value = 'Jl. Perintis Kemerdekaan No. 12, Barabai';
+
+            document.getElementById('namaPelamar').value = 'M. Riswan, A.Md.Kep.';
+            document.getElementById('ttlPelamar').value = 'Barabai, 14 Mei 1997';
+            document.getElementById('alamatPelamar').value = 'Jl. Murakata RT 05 / RW 02, Kec. Barabai, Kab. HST';
+            document.getElementById('jkPelamar').value = 'Laki-laki';
+            document.getElementById('pendidikanPelamar').value = 'D-III Keperawatan';
+            document.getElementById('phonePelamar').value = '0821-5544-3322';
+            document.getElementById('emailPelamar').value = 'riswan.keperawatan@email.com';
+
+            attachments = [
+                'Pasfoto terbaru ukuran 4x6 latar belakang merah (2 lembar)',
+                'Fotokopi Ijazah D-III Keperawatan legalisir',
+                'Fotokopi Transkrip Nilai legalisir',
+                'Fotokopi Surat Tanda Registrasi (STR) Aktif',
+                'Curriculum Vitae (CV) / Daftar Riwayat Hidup'
+            ];
+
+            renderAttachmentInputs();
+            showToast('Contoh data berhasil dimuat!');
+        }
+
+        // Reset Form
+        function resetForm() {
+            document.getElementById('letterForm').reset();
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('tanggalSurat').value = today;
+            document.getElementById('tempatSurat').value = 'Barabai';
+            document.getElementById('perihal').value = 'Lamaran Pekerjaan';
+            document.getElementById('jumlahLampiran').value = '1 (satu) berkas';
+
+            attachments = [
+                'Pasfoto 4x6 latar belakang merah (2 lembar)',
+                'Fotokopi Ijazah Terakhir dan Transkrip Nilai Legalisir',
+                'Fotokopi Kartu Tanda Penduduk (KTP)',
+                'Daftar Riwayat Hidup (Curriculum Vitae)',
+                'Surat Keterangan Sehat dari Dokter'
+            ];
+
+            renderAttachmentInputs();
+            showToast('Form telah dikosongkan.');
+        }
+
+        // Download as PDF using html2pdf.js
+        function downloadPDF() {
+            const element = document.getElementById('letterPaper');
+            const nama = document.getElementById('namaPelamar').value || 'Pelamar';
+            const cleanName = nama.replace(/[^a-zA-Z0-9]/g, '_');
+
+            showToast('Menyiapkan file PDF...', 'info');
+
+            const opt = {
+                margin:       0,
+                filename:     `Surat_Lamaran_Kerja_${cleanName}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true, logging: false },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            html2pdf().set(opt).from(element).save().then(() => {
+                showToast('Surat PDF berhasil diunduh!');
+            }).catch(err => {
+                console.error(err);
+                showToast('Gagal mengunduh PDF. Mengalihkan ke mode cetak...', 'error');
+                setTimeout(() => window.print(), 1000);
+            });
+        }
+
+        // Copy Letter Plain Text to Clipboard
+        function copyLetterText() {
+            const paper = document.getElementById('letterPaper');
+            const textContent = paper.innerText;
+
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(textContent).then(() => {
+                    showToast('Teks surat berhasil disalin!');
+                }).catch(() => {
+                    fallbackCopyText(textContent);
+                });
+            } else {
+                fallbackCopyText(textContent);
+            }
+        }
+
+        function fallbackCopyText(text) {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                showToast('Teks surat berhasil disalin!');
+            } catch (err) {
+                showToast('Gagal menyalin teks', 'error');
+            }
+            document.body.removeChild(textArea);
+        }
+
+        // Github Modal Helper
+        function openGithubModal() {
+            document.getElementById('githubModal').classList.remove('hidden');
+        }
+
+        function closeGithubModal() {
+            document.getElementById('githubModal').classList.add('hidden');
+        }
+
+        // Toast Notification Helper
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toastMsg');
+            const toastIcon = document.getElementById('toastIcon');
+
+            toastMsg.innerText = message;
+
+            if (type === 'error') {
+                toastIcon.className = 'fa-solid fa-circle-exclamation text-rose-400';
+            } else if (type === 'info') {
+                toastIcon.className = 'fa-solid fa-spinner fa-spin text-sky-400';
+            } else {
+                toastIcon.className = 'fa-solid fa-circle-check text-emerald-400';
+            }
+
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+    </script>
 </body>
 </html>
