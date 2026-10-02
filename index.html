@@ -281,9 +281,10 @@
                                 <div class="flex flex-wrap gap-1.5 mb-3">
                                     <span class="text-[11px] text-slate-400 flex items-center mr-1">Tambah Cepat:</span>
                                     <button type="button" onclick="addPresetAttachment('Ijazah Terakhir')" class="px-2 py-0.5 bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-600 rounded text-xs border border-slate-200 transition-colors">+ Ijazah</button>
-                                    <button type="button" onclick="addPresetAttachment('Kartu Tanda Penduduk (KTP)')" class="px-2 py-0.5 bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-600 rounded text-xs border border-slate-200 transition-colors">+ KTP</button>
-                                    <button type="button" onclick="addPresetAttachment('Kartu Keluarga (KK)')" class="px-2 py-0.5 bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-600 rounded text-xs border border-slate-200 transition-colors">+ KK</button>
-                                    <button type="button" onclick="addPresetAttachment('Kartu BPJS')" class="px-2 py-0.5 bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-600 rounded text-xs border border-slate-200 transition-colors">+ BPJS</button>
+                                    <button type="button" onclick="addPresetAttachment('Fotokopi Kartu Tanda Penduduk (KTP)')" class="px-2 py-0.5 bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-600 rounded text-xs border border-slate-200 transition-colors">+ KTP</button>
+                                    <button type="button" onclick="addPresetAttachment('Fotokopi Kartu Keluarga (KK)')" class="px-2 py-0.5 bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-600 rounded text-xs border border-slate-200 transition-colors">+ KK</button>
+                                    <button type="button" onclick="addPresetAttachment('Fotokopi Kartu BPJS Ketenagakerjaan')" class="px-2 py-0.5 bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-600 rounded text-xs border border-slate-200 transition-colors">+ BPJS KK</button>
+                                    <button type="button" onclick="addPresetAttachment('Fotokopi Kartu BPJS Kesehatan')" class="px-2 py-0.5 bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-600 rounded text-xs border border-slate-200 transition-colors">+ BPJS KS</button>
                                     <button type="button" onclick="addPresetAttachment('NPWP')" class="px-2 py-0.5 bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-600 rounded text-xs border border-slate-200 transition-colors">+ NPWP</button>
                                 </div>
 
@@ -469,11 +470,11 @@
     <script>
         // Default Dynamic Attachments Array
         let attachments = [
-            'Pasfoto 4x6 latar belakang merah (2 lembar)',
-            'Fotokopi Ijazah Terakhir dan Transkrip Nilai Legalisir',
+            'Ijazah Terakhir',
             'Fotokopi Kartu Tanda Penduduk (KTP)',
-            'Daftar Riwayat Hidup (Curriculum Vitae)',
-            'Surat Keterangan Sehat dari Dokter'
+            'Fotokopi Kartu Keluarga (KK)',
+            'Fotokopi Kartu BPJS (Ketenagakerjaan/Kesehatan)',
+            'NPWP'
         ];
 
         // Format Indonesian Date Helper
@@ -638,11 +639,11 @@
             document.getElementById('jumlahLampiran').value = '1 (satu) berkas';
 
             attachments = [
-                'Pasfoto 4x6 latar belakang merah (2 lembar)',
-                'Fotokopi Ijazah Terakhir dan Transkrip Nilai Legalisir',
+                'Ijazah Terakhir',
                 'Fotokopi Kartu Tanda Penduduk (KTP)',
-                'Daftar Riwayat Hidup (Curriculum Vitae)',
-                'Surat Keterangan Sehat dari Dokter'
+                'Fotokopi Kartu Keluarga (KK)',
+                'Fotokopi Kartu BPJS (Ketenagakerjaan/Kesehatan)',
+                'NPWP'
             ];
 
             renderAttachmentInputs();
@@ -652,8 +653,9 @@
         // Download as PDF using html2pdf.js with canvas scroll fix & standard font fallback
         function downloadPDF() {
             const element = document.getElementById('letterPaper');
-            const nama = document.getElementById('namaPelamar').value || 'Pelamar';
-            const cleanName = nama.replace(/[^a-zA-Z0-9]/g, '_');
+            const nama = document.getElementById('namaPelamar').value.trim() || 'Pelamar';
+            // Clean up name for safe filename: convert special chars/spaces into clean single underscores
+            const cleanName = nama.replace(/[^a-zA-Z0-9]+/g, '_').replace(/^_+|_+$/g, '');
 
             showToast('Menyiapkan file PDF...', 'info');
 
@@ -664,7 +666,7 @@
 
             const opt = {
                 margin:       0,
-                filename:     `Surat_Lamaran_Kerja_${cleanName}.pdf`,
+                filename:     `Surat_Lamaran_${cleanName}.pdf`,
                 image:        { type: 'jpeg', quality: 0.98 },
                 html2canvas:  { 
                     scale: 2, 
