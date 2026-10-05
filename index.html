@@ -55,17 +55,17 @@
             background: #94a3b8;
         }
 
-        /* Paper Preview Styling (F4 / Folio Standard: 210mm x 330mm) */
+        /* Paper Preview Styling (A4 Standard: 210mm x 297mm) */
         .a4-paper {
             width: 210mm;
-            height: 328mm;
-            padding: 12mm 15mm 12mm 20mm; /* Compact margins for 1-page fit */
+            height: 295mm;
+            padding: 10mm 15mm 10mm 20mm; /* Compact margins for 1-page A4 fit */
             margin: 0 auto;
             background-color: #ffffff !important;
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
             font-family: 'Times New Roman', Times, Georgia, serif !important;
             font-size: 11pt;
-            line-height: 1.4;
+            line-height: 1.35;
             color: #000000 !important;
             box-sizing: border-box;
             position: relative;
@@ -80,7 +80,7 @@
         /* CSS Print Stylesheet for direct printing */
         @media print {
             html, body {
-                height: 330mm !important;
+                height: 297mm !important;
                 overflow: hidden !important;
                 background: white !important;
                 padding: 0 !important;
@@ -97,16 +97,16 @@
             }
             .a4-paper {
                 box-shadow: none !important;
-                padding: 12mm 15mm 12mm 20mm !important;
+                padding: 10mm 15mm 10mm 20mm !important;
                 width: 210mm !important;
-                height: 328mm !important;
-                max-height: 328mm !important;
+                height: 295mm !important;
+                max-height: 295mm !important;
                 overflow: hidden !important;
                 page-break-after: avoid !important;
                 page-break-inside: avoid !important;
             }
             @page {
-                size: 210mm 330mm; /* Standard F4 / Folio Size */
+                size: A4 portrait; /* Standard A4 Size */
                 margin: 0;
             }
         }
@@ -172,8 +172,8 @@
                             <!-- Tempat & Tanggal Surat -->
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                 <div>
-                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Tempat Surat <span class="text-red-500">*</span></label>
-                                    <input type="text" id="tempatSurat" value="Barabai" oninput="updateLetter()" placeholder="Kota pembuatan" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-all outline-none">
+                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Tempat Surat <span class="text-sky-600 font-normal">(Otomatis)</span></label>
+                                    <input type="text" id="tempatSurat" value="Barabai" oninput="updateLetter()" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-200 bg-slate-50 text-slate-700 font-medium cursor-not-allowed outline-none" readonly>
                                 </div>
                                 <div>
                                     <label class="block text-xs font-semibold text-slate-700 mb-1">Tanggal Surat <span class="text-red-500">*</span></label>
@@ -195,15 +195,14 @@
 
                             <!-- Penerima / Jabatan -->
                             <div>
-                                <label class="block text-xs font-semibold text-slate-700 mb-1">Penerima / Jabatan <span class="text-red-500">*</span></label>
-                                <input type="text" id="penerima" placeholder="Misal: Kepala Dinas Kesehatan" oninput="updateLetter()" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-all outline-none">
-                                <p class="text-[11px] text-slate-400 mt-1">Otomatis diawali dengan "Kepada Yth."</p>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">Penerima / Jabatan <span class="text-sky-600 font-normal">(Otomatis)</span></label>
+                                <input type="text" id="penerima" value="Kepala Dinas Kesehatan" oninput="updateLetter()" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-200 bg-slate-50 text-slate-700 font-medium cursor-not-allowed outline-none" readonly>
                             </div>
 
                             <!-- Kota Instansi -->
                             <div>
-                                <label class="block text-xs font-semibold text-slate-700 mb-1">Kota Tujuan Perusahaan/Instansi <span class="text-red-500">*</span></label>
-                                <input type="text" id="kotaPerusahaan" placeholder="Misal: Barabai" oninput="updateLetter()" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-all outline-none">
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">Kota Tujuan Perusahaan/Instansi <span class="text-sky-600 font-normal">(Otomatis)</span></label>
+                                <input type="text" id="kotaPerusahaan" value="Barabai" oninput="updateLetter()" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-200 bg-slate-50 text-slate-700 font-medium cursor-not-allowed outline-none" readonly>
                             </div>
                         </div>
                     </div>
@@ -251,17 +250,10 @@
                                 </div>
                             </div>
 
-                            <!-- No HP & Email -->
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                <div>
-                                    <label class="block text-xs font-semibold text-slate-700 mb-1">No. HP / WhatsApp <span class="text-red-500">*</span></label>
-                                    <input type="tel" id="phonePelamar" placeholder="0812-3456-7890" oninput="updateLetter()" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-all outline-none">
-                                    <p class="text-[10px] text-amber-600 mt-1 font-medium"><i class="fa-solid fa-circle-info mr-0.5"></i> Pastikan nomor selalu aktif</p>
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Email <span class="text-slate-400 font-normal">(Opsional)</span></label>
-                                    <input type="email" id="emailPelamar" placeholder="nama@email.com" oninput="updateLetter()" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-all outline-none">
-                                </div>
+                            <!-- Email Opsional -->
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">Email <span class="text-slate-400 font-normal">(Opsional)</span></label>
+                                <input type="email" id="emailPelamar" placeholder="nama@email.com" oninput="updateLetter()" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-all outline-none">
                             </div>
 
                             <div class="pt-2 border-t border-slate-100">
@@ -278,8 +270,7 @@
                                     <button type="button" onclick="addPresetAttachment('Ijazah Terakhir')" class="px-2 py-0.5 bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-600 rounded text-xs border border-slate-200 transition-colors">+ Ijazah</button>
                                     <button type="button" onclick="addPresetAttachment('Kartu Tanda Penduduk (KTP)')" class="px-2 py-0.5 bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-600 rounded text-xs border border-slate-200 transition-colors">+ KTP</button>
                                     <button type="button" onclick="addPresetAttachment('Kartu Keluarga (KK)')" class="px-2 py-0.5 bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-600 rounded text-xs border border-slate-200 transition-colors">+ KK</button>
-                                    <button type="button" onclick="addPresetAttachment('Kartu BPJS Ketenagakerjaan')" class="px-2 py-0.5 bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-600 rounded text-xs border border-slate-200 transition-colors">+ BPJSKK</button>
-                                    <button type="button" onclick="addPresetAttachment('Kartu BPJS Kesehatan')" class="px-2 py-0.5 bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-600 rounded text-xs border border-slate-200 transition-colors">+ BPJSKS</button>
+                                    <button type="button" onclick="addPresetAttachment('Kartu BPJS')" class="px-2 py-0.5 bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-600 rounded text-xs border border-slate-200 transition-colors">+ BPJS</button>
                                     <button type="button" onclick="addPresetAttachment('NPWP')" class="px-2 py-0.5 bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-600 rounded text-xs border border-slate-200 transition-colors">+ NPWP</button>
                                 </div>
 
@@ -292,7 +283,6 @@
                     </div>
                 </form>
 
-                <!-- Export & Copy Action Buttons -->
                 <div class="p-4 bg-white rounded-2xl border border-slate-200/80 shadow-sm space-y-3">
                     <button onclick="downloadPDF()" class="w-full py-3 px-4 bg-gradient-to-r from-sky-600 to-blue-600 hover:from-sky-700 hover:to-blue-700 text-white font-bold rounded-xl shadow-lg shadow-sky-500/20 flex items-center justify-center gap-2 transition-all transform active:scale-[0.99]">
                         <i class="fa-solid fa-file-pdf text-lg"></i>
@@ -313,7 +303,6 @@
 
             </div>
 
-            <!-- RIGHT COLUMN: LIVE PREVIEW LETTER (Lg 7 Cols) -->
             <div class="lg:col-span-7 flex flex-col items-center">
                 
                 <div class="w-full mb-3 flex items-center justify-between no-print px-1">
@@ -321,7 +310,7 @@
                         <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
                         <span class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Live Preview Real-time</span>
                     </div>
-                    <span class="text-xs text-slate-400">Ukuran Standar F4 / Folio (210 x 330 mm)</span>
+                    <span class="text-xs text-slate-400">Ukuran Standar A4 (210 x 297 mm)</span>
                 </div>
 
                 <!-- PREVIEW CONTAINER / PRINT WRAPPER -->
@@ -337,7 +326,7 @@
                         <div class="mb-2.5 space-y-0.5">
                             <div class="grid grid-cols-12 max-w-xs">
                                 <div class="col-span-4">Lampiran</div>
-                                <div class="col-span-8">: <span id="pv-jumlahLampiran">1 (satu) berkas</span></div>
+                                <div class="col-span-8">: <span id="pv-jumlahLampiran">5 (lima) berkas</span></div>
                             </div>
                             <div class="grid grid-cols-12 max-w-xs font-medium">
                                 <div class="col-span-4">Perihal</div>
@@ -407,15 +396,8 @@
                                     <span id="pv-pendidikan">[Pendidikan Terakhir]</span>
                                 </div>
                             </div>
-                            <div class="grid grid-cols-12">
-                                <div class="col-span-4 sm:col-span-3">6. No. HP / WhatsApp</div>
-                                <div class="col-span-8 sm:col-span-9 flex">
-                                    <span class="mr-2">:</span>
-                                    <span id="pv-phone">[Nomor HP/WA]</span>
-                                </div>
-                            </div>
                             <div class="grid grid-cols-12" id="pv-emailContainer">
-                                <div class="col-span-4 sm:col-span-3">7. Email</div>
+                                <div class="col-span-4 sm:col-span-3">6. Email</div>
                                 <div class="col-span-8 sm:col-span-9 flex">
                                     <span class="mr-2">:</span>
                                     <span id="pv-email">-</span>
@@ -436,9 +418,9 @@
                             <p>Demikian surat lamaran kerja ini saya sampaikan. Atas perhatian dan kesempatan yang Bapak/Ibu berikan, saya ucapkan terima kasih.</p>
                         </div>
 
-                        <!-- Tanda Tangan Block -->
-                        <div class="flex justify-end">
-                            <div class="text-center w-60 space-y-8">
+                        <!-- Tanda Tangan Block (Large Vertical Space) -->
+                        <div class="flex justify-end pt-2">
+                            <div class="text-center w-60 space-y-20">
                                 <p>Hormat saya,</p>
                                 <div>
                                     <p id="pv-namaTtd" class="font-bold underline decoration-1 text-slate-900">[Nama Lengkap]</p>
@@ -566,7 +548,6 @@
                 .replace(/'/g, "&#039;");
         }
 
-        // Update Live Preview Engine
         function updateLetter() {
             // Form 1 Data
             const tempatSurat = document.getElementById('tempatSurat').value || 'Barabai';
@@ -578,7 +559,7 @@
             const autoLampiran = getAutoJumlahLampiran();
             document.getElementById('jumlahLampiran').value = autoLampiran;
 
-            const penerima = document.getElementById('penerima').value || '[Penerima / Jabatan]';
+            const penerima = document.getElementById('penerima').value || 'Kepala Dinas Kesehatan';
             const kotaPerusahaan = document.getElementById('kotaPerusahaan').value || 'Barabai';
 
             // Form 2 Data
@@ -587,7 +568,6 @@
             const alamatPelamar = document.getElementById('alamatPelamar').value || '[Alamat Lengkap]';
             const jkPelamar = document.getElementById('jkPelamar').value;
             const pendidikanPelamar = document.getElementById('pendidikanPelamar').value || '[Pendidikan Terakhir]';
-            const phonePelamar = document.getElementById('phonePelamar').value || '[Nomor HP/WA]';
             const emailPelamar = document.getElementById('emailPelamar').value;
 
             // Update DOM Elements in Live Preview
@@ -602,7 +582,6 @@
             document.getElementById('pv-alamat').innerText = alamatPelamar;
             document.getElementById('pv-jk').innerText = jkPelamar;
             document.getElementById('pv-pendidikan').innerText = pendidikanPelamar;
-            document.getElementById('pv-phone').innerText = phonePelamar;
 
             // Optional Email Row Logic
             const emailContainer = document.getElementById('pv-emailContainer');
@@ -635,6 +614,8 @@
             document.getElementById('tanggalSurat').value = today;
             document.getElementById('tempatSurat').value = 'Barabai';
             document.getElementById('perihal').value = 'Lamaran Pekerjaan';
+            document.getElementById('penerima').value = 'Kepala Dinas Kesehatan';
+            document.getElementById('kotaPerusahaan').value = 'Barabai';
 
             attachments = [
                 'Ijazah Terakhir',
@@ -648,7 +629,6 @@
             showToast('Form telah dikosongkan.');
         }
 
-        // Download as PDF using html2pdf.js with canvas scroll fix & standard font fallback
         function downloadPDF() {
             const element = document.getElementById('letterPaper');
             const nama = document.getElementById('namaPelamar').value.trim() || 'Pelamar';
@@ -676,12 +656,12 @@
                     backgroundColor: '#ffffff',
                     letterRendering: true
                 },
-                jsPDF:        { unit: 'mm', format: [210, 330], orientation: 'portrait' },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
                 pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
             };
 
             html2pdf().set(opt).from(element).save().then(() => {
-                showToast('Surat PDF (Ukuran F4) berhasil diunduh!');
+                showToast('Surat PDF (Ukuran A4) berhasil diunduh!');
             }).catch(err => {
                 console.error(err);
                 showToast('Gagal mengunduh PDF. Mengalihkan ke mode cetak...', 'error');
