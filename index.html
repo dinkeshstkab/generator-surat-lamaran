@@ -59,7 +59,7 @@
         .a4-paper {
             width: 210mm;
             height: 295mm;
-            padding: 12mm 15mm 12mm 20mm; /* Compact margins for 1-page A4 fit */
+            padding: 12mm 15mm 12mm 20mm; /* Compact margins for exact 1-page per sheet fit */
             margin: 0 auto;
             background-color: #ffffff !important;
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
@@ -305,7 +305,7 @@
                     </div>
                 </form>
 
-                <!-- ACTION BUTTONS: SIMPLIFIED TO PDF & PRINT -->
+                <!-- ACTION BUTTONS -->
                 <div class="p-4 bg-white rounded-2xl border border-slate-200/80 shadow-sm space-y-3">
                     <button onclick="downloadPDF()" class="w-full py-3 px-4 bg-gradient-to-r from-sky-600 to-blue-600 hover:from-sky-700 hover:to-blue-700 text-white font-bold rounded-xl shadow-lg shadow-sky-500/20 flex items-center justify-center gap-2 transition-all transform active:scale-[0.99]">
                         <i class="fa-solid fa-file-pdf text-lg"></i>
@@ -325,7 +325,7 @@
                 <div class="w-full mb-3 flex items-center justify-between no-print px-1">
                     <div class="flex items-center space-x-2">
                         <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                        <span class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Live Preview (2 Halaman)</span>
+                        <span class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Live Preview (Tepat 2 Halaman A4)</span>
                     </div>
                     <span class="text-xs text-slate-400">Ukuran Standar A4 (210 x 297 mm)</span>
                 </div>
@@ -336,116 +336,116 @@
                         
                         <!-- HALAMAN 1: SURAT LAMARAN KERJA -->
                         <div id="letterPaper" class="a4-paper shadow-2xl rounded-sm">
-                            
-                            <!-- Header Kanan (Tempat & Tanggal) -->
-                            <div class="text-right mb-2.5">
-                                <p id="pv-tempatTanggal">Barabai, 2 Oktober 2026</p>
-                            </div>
-
-                            <!-- Lampiran & Perihal -->
-                            <div class="mb-2.5 space-y-0.5">
-                                <div class="grid grid-cols-12 max-w-xs">
-                                    <div class="col-span-4">Lampiran</div>
-                                    <div class="col-span-8">: <span id="pv-jumlahLampiran">5 (lima) berkas</span></div>
+                            <div>
+                                <!-- Header Kanan (Tempat & Tanggal) -->
+                                <div class="text-right mb-2.5">
+                                    <p id="pv-tempatTanggal">Barabai, 6 Oktober 2026</p>
                                 </div>
-                                <div class="grid grid-cols-12 max-w-xs font-medium">
-                                    <div class="col-span-4">Perihal</div>
-                                    <div class="col-span-8">: <span id="pv-perihal">Lamaran Pekerjaan</span></div>
-                                </div>
-                            </div>
 
-                            <!-- Penerima / Tujuan -->
-                            <div class="mb-2.5 space-y-0.5">
-                                <p>Kepada Yth.</p>
-                                <p id="pv-penerima" class="font-bold">Kepala Dinas Kesehatan</p>
-                                <p id="pv-instansi" class="font-bold">Kab. Hulu Sungai Tengah</p>
-                                <p>di -</p>
-                                <p class="pl-4 font-semibold" id="pv-kotaPerusahaan">Barabai</p>
-                            </div>
-
-                            <!-- Salam Pembuka -->
-                            <div class="mb-2">
-                                <p>Dengan hormat,</p>
-                            </div>
-
-                            <!-- Paragraf Utama -->
-                            <div class="mb-2.5 text-justify leading-relaxed">
-                                <p>
-                                    Dengan ini saya bermaksud untuk mengajukan permohonan kepada Bapak/Ibu, untuk dapat diterima menjadi pegawai kontrak di lingkup Dinas Kesehatan. Saya memiliki kualifikasi yang relevan, dedikasi tinggi, serta komitmen untuk memberikan kontribusi terbaik bagi Dinas Kesehatan.
-                                </p>
-                            </div>
-
-                            <!-- Data Diri Header -->
-                            <div class="mb-1">
-                                <p>Berikut adalah data diri singkat saya:</p>
-                            </div>
-
-                            <!-- Data Diri Table List with exact Colon alignment -->
-                            <div class="mb-2.5 pl-4 space-y-0.5 text-sm sm:text-base">
-                                <div class="grid grid-cols-12">
-                                    <div class="col-span-4 sm:col-span-3">1. Nama Lengkap</div>
-                                    <div class="col-span-8 sm:col-span-9 flex">
-                                        <span class="mr-2">:</span>
-                                        <span id="pv-nama" class="font-bold">[Nama Pelamar]</span>
+                                <!-- Lampiran & Perihal -->
+                                <div class="mb-2.5 space-y-0.5">
+                                    <div class="grid grid-cols-12 max-w-xs">
+                                        <div class="col-span-4">Lampiran</div>
+                                        <div class="col-span-8">: <span id="pv-jumlahLampiran">5 (lima) berkas</span></div>
+                                    </div>
+                                    <div class="grid grid-cols-12 max-w-xs font-medium">
+                                        <div class="col-span-4">Perihal</div>
+                                        <div class="col-span-8">: <span id="pv-perihal">Lamaran Pekerjaan</span></div>
                                     </div>
                                 </div>
-                                <div class="grid grid-cols-12">
-                                    <div class="col-span-4 sm:col-span-3">2. Tempat, Tgl Lahir</div>
-                                    <div class="col-span-8 sm:col-span-9 flex">
-                                        <span class="mr-2">:</span>
-                                        <span id="pv-ttl">[Tempat, Tanggal Lahir]</span>
+
+                                <!-- Penerima / Tujuan -->
+                                <div class="mb-2.5 space-y-0.5">
+                                    <p>Kepada Yth.</p>
+                                    <p id="pv-penerima" class="font-bold">Kepala Dinas Kesehatan</p>
+                                    <p id="pv-instansi" class="font-bold">Kab. Hulu Sungai Tengah</p>
+                                    <p>di -</p>
+                                    <p class="pl-4 font-semibold" id="pv-kotaPerusahaan">Barabai</p>
+                                </div>
+
+                                <!-- Salam Pembuka -->
+                                <div class="mb-2">
+                                    <p>Dengan hormat,</p>
+                                </div>
+
+                                <!-- Paragraf Utama -->
+                                <div class="mb-2.5 text-justify leading-relaxed">
+                                    <p>
+                                        Dengan ini saya bermaksud untuk mengajukan permohonan kepada Bapak/Ibu, untuk dapat diterima menjadi pegawai kontrak di lingkup Dinas Kesehatan. Saya memiliki kualifikasi yang relevan, dedikasi tinggi, serta komitmen untuk memberikan kontribusi terbaik bagi Dinas Kesehatan.
+                                    </p>
+                                </div>
+
+                                <!-- Data Diri Header -->
+                                <div class="mb-1">
+                                    <p>Berikut adalah data diri singkat saya:</p>
+                                </div>
+
+                                <!-- Data Diri Table List -->
+                                <div class="mb-2.5 pl-4 space-y-0.5 text-sm sm:text-base">
+                                    <div class="grid grid-cols-12">
+                                        <div class="col-span-4 sm:col-span-3">1. Nama Lengkap</div>
+                                        <div class="col-span-8 sm:col-span-9 flex">
+                                            <span class="mr-2">:</span>
+                                            <span id="pv-nama" class="font-bold">[Nama Pelamar]</span>
+                                        </div>
+                                    </div>
+                                    <div class="grid grid-cols-12">
+                                        <div class="col-span-4 sm:col-span-3">2. Tempat, Tgl Lahir</div>
+                                        <div class="col-span-8 sm:col-span-9 flex">
+                                            <span class="mr-2">:</span>
+                                            <span id="pv-ttl">[Tempat, Tanggal Lahir]</span>
+                                        </div>
+                                    </div>
+                                    <div class="grid grid-cols-12">
+                                        <div class="col-span-4 sm:col-span-3">3. Alamat Lengkap</div>
+                                        <div class="col-span-8 sm:col-span-9 flex">
+                                            <span class="mr-2">:</span>
+                                            <span id="pv-alamat">[Alamat Lengkap]</span>
+                                        </div>
+                                    </div>
+                                    <div class="grid grid-cols-12">
+                                        <div class="col-span-4 sm:col-span-3">4. Jenis Kelamin</div>
+                                        <div class="col-span-8 sm:col-span-9 flex">
+                                            <span class="mr-2">:</span>
+                                            <span id="pv-jk">Laki-laki</span>
+                                        </div>
+                                    </div>
+                                    <div class="grid grid-cols-12">
+                                        <div class="col-span-4 sm:col-span-3">5. Pendidikan Terakhir</div>
+                                        <div class="col-span-8 sm:col-span-9 flex">
+                                            <span class="mr-2">:</span>
+                                            <span id="pv-pendidikan">[Pendidikan Terakhir]</span>
+                                        </div>
+                                    </div>
+                                    <div class="grid grid-cols-12">
+                                        <div class="col-span-4 sm:col-span-3">6. No. Telepon / HP</div>
+                                        <div class="col-span-8 sm:col-span-9 flex">
+                                            <span class="mr-2">:</span>
+                                            <span id="pv-phone"></span>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="grid grid-cols-12">
-                                    <div class="col-span-4 sm:col-span-3">3. Alamat Lengkap</div>
-                                    <div class="col-span-8 sm:col-span-9 flex">
-                                        <span class="mr-2">:</span>
-                                        <span id="pv-alamat">[Alamat Lengkap]</span>
-                                    </div>
+
+                                <!-- Paragraf Pertimbangan & Lampiran List -->
+                                <div class="mb-2.5">
+                                    <p class="mb-1">Sebagai bahan pertimbangan Bapak/Ibu, bersama surat ini saya lampirkan:</p>
+                                    <ol id="pv-attachmentList" class="list-decimal list-inside pl-4 space-y-0.5">
+                                        <!-- Dynamic Rendered Attachments -->
+                                    </ol>
                                 </div>
-                                <div class="grid grid-cols-12">
-                                    <div class="col-span-4 sm:col-span-3">4. Jenis Kelamin</div>
-                                    <div class="col-span-8 sm:col-span-9 flex">
-                                        <span class="mr-2">:</span>
-                                        <span id="pv-jk">Laki-laki</span>
-                                    </div>
-                                </div>
-                                <div class="grid grid-cols-12">
-                                    <div class="col-span-4 sm:col-span-3">5. Pendidikan Terakhir</div>
-                                    <div class="col-span-8 sm:col-span-9 flex">
-                                        <span class="mr-2">:</span>
-                                        <span id="pv-pendidikan">[Pendidikan Terakhir]</span>
-                                    </div>
-                                </div>
-                                <div class="grid grid-cols-12">
-                                    <div class="col-span-4 sm:col-span-3">6. No. Telepon / HP</div>
-                                    <div class="col-span-8 sm:col-span-9 flex">
-                                        <span class="mr-2">:</span>
-                                        <span id="pv-phone"></span>
-                                    </div>
+
+                                <!-- Paragraf Penutup -->
+                                <div class="mb-3 text-justify leading-relaxed">
+                                    <p>Demikian surat lamaran kerja ini saya sampaikan. Atas perhatian dan kesempatan yang Bapak/Ibu berikan, saya ucapkan terima kasih.</p>
                                 </div>
                             </div>
 
-                            <!-- Paragraf Pertimbangan & Lampiran List -->
-                            <div class="mb-2.5">
-                                <p class="mb-1">Sebagai bahan pertimbangan Bapak/Ibu, bersama surat ini saya lampirkan:</p>
-                                <ol id="pv-attachmentList" class="list-decimal list-inside pl-4 space-y-0.5">
-                                    <!-- Dynamic Rendered Attachments -->
-                                </ol>
-                            </div>
-
-                            <!-- Paragraf Penutup -->
-                            <div class="mb-4 text-justify leading-relaxed">
-                                <p>Demikian surat lamaran kerja ini saya sampaikan. Atas perhatian dan kesempatan yang Bapak/Ibu berikan, saya ucapkan terima kasih.</p>
-                            </div>
-
-                            <!-- Tanda Tangan Block -->
-                            <div class="flex justify-end pt-2">
-                                <div class="text-center w-60 space-y-26">
+                            <!-- Tanda Tangan Standard Flow -->
+                            <div class="flex justify-end mt-6">
+                                <div class="text-center w-60">
                                     <p>Hormat saya,</p>
-                                    <div>
-                                        <p id="pv-namaTtd" class="font-bold underline decoration-1 text-slate-900">[Nama Lengkap]</p>
-                                    </div>
+                                    <div class="h-20"></div>
+                                    <p id="pv-namaTtd" class="font-bold underline decoration-1 text-slate-900">[Nama Lengkap]</p>
                                 </div>
                             </div>
 
@@ -453,97 +453,100 @@
 
                         <!-- HALAMAN 2: SURAT PERNYATAAN TENAGA KERJA -->
                         <div id="statementPaper" class="a4-paper shadow-2xl rounded-sm page-break">
-                            
-                            <!-- Judul Surat Pernyataan -->
-                            <div class="text-center mb-6 pt-2">
-                                <h2 class="text-base font-bold tracking-wide uppercase underline decoration-1">SURAT PERNYATAAN TENAGA KERJA</h2>
-                            </div>
-
-                            <!-- Sub-header Data Diri -->
-                            <div class="mb-2">
-                                <p>Yang bertanda tangan di bawah ini:</p>
-                            </div>
-
-                            <!-- Data Diri Pernyataan List -->
-                            <div class="mb-4 pl-4 space-y-1 text-sm sm:text-base">
-                                <div class="grid grid-cols-12">
-                                    <div class="col-span-5 sm:col-span-4 font-medium">Nama Lengkap</div>
-                                    <div class="col-span-7 sm:col-span-8 flex">
-                                        <span class="mr-2">:</span>
-                                        <span id="sp-nama" class="font-bold">[Nama Lengkap]</span>
-                                    </div>
+                            <div>
+                                <!-- Judul Surat Pernyataan -->
+                                <div class="text-center mb-5 pt-2">
+                                    <h2 class="text-base font-bold tracking-wide uppercase underline decoration-1">SURAT PERNYATAAN TENAGA KERJA</h2>
                                 </div>
-                                <div class="grid grid-cols-12">
-                                    <div class="col-span-5 sm:col-span-4 font-medium">NIK</div>
-                                    <div class="col-span-7 sm:col-span-8 flex">
-                                        <span class="mr-2">:</span>
-                                        <span id="sp-nik">[Nomor Induk Kependudukan]</span>
-                                    </div>
-                                </div>
-                                <div class="grid grid-cols-12">
-                                    <div class="col-span-5 sm:col-span-4 font-medium">Tempat, Tanggal Lahir</div>
-                                    <div class="col-span-7 sm:col-span-8 flex">
-                                        <span class="mr-2">:</span>
-                                        <span id="sp-ttl">[Tempat, Tanggal Lahir]</span>
-                                    </div>
-                                </div>
-                                <div class="grid grid-cols-12">
-                                    <div class="col-span-5 sm:col-span-4 font-medium">Alamat Lengkap</div>
-                                    <div class="col-span-7 sm:col-span-8 flex">
-                                        <span class="mr-2">:</span>
-                                        <span id="sp-alamat">[Alamat Lengkap sesuai KTP]</span>
-                                    </div>
-                                </div>
-                                <div class="grid grid-cols-12">
-                                    <div class="col-span-5 sm:col-span-4 font-medium">No. Telepon / HP</div>
-                                    <div class="col-span-7 sm:col-span-8 flex">
-                                        <span class="mr-2">:</span>
-                                        <span id="sp-phone"></span>
-                                    </div>
-                                </div>
-                            </div>
 
-                            <!-- Kalimat Pernyataan & Poin-poin -->
-                            <div class="mb-4 text-justify leading-relaxed">
-                                <p class="mb-2">Dengan ini menyatakan dengan sesungguhnya bahwa saya:</p>
-                                <ol class="list-decimal list-outside pl-5 space-y-1.5">
-                                    <li class="pl-1">
-                                        <strong>Bebas Narkoba:</strong> Tidak sedang atau pernah mengonsumsi, menyimpan, maupun mengedarkan Narkotika, Psikotropika, dan Zat Adiktif lainnya (NAPZA).
-                                    </li>
-                                    <li class="pl-1">
-                                        <strong>Rekam Jejak Hukum:</strong> Tidak pernah atau tidak sedang terlibat dalam tindakan kriminal maupun tindak pidana hukum apa pun.
-                                    </li>
-                                    <li class="pl-1">
-                                        <strong>Kebenaran Dokumen:</strong> Seluruh data, dokumen, serta informasi yang saya berikan kepada perusahaan adalah benar, sah, dan sesuai dengan kondisi asli.
-                                    </li>
-                                    <li class="pl-1">
-                                        <strong>Kepatuhan Aturan:</strong> Bersedia mematuhi seluruh peraturan, kode etik, serta ketentuan yang berlaku di Lingkungan Dinas Kesehatan.
-                                    </li>
-                                    <li class="pl-1">
-                                        <strong>Keterikatan Kerja:</strong> Tidak sedang terikat kontrak kerja atau hubungan dinas dengan instansi/perusahaan lain yang dapat mengganggu pelaksanaan tugas.
-                                    </li>
-                                </ol>
-                            </div>
+                                <!-- Sub-header Data Diri -->
+                                <div class="mb-2">
+                                    <p>Yang bertanda tangan di bawah ini:</p>
+                                </div>
 
-                            <!-- Paragraf Penutup Pernyataan -->
-                            <div class="mb-6 text-justify leading-relaxed">
-                                <p>Demikian surat pernyataan ini saya buat dengan sebenarnya tanpa ada paksaan dari pihak mana pun. Apabila di kemudian hari terbukti pernyataan ini tidak benar, saya bersedia menerima sanksi sesuai dengan hukum dan ketentuan yang berlaku.</p>
-                            </div>
-
-                            <!-- Tanda Tangan Pernyataan (dengan Kotak Materai 10.000) -->
-                            <div class="flex justify-end pt-2">
-                                <div class="text-center w-64 space-y-3">
-                                    <p id="sp-tempatTanggal">Barabai, 2 Oktober 2026</p>
-                                    <div class="text-center w-60 space-y-26">
-                                    <p>Yang membuat pernyataan,</p>
-                                        <div>
-                                        <p id="sp-namaTtd" class="font-bold underline decoration-1 text-slate-900">[Nama Lengkap]</p>
+                                <!-- Data Diri Pernyataan List -->
+                                <div class="mb-4 pl-4 space-y-1 text-sm sm:text-base">
+                                    <div class="grid grid-cols-12">
+                                        <div class="col-span-5 sm:col-span-4 font-medium">Nama Lengkap</div>
+                                        <div class="col-span-7 sm:col-span-8 flex">
+                                            <span class="mr-2">:</span>
+                                            <span id="sp-nama" class="font-bold">[Nama Lengkap]</span>
+                                        </div>
+                                    </div>
+                                    <div class="grid grid-cols-12">
+                                        <div class="col-span-5 sm:col-span-4 font-medium">NIK</div>
+                                        <div class="col-span-7 sm:col-span-8 flex">
+                                            <span class="mr-2">:</span>
+                                            <span id="sp-nik">[Nomor Induk Kependudukan]</span>
+                                        </div>
+                                    </div>
+                                    <div class="grid grid-cols-12">
+                                        <div class="col-span-5 sm:col-span-4 font-medium">Tempat, Tanggal Lahir</div>
+                                        <div class="col-span-7 sm:col-span-8 flex">
+                                            <span class="mr-2">:</span>
+                                            <span id="sp-ttl">[Tempat, Tanggal Lahir]</span>
+                                        </div>
+                                    </div>
+                                    <div class="grid grid-cols-12">
+                                        <div class="col-span-5 sm:col-span-4 font-medium">Alamat Lengkap</div>
+                                        <div class="col-span-7 sm:col-span-8 flex">
+                                            <span class="mr-2">:</span>
+                                            <span id="sp-alamat">[Alamat Lengkap sesuai KTP]</span>
+                                        </div>
+                                    </div>
+                                    <div class="grid grid-cols-12">
+                                        <div class="col-span-5 sm:col-span-4 font-medium">No. Telepon / HP</div>
+                                        <div class="col-span-7 sm:col-span-8 flex">
+                                            <span class="mr-2">:</span>
+                                            <span id="sp-phone"></span>
                                         </div>
                                     </div>
                                 </div>
+
+                                <!-- Kalimat Pernyataan & Poin-poin -->
+                                <div class="mb-4 text-justify leading-relaxed">
+                                    <p class="mb-2">Dengan ini menyatakan dengan sesungguhnya bahwa saya:</p>
+                                    <ol class="list-decimal list-outside pl-5 space-y-1.5">
+                                        <li class="pl-1">
+                                            <strong>Bebas Narkoba:</strong> Tidak sedang atau pernah mengonsumsi, menyimpan, maupun mengedarkan Narkotika, Psikotropika, dan Zat Adiktif lainnya (NAPZA).
+                                        </li>
+                                        <li class="pl-1">
+                                            <strong>Rekam Jejak Hukum:</strong> Tidak pernah atau tidak sedang terlibat dalam tindakan kriminal maupun tindak pidana hukum apa pun.
+                                        </li>
+                                        <li class="pl-1">
+                                            <strong>Kebenaran Dokumen:</strong> Seluruh data, dokumen, serta informasi yang saya berikan kepada perusahaan adalah benar, sah, dan sesuai dengan kondisi asli.
+                                        </li>
+                                        <li class="pl-1">
+                                            <strong>Kepatuhan Aturan:</strong> Bersedia mematuhi seluruh peraturan, kode etik, serta ketentuan yang berlaku di Lingkungan Dinas Kesehatan.
+                                        </li>
+                                        <li class="pl-1">
+                                            <strong>Keterikatan Kerja:</strong> Tidak sedang terikat kontrak kerja atau hubungan dinas dengan instansi/perusahaan lain yang dapat mengganggu pelaksanaan tugas.
+                                        </li>
+                                    </ol>
+                                </div>
+
+                                <!-- Paragraf Penutup Pernyataan -->
+                                <div class="mb-3 text-justify leading-relaxed">
+                                    <p>Demikian surat pernyataan ini saya buat dengan sebenarnya tanpa ada paksaan dari pihak mana pun. Apabila di kemudian hari terbukti pernyataan ini tidak benar, saya bersedia menerima sanksi sesuai dengan hukum dan ketentuan yang berlaku.</p>
+                                </div>
                             </div>
 
+                            <!-- Tanda Tangan Pernyataan Standard Flow -->
+                            <div class="flex justify-end mt-6">
+                                <div class="text-center w-60">
+                                    <p id="sp-tempatTanggal">Barabai, 6 Oktober 2026</p>
+                                    <p>Yang membuat pernyataan,</p>
+                                    <div class="h-20"></div>
+                                    <p id="sp-namaTtd" class="font-bold underline decoration-1 text-slate-900">( [Nama Lengkap] )</p>
+                                </div>
+                            </div>
+
+                        </div>
+
                     </div>
+                </div>
+
+            </div>
 
         </div>
     </main>
@@ -1122,7 +1125,7 @@
             if (document.getElementById('sp-alamat')) document.getElementById('sp-alamat').innerText = alamatPelamar;
             if (document.getElementById('sp-phone')) document.getElementById('sp-phone').innerText = phonePelamar;
             if (document.getElementById('sp-tempatTanggal')) document.getElementById('sp-tempatTanggal').innerText = `${tempatSurat}, ${tanggalFormatted}`;
-            if (document.getElementById('sp-namaTtd')) document.getElementById('sp-namaTtd').innerText = `${namaPelamar}`;
+            if (document.getElementById('sp-namaTtd')) document.getElementById('sp-namaTtd').innerText = `( ${namaPelamar} )`;
 
             // Render Attachments List Preview
             const pvAttachmentList = document.getElementById('pv-attachmentList');
@@ -1201,38 +1204,6 @@
                 showToast('Gagal mengunduh PDF. Mengalihkan ke mode cetak...', 'error');
                 setTimeout(() => window.print(), 800);
             });
-        }
-
-        // Copy Letter Plain Text to Clipboard
-        function copyLetterText() {
-            const paper = document.getElementById('letterPaper');
-            if (!paper) return;
-            const textContent = paper.innerText;
-
-            if (navigator.clipboard) {
-                navigator.clipboard.writeText(textContent).then(() => {
-                    showToast('Teks surat berhasil disalin!');
-                }).catch(() => {
-                    fallbackCopyText(textContent);
-                });
-            } else {
-                fallbackCopyText(textContent);
-            }
-        }
-
-        function fallbackCopyText(text) {
-            const textArea = document.createElement("textarea");
-            textArea.value = text;
-            document.body.appendChild(textArea);
-            textArea.focus();
-            textArea.select();
-            try {
-                document.execCommand('copy');
-                showToast('Teks surat berhasil disalin!');
-            } catch (err) {
-                showToast('Gagal menyalin teks', 'error');
-            }
-            document.body.removeChild(textArea);
         }
 
         // Toast Notification Helper
