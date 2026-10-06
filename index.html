@@ -648,31 +648,6 @@
                     <input type="url" id="sheetWebhookUrl" placeholder="https://script.google.com/macros/s/.../exec" class="w-full text-xs px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-emerald-500 outline-none">
                     <p class="text-[11px] text-slate-500 mt-1">Masukkan URL Web App dari Google Apps Script untuk pengiriman otomatis saat klik "Cetak Langsung".</p>
                 </div>
-
-                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-2">
-                    <h4 class="font-bold text-xs text-slate-800 flex items-center gap-1.5">
-                        <i class="fa-solid fa-code text-emerald-600"></i>
-                        <span>Kode Google Apps Script (Salin ke Google Sheets)</span>
-                    </h4>
-                    <p class="text-[11px] text-slate-600">Di Google Sheets Anda, buka <strong>Ekstensi &gt; Apps Script</strong>, hapus kode bawaan, salin kode di bawah ini, lalu klik <strong>Terapkan / Deploy as Web App</strong>:</p>
-                    <textarea readonly class="w-full h-36 font-mono text-[10px] p-2.5 bg-slate-900 text-emerald-400 rounded-lg outline-none select-all">function doPost(e) {
-  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-  var data = JSON.parse(e.postData.contents);
-  sheet.appendRow([
-    new Date(),
-    data.namaPelamar,
-    data.nikPelamar,
-    data.ttlPelamar,
-    data.alamatPelamar,
-    data.jkPelamar,
-    data.pendidikanPelamar,
-    data.phonePelamar,
-    data.tempatSurat,
-    data.tanggalSurat
-  ]);
-  return ContentService.createTextOutput("Success");
-}</textarea>
-                </div>
             </div>
 
             <div class="p-4 bg-slate-50 border-t border-slate-200 flex justify-end space-x-2">
