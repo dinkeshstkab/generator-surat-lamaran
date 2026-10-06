@@ -609,7 +609,6 @@
         let currentUser = null;
         let savedApplicants = [];
 
-        // Auto Sync from Google Sheets on Boot
         const initStartupSync = () => {
             if (window.getActiveWebhookUrl()) {
                 loadFromGoogleSheets();
@@ -625,13 +624,11 @@
 
         // Anti-Inspect & Anti-Edit Protection Logic
         function initAntiInspectSecurity() {
-            // 1. Disable Right Click context menu on Preview Container
             const previewContainer = document.getElementById('pdfContainer');
             if (previewContainer) {
                 previewContainer.addEventListener('contextmenu', (e) => e.preventDefault());
             }
 
-            // 2. Disable DevTools Shortcut Keys
             window.addEventListener('keydown', (e) => {
                 if (
                     e.key === 'F12' || 
@@ -642,7 +639,6 @@
                 }
             });
 
-            // 3. MutationObserver: Auto-revert any manual text edit on A4 preview paper instantly
             const papers = document.querySelectorAll('.a4-paper');
             let isResetting = false;
 
@@ -650,7 +646,6 @@
                 if (isResetting) return;
                 isResetting = true;
                 
-                // Trigger quick update to reset DOM back to original form values
                 if (typeof window.updateLetter === 'function') {
                     window.updateLetter();
                 }
@@ -668,7 +663,6 @@
             });
         }
 
-        // Fetch / Read data from Google Sheets API
         window.loadFromGoogleSheets = async function() {
             const webhookUrl = window.getActiveWebhookUrl();
             if (!webhookUrl) {
@@ -676,13 +670,14 @@
                 return false;
             }
 
-            // Validasi jika pengguna menempelkan link Spreadsheet langsung alih-alih URL Web App
             if (webhookUrl.includes('docs.google.com/spreadsheets')) {
                 showToast('Gagal! URL yang diisi adalah Link Spreadsheet. Harap masukkan URL Web App Apps Script (/exec).', 'error');
                 return false;
             }
 
             showToast('Memproses sinkronisasi data dari Google Sheets...', 'info');
+            
+            let sheetData = null;
             try {
                 const response = await fetch(webhookUrl);
                 if (!response.ok) {
@@ -691,7 +686,6 @@
                 }
 
                 const rawText = await response.text();
-                let sheetData;
                 try {
                     sheetData = JSON.parse(rawText);
                 } catch (jsonErr) {
@@ -699,33 +693,44 @@
                     showToast('Gagal! Pastikan Deploy Apps Script set "Who has access" = "Anyone".', 'error');
                     return false;
                 }
-
-                if (sheetData && sheetData.error) {
-                    showToast(`Error Apps Script: ${sheetData.error}`, 'error');
-                    return false;
-                }
-
-                if (Array.isArray(sheetData)) {
-                    sheetData.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
-                    savedApplicants = sheetData;
-                    updateApplicantTableUI();
-                    if (sheetData.length === 0) {
-                        showToast('Berhasil terhubung! Belum ada data tersimpan di Google Sheet.', 'info');
-                    } else {
-                        showToast(`Berhasil memuat ${sheetData.length} data dari Google Sheets!`);
-                    }
-                    return true;
-                } else {
-                    showToast('Format data dari Google Sheets tidak valid!', 'error');
-                }
             } catch (err) {
                 console.error("Gagal membaca dari Google Sheets:", err);
                 showToast('Gagal sinkronisasi. Cek izin akses Apps Script ("Anyone") atau URL Web App.', 'error');
+                return false;
+            }
+
+            if (sheetData && sheetData.error) {
+                showToast(`Error Apps Script: ${sheetData.error}`, 'error');
+                return false;
+            }
+
+            if (Array.isArray(sheetData)) {
+                sheetData.sort((a, b) => {
+                    const timeA = new Date(a.createdAt || 0).getTime() || 0;
+                    const timeB = new Date(b.createdAt || 0).getTime() || 0;
+                    return timeB - timeA;
+                });
+                
+                savedApplicants = sheetData;
+                
+                try {
+                    updateApplicantTableUI();
+                } catch (uiErr) {
+                    console.error("Error rendering table UI:", uiErr);
+                }
+
+                if (sheetData.length === 0) {
+                    showToast('Berhasil terhubung! Belum ada data tersimpan di Google Sheet.', 'info');
+                } else {
+                    showToast(`Berhasil memuat ${sheetData.length} data dari Google Sheets!`);
+                }
+                return true;
+            } else {
+                showToast('Format data dari Google Sheets tidak valid!', 'error');
             }
             return false;
         };
 
-        // Initialize Firebase Fallback
         try {
             const app = initializeApp(firebaseConfig);
             const auth = getAuth(app);
@@ -748,18 +753,21 @@
             console.warn("Firebase sync initialized in local fallback mode.", e);
         }
 
-        // Subscribe to Firestore Collection
         function subscribeToApplicants() {
             if (!db || !currentUser) return;
             const colRef = collection(db, 'artifacts', appId, 'public', 'data', 'pelamar');
             
             onSnapshot(colRef, (snapshot) => {
-                if (window.getActiveWebhookUrl()) return; // Skip if Sheets URL active
+                if (window.getActiveWebhookUrl()) return;
                 savedApplicants = snapshot.docs.map(docSnap => ({
                     id: docSnap.id,
                     ...docSnap.data()
                 }));
-                savedApplicants.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+                savedApplicants.sort((a, b) => {
+                    const timeA = new Date(a.createdAt || 0).getTime() || 0;
+                    const timeB = new Date(b.createdAt || 0).getTime() || 0;
+                    return timeB - timeA;
+                });
                 updateApplicantTableUI();
             }, (error) => {
                 console.error("Error fetching applicants:", error);
@@ -802,7 +810,6 @@
 
             showToast('Menyimpan data pelamar...', 'info');
 
-            // 1. Stream to Google Sheets Webhook if configured
             const webhookUrl = window.getActiveWebhookUrl();
             if (webhookUrl) {
                 try {
@@ -813,7 +820,6 @@
                         body: JSON.stringify(formData)
                     });
                     
-                    // Add to current session table immediately
                     formData.id = 'sheet_' + Date.now();
                     savedApplicants.unshift(formData);
                     updateApplicantTableUI();
@@ -825,7 +831,6 @@
                 }
             }
 
-            // 2. Fallback to Cloud Firestore
             if (db && currentUser) {
                 try {
                     const colRef = collection(db, 'artifacts', appId, 'public', 'data', 'pelamar');
@@ -843,7 +848,6 @@
             return true;
         };
 
-        // Render Applicant Table inside Modal
         function updateApplicantTableUI() {
             const tbody = document.getElementById('applicantTableBody');
             const badge = document.getElementById('dbCountBadge');
@@ -871,15 +875,34 @@
                 return;
             }
 
+            const safeEscape = (txt) => {
+                if (!txt) return '';
+                return String(txt)
+                    .replace(/&/g, "&amp;")
+                    .replace(/</g, "&lt;")
+                    .replace(/>/g, "&gt;")
+                    .replace(/"/g, "&quot;")
+                    .replace(/'/g, "&#039;");
+            };
+
             tbody.innerHTML = filtered.map(item => {
-                const dateStr = item.createdAt ? new Date(item.createdAt).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }) : '-';
+                let dateStr = '-';
+                if (item.createdAt) {
+                    const d = new Date(item.createdAt);
+                    if (!isNaN(d.getTime())) {
+                        dateStr = d.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
+                    } else {
+                        dateStr = String(item.createdAt).split('T')[0] || '-';
+                    }
+                }
+
                 return `
                     <tr class="hover:bg-slate-50 transition-colors">
                         <td class="p-2.5 text-slate-500 whitespace-nowrap">${dateStr}</td>
-                        <td class="p-2.5 font-bold text-slate-800">${escapeHtml(item.namaPelamar)}</td>
-                        <td class="p-2.5 text-slate-600 font-mono">${escapeHtml(item.nikPelamar)}</td>
-                        <td class="p-2.5 text-slate-600">${escapeHtml(item.pendidikanPelamar)}</td>
-                        <td class="p-2.5 text-slate-600">${escapeHtml(item.phonePelamar || '-')}</td>
+                        <td class="p-2.5 font-bold text-slate-800">${safeEscape(item.namaPelamar)}</td>
+                        <td class="p-2.5 text-slate-600 font-mono">${safeEscape(item.nikPelamar)}</td>
+                        <td class="p-2.5 text-slate-600">${safeEscape(item.pendidikanPelamar)}</td>
+                        <td class="p-2.5 text-slate-600">${safeEscape(item.phonePelamar || '-')}</td>
                         <td class="p-2.5 text-center whitespace-nowrap">
                             <button onclick="loadApplicantToForm('${item.id}')" class="px-2 py-1 bg-sky-50 hover:bg-sky-100 text-sky-700 font-medium text-[11px] rounded mr-1">
                                 <i class="fa-solid fa-arrow-right-to-bracket mr-1"></i>Muat Data
@@ -901,10 +924,8 @@
 
             if (document.getElementById('namaPelamar')) document.getElementById('namaPelamar').value = item.namaPelamar || '';
             if (document.getElementById('nikPelamar')) document.getElementById('nikPelamar').value = item.nikPelamar || '';
-            
             if (document.getElementById('tempatLahirPelamar')) document.getElementById('tempatLahirPelamar').value = item.tempatLahirPelamar || '';
             if (document.getElementById('tglLahirPelamar')) document.getElementById('tglLahirPelamar').value = item.tglLahirPelamar || '';
-            
             if (document.getElementById('alamatPelamar')) document.getElementById('alamatPelamar').value = item.alamatPelamar || '';
             if (document.getElementById('jkPelamar')) document.getElementById('jkPelamar').value = item.jkPelamar || 'Laki-laki';
             if (document.getElementById('pendidikanPelamar')) document.getElementById('pendidikanPelamar').value = item.pendidikanPelamar || '';
@@ -964,7 +985,6 @@
     </script>
 
     <script>
-        // Format Indonesian Date Helper (Globally available)
         function formatIndonesianDate(dateString) {
             if (!dateString) return '';
             const months = [
@@ -977,7 +997,6 @@
         }
         window.formatIndonesianDate = formatIndonesianDate;
 
-        // Default Dynamic Attachments Array
         let attachments = [
             'Ijazah Terakhir',
             'Fotokopi Kartu Tanda Penduduk (KTP)',
@@ -986,7 +1005,6 @@
             'NPWP'
         ];
 
-        // Combined Handler for Print & Save
         window.handlePrintAndSave = async function() {
             try {
                 if (typeof window.saveToDatabase === 'function') {
@@ -996,13 +1014,11 @@
                 console.error("Save before print error:", err);
             }
             
-            // Open standard browser print dialog
             setTimeout(() => {
                 window.print();
             }, 400);
         };
 
-        // Toggle Modals
         function toggleDatabaseModal() {
             const modal = document.getElementById('dbModal');
             if (modal) {
@@ -1015,14 +1031,12 @@
             }
         }
 
-        // Convert number to Indonesian text helper
         function numberToWordsIndonesian(num) {
             const words = ['', 'satu', 'dua', 'tiga', 'empat', 'lima', 'enam', 'tujuh', 'delapan', 'sembilan', 'sepuluh', 'sebelas'];
             if (num <= 11) return words[num];
             return num.toString();
         }
 
-        // Calculate automatic attachment string
         function getAutoJumlahLampiran() {
             const validAttachments = attachments.filter(item => item && item.trim() !== '');
             const count = validAttachments.length;
@@ -1097,7 +1111,6 @@
         }
 
         function updateLetter() {
-            // Informasi Surat & Instansi (Seragam & Otomatis)
             const tempatSurat = 'Barabai';
             const perihal = 'Lamaran Pekerjaan';
             const penerima = 'Kepala Dinas Kesehatan';
@@ -1109,7 +1122,6 @@
             
             const autoLampiran = getAutoJumlahLampiran();
 
-            // Data Pelamar
             const namaPelamar = document.getElementById('namaPelamar')?.value || '[Nama Pelamar]';
             const nikPelamar = document.getElementById('nikPelamar')?.value || '[Nomor Induk Kependudukan]';
             
@@ -1133,7 +1145,6 @@
             const pendidikanPelamar = document.getElementById('pendidikanPelamar')?.value || '[Pendidikan Terakhir]';
             const phonePelamar = document.getElementById('phonePelamar')?.value || '';
 
-            // Update DOM Preview Elements (Halaman 1)
             if (document.getElementById('pv-tempatTanggal')) document.getElementById('pv-tempatTanggal').innerText = `${tempatSurat}, ${tanggalFormatted}`;
             if (document.getElementById('pv-jumlahLampiran')) document.getElementById('pv-jumlahLampiran').innerText = autoLampiran;
             if (document.getElementById('pv-perihal')) document.getElementById('pv-perihal').innerText = perihal;
@@ -1148,10 +1159,8 @@
             if (document.getElementById('pv-pendidikan')) document.getElementById('pv-pendidikan').innerText = pendidikanPelamar;
             if (document.getElementById('pv-phone')) document.getElementById('pv-phone').innerText = phonePelamar;
 
-            // Tanda Tangan Halaman 1 (Tanpa tanda kurung)
             if (document.getElementById('pv-namaTtd')) document.getElementById('pv-namaTtd').innerText = namaPelamar;
 
-            // Update DOM Elements in Live Preview (Halaman 2 - Surat Pernyataan)
             if (document.getElementById('sp-nama')) document.getElementById('sp-nama').innerText = namaPelamar;
             if (document.getElementById('sp-nik')) document.getElementById('sp-nik').innerText = nikPelamar;
             if (document.getElementById('sp-ttl')) document.getElementById('sp-ttl').innerText = ttlPelamar;
@@ -1159,10 +1168,8 @@
             if (document.getElementById('sp-phone')) document.getElementById('sp-phone').innerText = phonePelamar;
             if (document.getElementById('sp-tempatTanggal')) document.getElementById('sp-tempatTanggal').innerText = `${tempatSurat}, ${tanggalFormatted}`;
             
-            // Tanda Tangan Halaman 2 (Tanpa tanda kurung)
             if (document.getElementById('sp-namaTtd')) document.getElementById('sp-namaTtd').innerText = namaPelamar;
 
-            // Render Attachments List Preview
             const pvAttachmentList = document.getElementById('pv-attachmentList');
             if (pvAttachmentList) {
                 pvAttachmentList.innerHTML = '';
