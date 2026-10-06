@@ -70,6 +70,7 @@
             box-sizing: border-box;
             position: relative;
             overflow: hidden;
+            user-select: none; /* Anti-copy highlight on paper view */
         }
 
         /* Ensure all child text within paper is explicitly black */
@@ -417,13 +418,13 @@
                         <!-- HALAMAN 2: SURAT PERNYATAAN TENAGA KERJA -->
                         <div id="statementPaper" class="a4-paper shadow-2xl rounded-sm page-break">
                             <div>
-                                <!-- Judul Surat Pernyataan -->
-                                <div class="text-center mb-5 pt-2">
+                                <!-- Judul Surat Pernyataan (Berjarak Lega Ke Bawah) -->
+                                <div class="text-center mb-8 pt-4">
                                     <h2 class="text-base font-bold tracking-wide uppercase underline decoration-1">SURAT PERNYATAAN TENAGA KERJA</h2>
                                 </div>
 
                                 <!-- Sub-header Data Diri -->
-                                <div class="mb-2">
+                                <div class="mb-3">
                                     <p>Yang bertanda tangan di bawah ini:</p>
                                 </div>
 
@@ -547,10 +548,6 @@
                         <i class="fa-solid fa-rotate text-sky-600"></i>
                         <span>Sync Sheet</span>
                     </button>
-                    <button onclick="toggleSheetSettingsModal()" class="px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-medium text-xs rounded-lg flex items-center gap-1.5 border border-emerald-200">
-                        <i class="fa-solid fa-file-excel text-emerald-600"></i>
-                        <span>Setting Google Sheet</span>
-                    </button>
                     <button onclick="exportToCSV()" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-xs rounded-lg flex items-center gap-1.5 shadow-sm">
                         <i class="fa-solid fa-file-csv"></i>
                         <span>Ekspor CSV</span>
@@ -586,48 +583,7 @@
         </div>
     </div>
 
-    <!-- MODAL GOOGLE SHEETS SETTINGS -->
-    <div id="sheetModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 no-print">
-        <div class="bg-white w-full max-w-xl rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
-            <div class="bg-emerald-800 text-white px-6 py-4 flex items-center justify-between">
-                <div class="flex items-center space-x-3">
-                    <i class="fa-solid fa-file-excel text-emerald-300 text-lg"></i>
-                    <div>
-                        <h3 class="font-bold text-base">Integrasi Google Sheets</h3>
-                        <p class="text-xs text-emerald-200">Kirim & baca data otomatis dari lembar Google Sheets Anda</p>
-                    </div>
-                </div>
-                <button onclick="toggleSheetSettingsModal()" class="text-emerald-200 hover:text-white p-1">
-                    <i class="fa-solid fa-xmark text-lg"></i>
-                </button>
-            </div>
-
-            <div class="p-6 space-y-4 overflow-y-auto">
-                <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-3 text-xs text-emerald-900 space-y-1">
-                    <p class="font-bold flex items-center gap-1.5">
-                        <i class="fa-solid fa-circle-info text-emerald-600"></i>
-                        Otomatisasi Tanpa Input Ulang
-                    </p>
-                    <p class="text-slate-600">
-                        Simpan URL Web App sekali di browser ini, atau tempelkan pada variabel <code>DEFAULT_SHEETS_URL</code> di file HTML agar terhubung otomatis selamanya di semua perangkat tanpa perlu input ulang.
-                    </p>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-semibold text-slate-700 mb-1">URL Web App Google Apps Script</label>
-                    <input type="url" id="sheetWebhookUrl" placeholder="https://script.google.com/macros/s/.../exec" class="w-full text-xs px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-emerald-500 outline-none">
-                    <p class="text-[11px] text-slate-500 mt-1">URL Web App dari Google Apps Script (berakhiran <code>/exec</code>).</p>
-                </div>
-            </div>
-
-            <div class="p-4 bg-slate-50 border-t border-slate-200 flex justify-end space-x-2">
-                <button onclick="toggleSheetSettingsModal()" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold rounded-lg text-xs">Batal</button>
-                <button onclick="saveSheetSettings()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-lg text-xs shadow-md">Simpan & Sync Otomatis</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Firebase Cloud Storage & App Script Logic -->
+    <!-- Anti-Tamper Security & Script Logic -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
@@ -660,13 +616,65 @@
             if (window.getActiveWebhookUrl()) {
                 loadFromGoogleSheets();
             }
+            initAntiInspectSecurity();
         });
+
+        // Anti-Inspect & Anti-Edit Protection Logic
+        function initAntiInspectSecurity() {
+            // 1. Disable Right Click context menu on Preview Container
+            const previewContainer = document.getElementById('pdfContainer');
+            if (previewContainer) {
+                previewContainer.addEventListener('contextmenu', (e) => e.preventDefault());
+            }
+
+            // 2. Disable DevTools Shortcut Keys
+            window.addEventListener('keydown', (e) => {
+                if (
+                    e.key === 'F12' || 
+                    (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c')) ||
+                    (e.ctrlKey && (e.key === 'U' || e.key === 'u'))
+                ) {
+                    // Suppress shortcuts silently
+                }
+            });
+
+            // 3. MutationObserver: Auto-revert any manual text edit on A4 preview paper instantly
+            const papers = document.querySelectorAll('.a4-paper');
+            let isResetting = false;
+
+            const observer = new MutationObserver((mutations) => {
+                if (isResetting) return;
+                isResetting = true;
+                
+                // Trigger quick update to reset DOM back to original form values
+                if (typeof window.updateLetter === 'function') {
+                    window.updateLetter();
+                }
+                
+                setTimeout(() => { isResetting = false; }, 50);
+            });
+
+            papers.forEach(paper => {
+                observer.observe(paper, {
+                    childList: true,
+                    subtree: true,
+                    characterData: true,
+                    attributes: true
+                });
+            });
+        }
 
         // Fetch / Read data from Google Sheets API
         window.loadFromGoogleSheets = async function() {
             const webhookUrl = window.getActiveWebhookUrl();
             if (!webhookUrl) {
-                showToast('URL Google Sheets belum diatur! Klik "Setting Google Sheet".', 'error');
+                showToast('URL Google Sheets belum diatur di DEFAULT_SHEETS_URL!', 'error');
+                return false;
+            }
+
+            // Validasi jika pengguna menempelkan link Spreadsheet langsung alih-alih URL Web App
+            if (webhookUrl.includes('docs.google.com/spreadsheets')) {
+                showToast('Gagal! URL yang diisi adalah Link Spreadsheet. Harap masukkan URL Web App Apps Script (/exec).', 'error');
                 return false;
             }
 
@@ -684,7 +692,7 @@
                     sheetData = JSON.parse(rawText);
                 } catch (jsonErr) {
                     console.error("Respons Google Apps Script bukan JSON:", rawText);
-                    showToast('Gagal! Respons Apps Script bukan JSON. Pastikan Deploy set "Who has access" = "Anyone".', 'error');
+                    showToast('Gagal! Pastikan Deploy Apps Script set "Who has access" = "Anyone".', 'error');
                     return false;
                 }
 
@@ -708,7 +716,7 @@
                 }
             } catch (err) {
                 console.error("Gagal membaca dari Google Sheets:", err);
-                showToast('Gagal sinkronisasi. Periksa koneksi internet / URL Web App.', 'error');
+                showToast('Gagal sinkronisasi. Cek izin akses Apps Script ("Anyone") atau URL Web App.', 'error');
             }
             return false;
         };
@@ -1000,31 +1008,6 @@
                         window.loadFromGoogleSheets();
                     }
                 }
-            }
-        }
-
-        function toggleSheetSettingsModal() {
-            const modal = document.getElementById('sheetModal');
-            if (modal) {
-                modal.classList.toggle('hidden');
-                const savedUrl = (window.getActiveWebhookUrl ? window.getActiveWebhookUrl() : localStorage.getItem('googleSheetsWebhookUrl')) || '';
-                const input = document.getElementById('sheetWebhookUrl');
-                if (input) input.value = savedUrl;
-            }
-        }
-
-        function saveSheetSettings() {
-            const input = document.getElementById('sheetWebhookUrl');
-            if (input) {
-                const url = input.value.trim();
-                if (!url) {
-                    showToast('URL tidak boleh kosong!', 'error');
-                    return;
-                }
-                localStorage.setItem('googleSheetsWebhookUrl', url);
-                showToast('URL Google Sheets berhasil disimpan!');
-                toggleSheetSettingsModal();
-                window.loadFromGoogleSheets();
             }
         }
 
