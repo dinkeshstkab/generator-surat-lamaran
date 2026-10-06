@@ -534,21 +534,16 @@
                             <div class="flex justify-end pt-2">
                                 <div class="text-center w-64 space-y-3">
                                     <p id="sp-tempatTanggal">Barabai, 2 Oktober 2026</p>
-                                    <p>Yang membuat pernyataan,</p>
-                                    
-                                    <div class="pt-2 pb-2 flex justify-center">
                                     <div class="text-center w-60 space-y-26">
-                                    <div>
+                                    <p>Yang membuat pernyataan,</p>
+                                        <div>
                                         <p id="sp-namaTtd" class="font-bold underline decoration-1 text-slate-900">[Nama Lengkap]</p>
+                                        </div>
                                     </div>
+                                </div>
                             </div>
 
-                        </div>
-
                     </div>
-                </div>
-
-            </div>
 
         </div>
     </main>
@@ -1127,7 +1122,7 @@
             if (document.getElementById('sp-alamat')) document.getElementById('sp-alamat').innerText = alamatPelamar;
             if (document.getElementById('sp-phone')) document.getElementById('sp-phone').innerText = phonePelamar;
             if (document.getElementById('sp-tempatTanggal')) document.getElementById('sp-tempatTanggal').innerText = `${tempatSurat}, ${tanggalFormatted}`;
-            if (document.getElementById('sp-namaTtd')) document.getElementById('sp-namaTtd').innerText = `( ${namaPelamar} )`;
+            if (document.getElementById('sp-namaTtd')) document.getElementById('sp-namaTtd').innerText = `${namaPelamar}`;
 
             // Render Attachments List Preview
             const pvAttachmentList = document.getElementById('pv-attachmentList');
