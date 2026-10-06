@@ -146,87 +146,43 @@
     </header>
 
     <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
             
-            <!-- LEFT COLUMN: FORM INPUTS (Lg 5 Cols) -->
-            <div class="lg:col-span-5 space-y-6 no-print">
+            <!-- LEFT COLUMN: FORM INPUTS (Lg 4 Cols - Compact Form) -->
+            <div class="lg:col-span-4 space-y-6 no-print">
                 
                 <!-- Notice Banner -->
                 <div class="bg-gradient-to-r from-sky-500 to-blue-600 rounded-2xl p-4 text-white shadow-lg shadow-sky-500/10 flex items-center justify-between">
                     <div class="space-y-1">
-                        <p class="text-xs font-medium text-sky-100 uppercase tracking-wider">Langkah Mudah</p>
-                        <h2 class="text-sm font-bold">Isi form di bawah, hasil surat langsung jadi!</h2>
+                        <p class="text-xs font-medium text-sky-100 uppercase tracking-wider">Form Singkat</p>
+                        <h2 class="text-sm font-bold">Isi data pelamar, surat otomatis siap!</h2>
                     </div>
                     <div class="bg-white/10 p-2.5 rounded-xl backdrop-blur-sm">
                         <i class="fa-solid fa-bolt text-xl text-yellow-300"></i>
                     </div>
                 </div>
 
-                <!-- FORM CONTAINER -->
+                <!-- FORM CONTAINER (Simplified Single Card) -->
                 <form id="letterForm" onsubmit="return false;" class="space-y-6">
 
                     <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden">
                         <div class="bg-slate-50/80 px-5 py-4 border-b border-slate-200 flex items-center justify-between">
                             <div class="flex items-center space-x-2.5">
-                                <span class="w-7 h-7 rounded-lg bg-sky-100 text-sky-700 font-bold text-xs flex items-center justify-center">1</span>
-                                <h2 class="font-bold text-slate-800 text-sm">Informasi Surat & Instansi</h2>
+                                <span class="w-7 h-7 rounded-lg bg-sky-100 text-sky-700 font-bold text-xs flex items-center justify-center">
+                                    <i class="fa-solid fa-user-pen"></i>
+                                </span>
+                                <h2 class="font-bold text-slate-800 text-sm">Data Pelamar & Tanggal</h2>
                             </div>
-                            <span class="text-xs text-slate-400">Form 1 dari 2</span>
+                            <span class="text-xs text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md font-medium border border-emerald-200/60">Otomatisasi Aktif</span>
                         </div>
 
                         <div class="p-5 space-y-4">
-                            <!-- Tempat & Tanggal Surat -->
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                <div>
-                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Tempat Surat <span class="text-sky-600 font-normal">(Otomatis)</span></label>
-                                    <input type="text" id="tempatSurat" value="Barabai" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-200 bg-slate-50 text-slate-700 font-medium cursor-not-allowed outline-none" readonly>
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Tanggal Surat <span class="text-red-500">*</span></label>
-                                    <input type="date" id="tanggalSurat" oninput="updateLetter()" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-all outline-none">
-                                </div>
-                            </div>
-
-                            <!-- Perihal & Jumlah Lampiran -->
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                <div>
-                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Perihal</label>
-                                    <input type="text" id="perihal" value="Lamaran Pekerjaan" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-200 bg-slate-50 text-slate-600 cursor-not-allowed outline-none" readonly>
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Jumlah Lampiran <span class="text-sky-600 font-normal">(Otomatis)</span></label>
-                                    <input type="text" id="jumlahLampiran" value="5 (lima) berkas" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-200 bg-slate-50 text-slate-700 font-medium cursor-not-allowed outline-none" readonly>
-                                </div>
-                            </div>
-
-                            <!-- Penerima / Jabatan & Instansi -->
+                            <!-- Tanggal Surat -->
                             <div>
-                                <label class="block text-xs font-semibold text-slate-700 mb-1">Penerima / Jabatan <span class="text-sky-600 font-normal">(Otomatis)</span></label>
-                                <input type="text" id="penerima" value="Kepala Dinas Kesehatan" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-200 bg-slate-50 text-slate-700 font-medium cursor-not-allowed outline-none" readonly>
-                            </div>
-                            <div>
-                                <label class="block text-xs font-semibold text-slate-700 mb-1">Instansi <span class="text-sky-600 font-normal">(Otomatis)</span></label>
-                                <input type="text" id="instansi" value="Kab. Hulu Sungai Tengah" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-200 bg-slate-50 text-slate-700 font-medium cursor-not-allowed outline-none" readonly>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">Tanggal Surat <span class="text-red-500">*</span></label>
+                                <input type="date" id="tanggalSurat" oninput="updateLetter()" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-all outline-none">
                             </div>
 
-                            <!-- Kota Instansi -->
-                            <div>
-                                <label class="block text-xs font-semibold text-slate-700 mb-1">Kota Tujuan Perusahaan/Instansi <span class="text-sky-600 font-normal">(Otomatis)</span></label>
-                                <input type="text" id="kotaPerusahaan" value="Barabai" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-200 bg-slate-50 text-slate-700 font-medium cursor-not-allowed outline-none" readonly>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden">
-                        <div class="bg-slate-50/80 px-5 py-4 border-b border-slate-200 flex items-center justify-between">
-                            <div class="flex items-center space-x-2.5">
-                                <span class="w-7 h-7 rounded-lg bg-sky-100 text-sky-700 font-bold text-xs flex items-center justify-center">2</span>
-                                <h2 class="font-bold text-slate-800 text-sm">Data Diri Pelamar & Lampiran</h2>
-                            </div>
-                            <span class="text-xs text-slate-400">Form 2 dari 2</span>
-                        </div>
-
-                        <div class="p-5 space-y-4">
                             <!-- Nama Lengkap dengan Gelar -->
                             <div>
                                 <label class="block text-xs font-semibold text-slate-700 mb-1">Nama Lengkap (dengan Gelar jika ada) <span class="text-red-500">*</span></label>
@@ -320,12 +276,13 @@
 
             </div>
 
-            <div class="lg:col-span-7 flex flex-col items-center">
+            <!-- RIGHT COLUMN: LIVE PREVIEW (Lg 8 Cols - Wider Canvas) -->
+            <div class="lg:col-span-8 flex flex-col items-center">
                 
                 <div class="w-full mb-3 flex items-center justify-between no-print px-1">
                     <div class="flex items-center space-x-2">
                         <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                        <span class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Live Preview (Tepat 2 Halaman A4)</span>
+                        <span class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Live Preview (2 Halaman A4 Standar)</span>
                     </div>
                     <span class="text-xs text-slate-400">Ukuran Standar A4 (210 x 297 mm)</span>
                 </div>
@@ -740,7 +697,7 @@
                 jkPelamar: document.getElementById('jkPelamar')?.value || 'Laki-laki',
                 pendidikanPelamar: document.getElementById('pendidikanPelamar')?.value || '',
                 phonePelamar: document.getElementById('phonePelamar')?.value || '',
-                tempatSurat: document.getElementById('tempatSurat')?.value || 'Barabai',
+                tempatSurat: 'Barabai',
                 tanggalSurat: document.getElementById('tanggalSurat')?.value || '',
                 createdAt: new Date().toISOString()
             };
@@ -1048,23 +1005,19 @@
         }
 
         function updateLetter() {
-            // Form 1 Data
-            const tempatSurat = document.getElementById('tempatSurat')?.value || 'Barabai';
+            // Informasi Surat & Instansi (Seragam & Otomatis)
+            const tempatSurat = 'Barabai';
+            const perihal = 'Lamaran Pekerjaan';
+            const penerima = 'Kepala Dinas Kesehatan';
+            const instansi = 'Kab. Hulu Sungai Tengah';
+            const kotaPerusahaan = 'Barabai';
+
             const tanggalSuratRaw = document.getElementById('tanggalSurat')?.value;
             const tanggalFormatted = formatIndonesianDate(tanggalSuratRaw);
-            const perihal = document.getElementById('perihal')?.value || 'Lamaran Pekerjaan';
             
             const autoLampiran = getAutoJumlahLampiran();
-            const elemJumlahLampiran = document.getElementById('jumlahLampiran');
-            if (elemJumlahLampiran) {
-                elemJumlahLampiran.value = autoLampiran;
-            }
 
-            const penerima = document.getElementById('penerima')?.value || 'Kepala Dinas Kesehatan';
-            const instansi = document.getElementById('instansi')?.value || 'Kab. Hulu Sungai Tengah';
-            const kotaPerusahaan = document.getElementById('kotaPerusahaan')?.value || 'Barabai';
-
-            // Form 2 Data
+            // Data Pelamar
             const namaPelamar = document.getElementById('namaPelamar')?.value || '[Nama Pelamar]';
             const nikPelamar = document.getElementById('nikPelamar')?.value || '[Nomor Induk Kependudukan]';
             
