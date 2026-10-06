@@ -179,7 +179,7 @@
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                 <div>
                                     <label class="block text-xs font-semibold text-slate-700 mb-1">Tempat Surat <span class="text-sky-600 font-normal">(Otomatis)</span></label>
-                                    <input type="text" id="tempatSurat" value="Barabai" oninput="updateLetter()" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-200 bg-slate-50 text-slate-700 font-medium cursor-not-allowed outline-none" readonly>
+                                    <input type="text" id="tempatSurat" value="Barabai" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-200 bg-slate-50 text-slate-700 font-medium cursor-not-allowed outline-none" readonly>
                                 </div>
                                 <div>
                                     <label class="block text-xs font-semibold text-slate-700 mb-1">Tanggal Surat <span class="text-red-500">*</span></label>
@@ -191,7 +191,7 @@
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                 <div>
                                     <label class="block text-xs font-semibold text-slate-700 mb-1">Perihal</label>
-                                    <input type="text" id="perihal" value="Lamaran Pekerjaan" oninput="updateLetter()" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-200 bg-slate-50 text-slate-600 cursor-not-allowed outline-none" readonly>
+                                    <input type="text" id="perihal" value="Lamaran Pekerjaan" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-200 bg-slate-50 text-slate-600 cursor-not-allowed outline-none" readonly>
                                 </div>
                                 <div>
                                     <label class="block text-xs font-semibold text-slate-700 mb-1">Jumlah Lampiran <span class="text-sky-600 font-normal">(Otomatis)</span></label>
@@ -202,17 +202,17 @@
                             <!-- Penerima / Jabatan & Instansi -->
                             <div>
                                 <label class="block text-xs font-semibold text-slate-700 mb-1">Penerima / Jabatan <span class="text-sky-600 font-normal">(Otomatis)</span></label>
-                                <input type="text" id="penerima" value="Kepala Dinas Kesehatan" oninput="updateLetter()" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-200 bg-slate-50 text-slate-700 font-medium cursor-not-allowed outline-none" readonly>
+                                <input type="text" id="penerima" value="Kepala Dinas Kesehatan" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-200 bg-slate-50 text-slate-700 font-medium cursor-not-allowed outline-none" readonly>
                             </div>
                             <div>
                                 <label class="block text-xs font-semibold text-slate-700 mb-1">Instansi <span class="text-sky-600 font-normal">(Otomatis)</span></label>
-                                <input type="text" id="instansi" value="Kab. Hulu Sungai Tengah" oninput="updateLetter()" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-200 bg-slate-50 text-slate-700 font-medium cursor-not-allowed outline-none" readonly>
+                                <input type="text" id="instansi" value="Kab. Hulu Sungai Tengah" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-200 bg-slate-50 text-slate-700 font-medium cursor-not-allowed outline-none" readonly>
                             </div>
 
                             <!-- Kota Instansi -->
                             <div>
                                 <label class="block text-xs font-semibold text-slate-700 mb-1">Kota Tujuan Perusahaan/Instansi <span class="text-sky-600 font-normal">(Otomatis)</span></label>
-                                <input type="text" id="kotaPerusahaan" value="Barabai" oninput="updateLetter()" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-200 bg-slate-50 text-slate-700 font-medium cursor-not-allowed outline-none" readonly>
+                                <input type="text" id="kotaPerusahaan" value="Barabai" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-200 bg-slate-50 text-slate-700 font-medium cursor-not-allowed outline-none" readonly>
                             </div>
                         </div>
                     </div>
@@ -440,7 +440,7 @@
                                 </div>
                             </div>
 
-                            <!-- Tanda Tangan Standard Flow -->
+                            <!-- Tanda Tangan Standard Flow Halaman 1 -->
                             <div class="flex justify-end mt-6">
                                 <div class="text-center w-60">
                                     <p>Hormat saya,</p>
@@ -537,7 +537,7 @@
                                     <p id="sp-tempatTanggal">Barabai, 6 Oktober 2026</p>
                                     <p>Yang membuat pernyataan,</p>
                                     <div class="h-20"></div>
-                                    <p id="pv-namaTtd" class="font-bold underline decoration-1 text-slate-900">[Nama Lengkap]</p>
+                                    <p id="sp-namaTtd" class="font-bold underline decoration-1 text-slate-900">[Nama Lengkap]</p>
                                 </div>
                             </div>
 
@@ -650,7 +650,6 @@
         </div>
     </div>
 
-    <!-- Firebase Cloud Storage & App Script Logic -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
@@ -712,7 +711,6 @@
             });
         }
 
-        // Global function to save current form to Cloud Database
         window.saveToDatabase = async function() {
             const nama = document.getElementById('namaPelamar')?.value.trim();
             const nik = document.getElementById('nikPelamar')?.value.trim();
@@ -836,7 +834,6 @@
 
         window.filterApplicantTable = updateApplicantTableUI;
 
-        // Load saved applicant data back into inputs
         window.loadApplicantToForm = function(id) {
             const item = savedApplicants.find(a => a.id === id);
             if (!item) return;
@@ -858,7 +855,6 @@
             showToast(`Data pelamar "${item.namaPelamar}" telah dimuat!`);
         };
 
-        // Delete applicant record
         window.deleteApplicantRecord = async function(id) {
             if (db && currentUser && !id.startsWith('local_')) {
                 try {
@@ -873,7 +869,6 @@
             showToast('Data pelamar berhasil dihapus.');
         };
 
-        // Export All Records to CSV (Compatible with Google Sheets)
         window.exportToCSV = function() {
             if (savedApplicants.length === 0) {
                 showToast('Tidak ada data pelamar untuk diekspor!', 'error');
@@ -908,6 +903,19 @@
     </script>
 
     <script>
+        // Format Indonesian Date Helper (Globally available)
+        function formatIndonesianDate(dateString) {
+            if (!dateString) return '';
+            const months = [
+                'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+                'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+            ];
+            const d = new Date(dateString);
+            if (isNaN(d.getTime())) return dateString;
+            return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+        }
+        window.formatIndonesianDate = formatIndonesianDate;
+
         // Default Dynamic Attachments Array
         let attachments = [
             'Ijazah Terakhir',
@@ -974,32 +982,15 @@
             return `${count} (${word}) berkas`;
         }
 
-        // Format Indonesian Date Helper
-        function formatIndonesianDate(dateString) {
-            if (!dateString) return '';
-            const months = [
-                'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
-                'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
-            ];
-            const d = new Date(dateString);
-            if (isNaN(d.getTime())) return dateString;
-            return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
-        }
-        window.formatIndonesianDate = formatIndonesianDate;
-
-        // Initialize App on Page Load
         window.addEventListener('DOMContentLoaded', () => {
-            // Set today's date as default in datepicker
             const today = new Date().toISOString().split('T')[0];
             const tglElem = document.getElementById('tanggalSurat');
             if (tglElem) tglElem.value = today;
 
-            // Render dynamic attachments input list & preview
             renderAttachmentInputs();
             updateLetter();
         });
 
-        // Render Dynamic Attachment Input Items
         function renderAttachmentInputs() {
             const container = document.getElementById('attachmentContainer');
             if (!container) return;
@@ -1046,7 +1037,6 @@
             renderAttachmentInputs();
         }
 
-        // Escape HTML string to prevent script injection
         function escapeHtml(text) {
             if (!text) return '';
             return text
@@ -1064,7 +1054,6 @@
             const tanggalFormatted = formatIndonesianDate(tanggalSuratRaw);
             const perihal = document.getElementById('perihal')?.value || 'Lamaran Pekerjaan';
             
-            // Auto Calculate Jumlah Lampiran
             const autoLampiran = getAutoJumlahLampiran();
             const elemJumlahLampiran = document.getElementById('jumlahLampiran');
             if (elemJumlahLampiran) {
@@ -1079,7 +1068,6 @@
             const namaPelamar = document.getElementById('namaPelamar')?.value || '[Nama Pelamar]';
             const nikPelamar = document.getElementById('nikPelamar')?.value || '[Nomor Induk Kependudukan]';
             
-            // Formatted Tempat & Tanggal Lahir Combination
             const tempatLahir = document.getElementById('tempatLahirPelamar')?.value.trim() || '';
             const tglLahirRaw = document.getElementById('tglLahirPelamar')?.value || '';
             const tglLahirFormatted = formatIndonesianDate(tglLahirRaw);
@@ -1100,7 +1088,7 @@
             const pendidikanPelamar = document.getElementById('pendidikanPelamar')?.value || '[Pendidikan Terakhir]';
             const phonePelamar = document.getElementById('phonePelamar')?.value || '';
 
-            // Update DOM Elements in Live Preview (Halaman 1)
+            // Update DOM Preview Elements (Halaman 1)
             if (document.getElementById('pv-tempatTanggal')) document.getElementById('pv-tempatTanggal').innerText = `${tempatSurat}, ${tanggalFormatted}`;
             if (document.getElementById('pv-jumlahLampiran')) document.getElementById('pv-jumlahLampiran').innerText = autoLampiran;
             if (document.getElementById('pv-perihal')) document.getElementById('pv-perihal').innerText = perihal;
@@ -1125,7 +1113,7 @@
             if (document.getElementById('sp-alamat')) document.getElementById('sp-alamat').innerText = alamatPelamar;
             if (document.getElementById('sp-phone')) document.getElementById('sp-phone').innerText = phonePelamar;
             if (document.getElementById('sp-tempatTanggal')) document.getElementById('sp-tempatTanggal').innerText = `${tempatSurat}, ${tanggalFormatted}`;
-            if (document.getElementById('sp-namaTtd')) document.getElementById('sp-namaTtd').innerText = {namaPelamar};
+            if (document.getElementById('sp-namaTtd')) document.getElementById('sp-namaTtd').innerText = namaPelamar;
 
             // Render Attachments List Preview
             const pvAttachmentList = document.getElementById('pv-attachmentList');
@@ -1141,18 +1129,12 @@
             }
         }
 
-        // Reset Form
         function resetForm() {
             const letterForm = document.getElementById('letterForm');
             if (letterForm) letterForm.reset();
 
             const today = new Date().toISOString().split('T')[0];
             if (document.getElementById('tanggalSurat')) document.getElementById('tanggalSurat').value = today;
-            if (document.getElementById('tempatSurat')) document.getElementById('tempatSurat').value = 'Barabai';
-            if (document.getElementById('perihal')) document.getElementById('perihal').value = 'Lamaran Pekerjaan';
-            if (document.getElementById('penerima')) document.getElementById('penerima').value = 'Kepala Dinas Kesehatan';
-            if (document.getElementById('instansi')) document.getElementById('instansi').value = 'Kab. Hulu Sungai Tengah';
-            if (document.getElementById('kotaPerusahaan')) document.getElementById('kotaPerusahaan').value = 'Barabai';
 
             attachments = [
                 'Ijazah Terakhir',
@@ -1169,12 +1151,10 @@
         function downloadPDF() {
             const element = document.getElementById('pdfContainer');
             const nama = document.getElementById('namaPelamar')?.value.trim() || 'Pelamar';
-            // Clean up name for safe filename
             const cleanName = nama.replace(/[^a-zA-Z0-9]+/g, '_').replace(/^_+|_+$/g, '');
 
             showToast('Menyiapkan file PDF 2 halaman...', 'info');
 
-            // Scroll print container to top to prevent canvas render misalignment
             const printArea = document.querySelector('.print-area');
             if (printArea) printArea.scrollTop = 0;
             window.scrollTo(0, 0);
@@ -1206,7 +1186,6 @@
             });
         }
 
-        // Toast Notification Helper
         function showToast(message, type = 'success') {
             const toast = document.getElementById('toast');
             const toastMsg = document.getElementById('toastMsg');
