@@ -239,10 +239,16 @@
                                 <input type="text" id="nikPelamar" placeholder="Misal: 6307011501980002" maxlength="16" oninput="updateLetter()" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-all outline-none">
                             </div>
 
-                            <!-- Tempat, Tanggal Lahir -->
-                            <div>
-                                <label class="block text-xs font-semibold text-slate-700 mb-1">Tempat, Tanggal Lahir <span class="text-red-500">*</span></label>
-                                <input type="text" id="ttlPelamar" placeholder="Misal: Barabai, 15 Januari 1998" oninput="updateLetter()" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-all outline-none">
+                            <!-- Terpisah: Tempat Lahir & Tanggal Lahir -->
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Tempat Lahir <span class="text-red-500">*</span></label>
+                                    <input type="text" id="tempatLahirPelamar" placeholder="Misal: Barabai" oninput="updateLetter()" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-all outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Tanggal Lahir <span class="text-red-500">*</span></label>
+                                    <input type="date" id="tglLahirPelamar" oninput="updateLetter()" class="w-full text-sm px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-all outline-none">
+                                </div>
                             </div>
 
                             <!-- Alamat Lengkap -->
@@ -640,7 +646,7 @@
                 <div>
                     <label class="block text-xs font-semibold text-slate-700 mb-1">URL Web App Google Apps Script</label>
                     <input type="url" id="sheetWebhookUrl" placeholder="https://script.google.com/macros/s/.../exec" class="w-full text-xs px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-emerald-500 outline-none">
-                    <p class="text-[11px] text-slate-500 mt-1">Masukkan URL Web App dari Google Apps Script untuk pengiriman otomatis saat klik "Simpan ke Database".</p>
+                    <p class="text-[11px] text-slate-500 mt-1">Masukkan URL Web App dari Google Apps Script untuk pengiriman otomatis saat klik "Cetak Langsung".</p>
                 </div>
 
                 <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-2">
@@ -742,16 +748,28 @@
         window.saveToDatabase = async function() {
             const nama = document.getElementById('namaPelamar')?.value.trim();
             const nik = document.getElementById('nikPelamar')?.value.trim();
+            const tempatLahir = document.getElementById('tempatLahirPelamar')?.value.trim() || '';
+            const tglLahirRaw = document.getElementById('tglLahirPelamar')?.value || '';
+            const tglLahirFormatted = window.formatIndonesianDate ? window.formatIndonesianDate(tglLahirRaw) : tglLahirRaw;
+            
+            let ttlCombined = '';
+            if (tempatLahir && tglLahirFormatted) {
+                ttlCombined = `${tempatLahir}, ${tglLahirFormatted}`;
+            } else {
+                ttlCombined = tempatLahir || tglLahirFormatted || '';
+            }
 
             if (!nama || nama === '[Nama Pelamar]') {
                 showToast('Mohon isi Nama Lengkap terlebih dahulu!', 'error');
-                return;
+                return false;
             }
 
             const formData = {
                 namaPelamar: nama,
                 nikPelamar: nik || '-',
-                ttlPelamar: document.getElementById('ttlPelamar')?.value || '',
+                tempatLahirPelamar: tempatLahir,
+                tglLahirPelamar: tglLahirRaw,
+                ttlPelamar: ttlCombined,
                 alamatPelamar: document.getElementById('alamatPelamar')?.value || '',
                 jkPelamar: document.getElementById('jkPelamar')?.value || 'Laki-laki',
                 pendidikanPelamar: document.getElementById('pendidikanPelamar')?.value || '',
@@ -795,6 +813,7 @@
             } else {
                 showToast('Data pelamar berhasil tersimpan di Database!');
             }
+            return true;
         };
 
         // Render Applicant Table inside Modal
@@ -856,7 +875,10 @@
 
             if (document.getElementById('namaPelamar')) document.getElementById('namaPelamar').value = item.namaPelamar || '';
             if (document.getElementById('nikPelamar')) document.getElementById('nikPelamar').value = item.nikPelamar || '';
-            if (document.getElementById('ttlPelamar')) document.getElementById('ttlPelamar').value = item.ttlPelamar || '';
+            
+            if (document.getElementById('tempatLahirPelamar')) document.getElementById('tempatLahirPelamar').value = item.tempatLahirPelamar || '';
+            if (document.getElementById('tglLahirPelamar')) document.getElementById('tglLahirPelamar').value = item.tglLahirPelamar || '';
+            
             if (document.getElementById('alamatPelamar')) document.getElementById('alamatPelamar').value = item.alamatPelamar || '';
             if (document.getElementById('jkPelamar')) document.getElementById('jkPelamar').value = item.jkPelamar || 'Laki-laki';
             if (document.getElementById('pendidikanPelamar')) document.getElementById('pendidikanPelamar').value = item.pendidikanPelamar || '';
@@ -927,6 +949,22 @@
             'NPWP'
         ];
 
+        // Combined Handler for Print & Save
+        window.handlePrintAndSave = async function() {
+            try {
+                if (typeof window.saveToDatabase === 'function') {
+                    await window.saveToDatabase();
+                }
+            } catch (err) {
+                console.error("Save before print error:", err);
+            }
+            
+            // Open standard browser print dialog
+            setTimeout(() => {
+                window.print();
+            }, 400);
+        };
+
         // Toggle Modals
         function toggleDatabaseModal() {
             const modal = document.getElementById('dbModal');
@@ -979,12 +1017,14 @@
             if (isNaN(d.getTime())) return dateString;
             return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
         }
+        window.formatIndonesianDate = formatIndonesianDate;
 
         // Initialize App on Page Load
         window.addEventListener('DOMContentLoaded', () => {
             // Set today's date as default in datepicker
             const today = new Date().toISOString().split('T')[0];
-            document.getElementById('tanggalSurat').value = today;
+            const tglElem = document.getElementById('tanggalSurat');
+            if (tglElem) tglElem.value = today;
 
             // Render dynamic attachments input list & preview
             renderAttachmentInputs();
@@ -994,6 +1034,7 @@
         // Render Dynamic Attachment Input Items
         function renderAttachmentInputs() {
             const container = document.getElementById('attachmentContainer');
+            if (!container) return;
             container.innerHTML = '';
 
             attachments.forEach((item, index) => {
@@ -1055,7 +1096,7 @@
             const tanggalFormatted = formatIndonesianDate(tanggalSuratRaw);
             const perihal = document.getElementById('perihal')?.value || 'Lamaran Pekerjaan';
             
-            // Auto Calculate Jumlah Lampiran (with defensive check)
+            // Auto Calculate Jumlah Lampiran
             const autoLampiran = getAutoJumlahLampiran();
             const elemJumlahLampiran = document.getElementById('jumlahLampiran');
             if (elemJumlahLampiran) {
@@ -1069,7 +1110,23 @@
             // Form 2 Data
             const namaPelamar = document.getElementById('namaPelamar')?.value || '[Nama Pelamar]';
             const nikPelamar = document.getElementById('nikPelamar')?.value || '[Nomor Induk Kependudukan]';
-            const ttlPelamar = document.getElementById('ttlPelamar')?.value || '[Tempat, Tanggal Lahir]';
+            
+            // Formatted Tempat & Tanggal Lahir Combination
+            const tempatLahir = document.getElementById('tempatLahirPelamar')?.value.trim() || '';
+            const tglLahirRaw = document.getElementById('tglLahirPelamar')?.value || '';
+            const tglLahirFormatted = formatIndonesianDate(tglLahirRaw);
+
+            let ttlPelamar = '[Tempat, Tanggal Lahir]';
+            if (tempatLahir || tglLahirFormatted) {
+                if (tempatLahir && tglLahirFormatted) {
+                    ttlPelamar = `${tempatLahir}, ${tglLahirFormatted}`;
+                } else if (tempatLahir) {
+                    ttlPelamar = tempatLahir;
+                } else {
+                    ttlPelamar = tglLahirFormatted;
+                }
+            }
+
             const alamatPelamar = document.getElementById('alamatPelamar')?.value || '[Alamat Lengkap]';
             const jkPelamar = document.getElementById('jkPelamar')?.value || 'Laki-laki';
             const pendidikanPelamar = document.getElementById('pendidikanPelamar')?.value || '[Pendidikan Terakhir]';
@@ -1143,7 +1200,7 @@
 
         function downloadPDF() {
             const element = document.getElementById('pdfContainer');
-            const nama = document.getElementById('namaPelamar').value.trim() || 'Pelamar';
+            const nama = document.getElementById('namaPelamar')?.value.trim() || 'Pelamar';
             // Clean up name for safe filename
             const cleanName = nama.replace(/[^a-zA-Z0-9]+/g, '_').replace(/^_+|_+$/g, '');
 
@@ -1184,6 +1241,7 @@
         // Copy Letter Plain Text to Clipboard
         function copyLetterText() {
             const paper = document.getElementById('letterPaper');
+            if (!paper) return;
             const textContent = paper.innerText;
 
             if (navigator.clipboard) {
@@ -1217,6 +1275,8 @@
             const toast = document.getElementById('toast');
             const toastMsg = document.getElementById('toastMsg');
             const toastIcon = document.getElementById('toastIcon');
+
+            if (!toast || !toastMsg || !toastIcon) return;
 
             toastMsg.innerText = message;
 
