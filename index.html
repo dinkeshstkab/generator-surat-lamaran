@@ -64,18 +64,18 @@
             background: #94a3b8;
         }
 
-        /* Paper Preview Styling (Exact A4 Standard: 210mm x 295mm to prevent subpixel overflows) */
+        /* Paper Preview Styling (Exact A4 Standard: 210mm x 297mm) */
         .a4-paper {
             width: 210mm;
-            height: 295mm;
-            max-height: 295mm;
-            padding: 10mm 18mm 10mm 18mm; /* Tighter precision margins */
+            height: 297mm;
+            max-height: 297mm;
+            padding: 12mm 18mm 12mm 18mm;
             margin: 0 auto;
             background-color: #ffffff !important;
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
             font-family: 'Times New Roman', Times, Georgia, serif !important;
             font-size: 11pt;
-            line-height: 1.3;
+            line-height: 1.35;
             color: #000000 !important;
             box-sizing: border-box !important;
             position: relative;
@@ -92,6 +92,16 @@
             color: #000000 !important;
         }
 
+        /* Temp class when generating PDF to eliminate space gaps without moving offscreen */
+        .pdf-export-mode {
+            gap: 0 !important;
+        }
+        .pdf-export-mode > div {
+            margin-top: 0 !important;
+            margin-bottom: 0 !important;
+            box-shadow: none !important;
+        }
+
         /* CSS Print Stylesheet for Exact 2-Page Print */
         @media print {
             @page {
@@ -103,7 +113,7 @@
                 padding: 0 !important;
                 margin: 0 !important;
                 width: 210mm !important;
-                height: auto !important;
+                height: 100% !important;
                 overflow: visible !important;
             }
             .no-print {
@@ -116,19 +126,18 @@
                 width: 210mm !important;
                 display: block !important;
                 gap: 0 !important;
-                space-y: 0 !important;
             }
-            #pdfContainer > div {
-                margin-bottom: 0 !important;
+            #pdfContainer > div, #pdfContainer > .a4-paper {
                 margin-top: 0 !important;
+                margin-bottom: 0 !important;
             }
             .a4-paper {
                 box-shadow: none !important;
                 margin: 0 !important;
-                padding: 10mm 18mm 10mm 18mm !important;
+                padding: 12mm 18mm 12mm 18mm !important;
                 width: 210mm !important;
-                height: 295mm !important;
-                max-height: 295mm !important;
+                height: 297mm !important;
+                max-height: 297mm !important;
                 box-sizing: border-box !important;
                 overflow: hidden !important;
                 
@@ -357,7 +366,7 @@
 
                             <!-- Sub-header Data Diri -->
                             <div class="mb-1.5">
-                                <p>Saya yang bertanda tangan dibawah ini::</p>
+                                <p>Saya yang bertanda tangan dibawah ini:</p>
                             </div>
 
                             <!-- Data Diri Table List -->
@@ -1317,46 +1326,16 @@
             const nama = document.getElementById('namaPelamar')?.value.trim() || 'Pelamar';
             const cleanName = nama.replace(/[^a-zA-Z0-9]+/g, '_').replace(/^_+|_+$/g, '');
 
-            showToast('Menyiapkan file PDF (Presisi Pas 2 Halaman)...', 'info');
+            showToast('Menyiapkan file PDF (Pas 2 Halaman Presisi)...', 'info');
 
-            const page1 = document.getElementById('letterPaper');
-            const page2 = document.getElementById('statementPaper');
-
-            if (!page1 || !page2) {
+            const pdfContainer = document.getElementById('pdfContainer');
+            if (!pdfContainer) {
                 showToast('Halaman dokumen tidak ditemukan!', 'error');
                 return;
             }
 
-            // Create an isolated, zero-margin container offscreen
-            const pdfWrapper = document.createElement('div');
-            pdfWrapper.style.width = '210mm';
-            pdfWrapper.style.margin = '0';
-            pdfWrapper.style.padding = '0';
-            pdfWrapper.style.background = '#ffffff';
-            pdfWrapper.style.position = 'fixed';
-            pdfWrapper.style.left = '-9999px';
-            pdfWrapper.style.top = '0';
-
-            const p1Clone = page1.cloneNode(true);
-            const p2Clone = page2.cloneNode(true);
-
-            // Configure clones for perfect 295mm page bounds
-            [p1Clone, p2Clone].forEach(el => {
-                el.style.width = '210mm';
-                el.style.height = '295mm';
-                el.style.maxHeight = '295mm';
-                el.style.margin = '0';
-                el.style.boxShadow = 'none';
-                el.style.boxSizing = 'border-box';
-                el.style.overflow = 'hidden';
-            });
-
-            p1Clone.style.pageBreakAfter = 'always';
-            p1Clone.style.breakAfter = 'page';
-
-            pdfWrapper.appendChild(p1Clone);
-            pdfWrapper.appendChild(p2Clone);
-            document.body.appendChild(pdfWrapper);
+            // Temporarily enable PDF capture mode (removes preview gap & shadows safely)
+            pdfContainer.classList.add('pdf-export-mode');
 
             const opt = {
                 margin:       0,
@@ -1365,7 +1344,6 @@
                 html2canvas:  { 
                     scale: 2, 
                     useCORS: true, 
-                    allowTaint: true,
                     logging: false,
                     backgroundColor: '#ffffff'
                 },
@@ -1374,16 +1352,15 @@
             };
 
             try {
-                await html2pdf().set(opt).from(pdfWrapper).save();
-                showToast('Dokumen PDF (Presisi 2 Halaman) berhasil diunduh!');
+                await html2pdf().set(opt).from(pdfContainer).save();
+                showToast('Dokumen PDF berhasil diunduh!');
             } catch (err) {
                 console.error("PDF engine error:", err);
-                showToast('Gagal mengunduh PDF. Mengalihkan ke mode cetak...', 'error');
-                setTimeout(() => window.print(), 800);
+                showToast('Gagal mengunduh PDF. Mengalihkan ke dialog cetak...', 'error');
+                setTimeout(() => window.print(), 500);
             } finally {
-                if (pdfWrapper.parentNode) {
-                    pdfWrapper.parentNode.removeChild(pdfWrapper);
-                }
+                // Restore original preview look
+                pdfContainer.classList.remove('pdf-export-mode');
             }
         }
         window.downloadPDF = downloadPDF;
