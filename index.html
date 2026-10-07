@@ -67,8 +67,8 @@
         /* Paper Preview Styling (Exact A4 Standard: 210mm x 297mm) */
         .a4-paper {
             width: 210mm;
-            height: 297mm;
-            max-height: 297mm;
+            height: 295mm !important;
+            max-height: 295mm !important;
             padding: 12mm 18mm 12mm 18mm;
             margin: 0 auto;
             background-color: #ffffff !important;
@@ -95,11 +95,19 @@
         /* Temp class when generating PDF to eliminate space gaps without moving offscreen */
         .pdf-export-mode {
             gap: 0 !important;
+            margin: 0 !important;
+            padding: 0 !important;
         }
-        .pdf-export-mode > div {
+        .pdf-export-mode > div, .pdf-export-mode .a4-paper {
             margin-top: 0 !important;
             margin-bottom: 0 !important;
             box-shadow: none !important;
+            page-break-after: always !important;
+            break-after: page !important;
+        }
+        .pdf-export-mode .a4-paper:last-child {
+            page-break-after: avoid !important;
+            break-after: avoid !important;
         }
 
         /* CSS Print Stylesheet for Exact 2-Page Print */
@@ -108,12 +116,16 @@
                 size: A4 portrait;
                 margin: 0 !important;
             }
+            *, *:before, *:after {
+                box-shadow: none !important;
+                text-shadow: none !important;
+            }
             html, body {
                 background: #ffffff !important;
                 padding: 0 !important;
                 margin: 0 !important;
                 width: 210mm !important;
-                height: 100% !important;
+                height: auto !important;
                 overflow: visible !important;
             }
             .no-print {
@@ -136,8 +148,8 @@
                 margin: 0 !important;
                 padding: 12mm 18mm 12mm 18mm !important;
                 width: 210mm !important;
-                height: 297mm !important;
-                max-height: 297mm !important;
+                height: 295mm !important;
+                max-height: 295mm !important;
                 box-sizing: border-box !important;
                 overflow: hidden !important;
                 
@@ -329,7 +341,7 @@
 
                 <!-- PREVIEW CONTAINER / PRINT WRAPPER -->
                 <div class="w-full overflow-x-auto pb-6 print-area flex flex-col items-center gap-8">
-                    <div id="pdfContainer" class="space-y-8 print:space-y-0 w-full flex flex-col items-center">
+                    <div id="pdfContainer" class="flex flex-col items-center gap-8 print:gap-0 w-full">
                         
                         <!-- HALAMAN 1: SURAT LAMARAN KERJA -->
                         <div id="letterPaper" class="a4-paper shadow-2xl rounded-sm">
@@ -366,7 +378,7 @@
 
                             <!-- Sub-header Data Diri -->
                             <div class="mb-1.5">
-                                <p>Saya yang bertanda tangan dibawah ini:</p>
+                                <p>Saya yang bertanda tangan dibawah ini::</p>
                             </div>
 
                             <!-- Data Diri Table List -->
