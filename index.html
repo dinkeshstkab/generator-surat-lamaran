@@ -67,19 +67,19 @@
         /* Paper Preview Styling (A4 Standard: 210mm x 297mm Exact) */
         .a4-paper {
             width: 210mm;
-            min-height: 297mm;
             height: 297mm;
-            padding: 15mm 20mm 15mm 20mm; /* Standar margin dokumen resmi */
+            max-height: 297mm;
+            padding: 12mm 20mm 12mm 20mm; /* Standar margin dokumen resmi presisi */
             margin: 0 auto;
             background-color: #ffffff !important;
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
             font-family: 'Times New Roman', Times, Georgia, serif !important;
             font-size: 11pt;
-            line-height: 1.4;
+            line-height: 1.35;
             color: #000000 !important;
-            box-sizing: border-box;
+            box-sizing: border-box !important;
             position: relative;
-            overflow: hidden;
+            overflow: hidden !important;
             user-select: none; /* Anti-copy highlight on paper view */
             
             /* Alur posisi alami dari atas ke bawah */
@@ -97,14 +97,14 @@
         @media print {
             @page {
                 size: A4 portrait;
-                margin: 0;
+                margin: 0 !important;
             }
             html, body {
                 background: #ffffff !important;
                 padding: 0 !important;
                 margin: 0 !important;
                 width: 210mm !important;
-                height: auto !important;
+                height: 594mm !important;
                 overflow: visible !important;
             }
             .no-print {
@@ -117,11 +117,16 @@
                 width: 210mm !important;
                 display: block !important;
                 gap: 0 !important;
+                space-y: 0 !important;
+            }
+            #pdfContainer > div {
+                margin-bottom: 0 !important;
+                margin-top: 0 !important;
             }
             .a4-paper {
                 box-shadow: none !important;
                 margin: 0 !important;
-                padding: 15mm 20mm 15mm 20mm !important;
+                padding: 12mm 20mm 12mm 20mm !important;
                 width: 210mm !important;
                 height: 297mm !important;
                 max-height: 297mm !important;
@@ -322,12 +327,12 @@
                         <!-- HALAMAN 1: SURAT LAMARAN KERJA -->
                         <div id="letterPaper" class="a4-paper shadow-2xl rounded-sm">
                             <!-- Header Kanan (Tempat & Tanggal) -->
-                            <div class="text-right mb-4">
+                            <div class="text-right mb-3">
                                 <p id="pv-tempatTanggal">Barabai, 12 Oktober 2026</p>
                             </div>
 
                             <!-- Lampiran & Perihal -->
-                            <div class="mb-4 space-y-0.5">
+                            <div class="mb-3 space-y-0.5">
                                 <div class="grid grid-cols-12 max-w-xs">
                                     <div class="col-span-4">Lampiran</div>
                                     <div class="col-span-8">: <span id="pv-jumlahLampiran">4 (empat) berkas</span></div>
@@ -339,7 +344,7 @@
                             </div>
 
                             <!-- Penerima / Tujuan -->
-                            <div class="mb-4 space-y-0.5">
+                            <div class="mb-3 space-y-0.5">
                                 <p>Kepada Yth.</p>
                                 <p id="pv-penerima" class="font-bold">Kepala Dinas Kesehatan</p>
                                 <p id="pv-instansi" class="font-bold">Kab. Hulu Sungai Tengah</p>
@@ -348,17 +353,17 @@
                             </div>
 
                             <!-- Salam Pembuka -->
-                            <div class="mb-3">
+                            <div class="mb-2">
                                 <p>Dengan hormat,</p>
                             </div>
 
                             <!-- Sub-header Data Diri -->
-                            <div class="mb-2">
-                                <p>Saya yang bertanda tangan dibawah ini::</p>
+                            <div class="mb-1.5">
+                                <p>Saya yang bertanda tangan dibawah ini:</p>
                             </div>
 
                             <!-- Data Diri Table List -->
-                            <div class="mb-4 pl-4 space-y-0.5 text-sm sm:text-base">
+                            <div class="mb-3 pl-4 space-y-0.5 text-sm sm:text-base">
                                 <div class="grid grid-cols-12">
                                     <div class="col-span-4 sm:col-span-3">1. Nama Lengkap</div>
                                     <div class="col-span-8 sm:col-span-9 flex">
@@ -404,14 +409,14 @@
                             </div>
 
                             <!-- Paragraf Permohonan -->
-                            <div class="mb-4 text-justify leading-relaxed">
+                            <div class="mb-3 text-justify leading-relaxed">
                                 <p>
                                     Dengan ini saya bermaksud untuk mengajukan permohonan kepada Bapak/Ibu, untuk dapat diterima menjadi pegawai kontrak di lingkup Dinas Kesehatan
                                 </p>
                             </div>
 
                             <!-- Paragraf Pertimbangan & Lampiran List -->
-                            <div class="mb-4">
+                            <div class="mb-3">
                                 <p class="mb-1">Sebagai bahan pertimbangan Bapak/Ibu, bersama surat ini saya lampirkan:</p>
                                 <ol id="pv-attachmentList" class="list-decimal list-inside pl-4 space-y-0.5">
                                     <!-- Dynamic Rendered Attachments -->
@@ -419,15 +424,15 @@
                             </div>
 
                             <!-- Paragraf Penutup -->
-                            <div class="mb-4 text-justify leading-relaxed">
+                            <div class="mb-3 text-justify leading-relaxed">
                                 <p>Demikian surat lamaran kerja ini saya sampaikan. Atas perhatian dan kesempatan yang Bapak/Ibu berikan, saya ucapkan terima kasih.</p>
                             </div>
 
                             <!-- Tanda Tangan Alami Mengikuti Alur Surat (Tidak Bold & Tidak Garis Bawah) -->
-                            <div class="flex justify-end mt-10">
+                            <div class="flex justify-end mt-6">
                                 <div class="text-center w-60">
                                     <p>Hormat saya,</p>
-                                    <div class="h-24"></div>
+                                    <div class="h-20"></div>
                                     <p id="pv-namaTtd" class="text-slate-900">[Nama Lengkap]</p>
                                 </div>
                             </div>
@@ -437,17 +442,17 @@
                         <!-- HALAMAN 2: SURAT PERNYATAAN TENAGA KERJA -->
                         <div id="statementPaper" class="a4-paper shadow-2xl rounded-sm page-break">
                             <!-- Judul Surat Pernyataan -->
-                            <div class="text-center mb-8 pt-4">
+                            <div class="text-center mb-4 pt-2">
                                 <h2 class="text-base font-bold tracking-wide uppercase underline decoration-1">SURAT PERNYATAAN TENAGA KERJA</h2>
                             </div>
 
                             <!-- Sub-header Data Diri -->
-                            <div class="mb-3">
+                            <div class="mb-2">
                                 <p>Yang bertanda tangan di bawah ini:</p>
                             </div>
 
                             <!-- Data Diri Pernyataan List -->
-                            <div class="mb-4 pl-4 space-y-1 text-sm sm:text-base">
+                            <div class="mb-3 pl-4 space-y-1 text-sm sm:text-base">
                                 <div class="grid grid-cols-12">
                                     <div class="col-span-5 sm:col-span-4 font-medium">Nama Lengkap</div>
                                     <div class="col-span-7 sm:col-span-8 flex">
@@ -486,9 +491,9 @@
                             </div>
 
                             <!-- Kalimat Pernyataan & Poin-poin -->
-                            <div class="mb-4 text-justify leading-relaxed">
-                                <p class="mb-2">Dengan ini menyatakan dengan sesungguhnya bahwa saya:</p>
-                                <ol class="list-decimal list-outside pl-5 space-y-1.5">
+                            <div class="mb-3 text-justify leading-relaxed">
+                                <p class="mb-1.5">Dengan ini menyatakan dengan sesungguhnya bahwa saya:</p>
+                                <ol class="list-decimal list-outside pl-5 space-y-1">
                                     <li class="pl-1">
                                         <strong>Bebas Narkoba:</strong> Tidak sedang atau pernah mengonsumsi, menyimpan, maupun mengedarkan Narkotika, Psikotropika, dan Zat Adiktif lainnya (NAPZA).
                                     </li>
@@ -513,11 +518,11 @@
                             </div>
 
                             <!-- Tanda Tangan Alami Halaman 2 (Tidak Bold & Tidak Garis Bawah) -->
-                            <div class="flex justify-end mt-10">
+                            <div class="flex justify-end mt-6">
                                 <div class="text-center w-60">
                                     <p id="sp-tempatTanggal">Barabai, 12 Oktober 2026</p>
                                     <p>Yang membuat pernyataan,</p>
-                                    <div class="h-24"></div>
+                                    <div class="h-20"></div>
                                     <p id="sp-namaTtd" class="text-slate-900">[Nama Lengkap]</p>
                                 </div>
                             </div>
@@ -1324,6 +1329,10 @@
             if (printArea) printArea.scrollTop = 0;
             window.scrollTo(0, 0);
 
+            // Temporarily remove space-y-8 margin gap for exact 2-page PDF capture
+            const originalClassName = element.className;
+            element.className = 'w-full flex flex-col items-center space-y-0 p-0 m-0';
+
             const opt = {
                 margin:       0,
                 filename:     `Surat_Lamaran_dan_Pernyataan_${cleanName}.pdf`,
@@ -1339,16 +1348,20 @@
                     letterRendering: true
                 },
                 jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
-                pagebreak:    { mode: ['avoid-all', 'css'] }
+                pagebreak:    { mode: ['css', 'legacy'] }
             };
 
-            html2pdf().set(opt).from(element).save().then(() => {
-                showToast('Dokumen PDF (2 Halaman) berhasil diunduh!');
-            }).catch(err => {
+            try {
+                await html2pdf().set(opt).from(element).save();
+                showToast('Dokumen PDF (Presisi 2 Halaman) berhasil diunduh!');
+            } catch (err) {
                 console.error(err);
                 showToast('Gagal mengunduh PDF. Mengalihkan ke mode cetak...', 'error');
                 setTimeout(() => window.print(), 800);
-            });
+            } finally {
+                // Restore original spacing
+                element.className = originalClassName;
+            }
         }
         window.downloadPDF = downloadPDF;
 
