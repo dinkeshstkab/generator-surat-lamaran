@@ -64,25 +64,24 @@
             background: #94a3b8;
         }
 
-        /* Paper Preview Styling (A4 Standard: 210mm x 297mm Exact) */
+        /* Paper Preview Styling (Exact A4 Standard: 210mm x 295mm to prevent subpixel overflows) */
         .a4-paper {
             width: 210mm;
-            height: 297mm;
-            max-height: 297mm;
-            padding: 12mm 20mm 12mm 20mm; /* Standar margin dokumen resmi presisi */
+            height: 295mm;
+            max-height: 295mm;
+            padding: 10mm 18mm 10mm 18mm; /* Tighter precision margins */
             margin: 0 auto;
             background-color: #ffffff !important;
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
             font-family: 'Times New Roman', Times, Georgia, serif !important;
             font-size: 11pt;
-            line-height: 1.35;
+            line-height: 1.3;
             color: #000000 !important;
             box-sizing: border-box !important;
             position: relative;
             overflow: hidden !important;
-            user-select: none; /* Anti-copy highlight on paper view */
+            user-select: none;
             
-            /* Alur posisi alami dari atas ke bawah */
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
@@ -104,7 +103,7 @@
                 padding: 0 !important;
                 margin: 0 !important;
                 width: 210mm !important;
-                height: 594mm !important;
+                height: auto !important;
                 overflow: visible !important;
             }
             .no-print {
@@ -126,10 +125,10 @@
             .a4-paper {
                 box-shadow: none !important;
                 margin: 0 !important;
-                padding: 12mm 20mm 12mm 20mm !important;
+                padding: 10mm 18mm 10mm 18mm !important;
                 width: 210mm !important;
-                height: 297mm !important;
-                max-height: 297mm !important;
+                height: 295mm !important;
+                max-height: 295mm !important;
                 box-sizing: border-box !important;
                 overflow: hidden !important;
                 
@@ -146,7 +145,6 @@
             .a4-paper:last-child {
                 page-break-after: avoid !important;
                 break-after: avoid !important;
-                page-break-after: none !important;
             }
         }
     </style>
@@ -327,12 +325,12 @@
                         <!-- HALAMAN 1: SURAT LAMARAN KERJA -->
                         <div id="letterPaper" class="a4-paper shadow-2xl rounded-sm">
                             <!-- Header Kanan (Tempat & Tanggal) -->
-                            <div class="text-right mb-3">
+                            <div class="text-right mb-2.5">
                                 <p id="pv-tempatTanggal">Barabai, 12 Oktober 2026</p>
                             </div>
 
                             <!-- Lampiran & Perihal -->
-                            <div class="mb-3 space-y-0.5">
+                            <div class="mb-2.5 space-y-0.5">
                                 <div class="grid grid-cols-12 max-w-xs">
                                     <div class="col-span-4">Lampiran</div>
                                     <div class="col-span-8">: <span id="pv-jumlahLampiran">4 (empat) berkas</span></div>
@@ -344,7 +342,7 @@
                             </div>
 
                             <!-- Penerima / Tujuan -->
-                            <div class="mb-3 space-y-0.5">
+                            <div class="mb-2.5 space-y-0.5">
                                 <p>Kepada Yth.</p>
                                 <p id="pv-penerima" class="font-bold">Kepala Dinas Kesehatan</p>
                                 <p id="pv-instansi" class="font-bold">Kab. Hulu Sungai Tengah</p>
@@ -359,11 +357,11 @@
 
                             <!-- Sub-header Data Diri -->
                             <div class="mb-1.5">
-                                <p>Saya yang bertanda tangan dibawah ini:</p>
+                                <p>Saya yang bertanda tangan dibawah ini::</p>
                             </div>
 
                             <!-- Data Diri Table List -->
-                            <div class="mb-3 pl-4 space-y-0.5 text-sm sm:text-base">
+                            <div class="mb-2.5 pl-4 space-y-0.5 text-sm sm:text-base">
                                 <div class="grid grid-cols-12">
                                     <div class="col-span-4 sm:col-span-3">1. Nama Lengkap</div>
                                     <div class="col-span-8 sm:col-span-9 flex">
@@ -409,14 +407,14 @@
                             </div>
 
                             <!-- Paragraf Permohonan -->
-                            <div class="mb-3 text-justify leading-relaxed">
+                            <div class="mb-2.5 text-justify leading-relaxed">
                                 <p>
                                     Dengan ini saya bermaksud untuk mengajukan permohonan kepada Bapak/Ibu, untuk dapat diterima menjadi pegawai kontrak di lingkup Dinas Kesehatan
                                 </p>
                             </div>
 
                             <!-- Paragraf Pertimbangan & Lampiran List -->
-                            <div class="mb-3">
+                            <div class="mb-2.5">
                                 <p class="mb-1">Sebagai bahan pertimbangan Bapak/Ibu, bersama surat ini saya lampirkan:</p>
                                 <ol id="pv-attachmentList" class="list-decimal list-inside pl-4 space-y-0.5">
                                     <!-- Dynamic Rendered Attachments -->
@@ -424,15 +422,15 @@
                             </div>
 
                             <!-- Paragraf Penutup -->
-                            <div class="mb-3 text-justify leading-relaxed">
+                            <div class="mb-2.5 text-justify leading-relaxed">
                                 <p>Demikian surat lamaran kerja ini saya sampaikan. Atas perhatian dan kesempatan yang Bapak/Ibu berikan, saya ucapkan terima kasih.</p>
                             </div>
 
-                            <!-- Tanda Tangan Alami Mengikuti Alur Surat (Tidak Bold & Tidak Garis Bawah) -->
-                            <div class="flex justify-end mt-6">
+                            <!-- Tanda Tangan Alami (Tanpa Bold & Tanpa Garis Bawah) -->
+                            <div class="flex justify-end mt-4">
                                 <div class="text-center w-60">
                                     <p>Hormat saya,</p>
-                                    <div class="h-20"></div>
+                                    <div class="h-16"></div>
                                     <p id="pv-namaTtd" class="text-slate-900">[Nama Lengkap]</p>
                                 </div>
                             </div>
@@ -442,7 +440,7 @@
                         <!-- HALAMAN 2: SURAT PERNYATAAN TENAGA KERJA -->
                         <div id="statementPaper" class="a4-paper shadow-2xl rounded-sm page-break">
                             <!-- Judul Surat Pernyataan -->
-                            <div class="text-center mb-4 pt-2">
+                            <div class="text-center mb-3 pt-1">
                                 <h2 class="text-base font-bold tracking-wide uppercase underline decoration-1">SURAT PERNYATAAN TENAGA KERJA</h2>
                             </div>
 
@@ -452,7 +450,7 @@
                             </div>
 
                             <!-- Data Diri Pernyataan List -->
-                            <div class="mb-3 pl-4 space-y-1 text-sm sm:text-base">
+                            <div class="mb-2.5 pl-4 space-y-0.5 text-sm sm:text-base">
                                 <div class="grid grid-cols-12">
                                     <div class="col-span-5 sm:col-span-4 font-medium">Nama Lengkap</div>
                                     <div class="col-span-7 sm:col-span-8 flex">
@@ -491,9 +489,9 @@
                             </div>
 
                             <!-- Kalimat Pernyataan & Poin-poin -->
-                            <div class="mb-3 text-justify leading-relaxed">
-                                <p class="mb-1.5">Dengan ini menyatakan dengan sesungguhnya bahwa saya:</p>
-                                <ol class="list-decimal list-outside pl-5 space-y-1">
+                            <div class="mb-2.5 text-justify leading-relaxed">
+                                <p class="mb-1">Dengan ini menyatakan dengan sesungguhnya bahwa saya:</p>
+                                <ol class="list-decimal list-outside pl-5 space-y-0.5">
                                     <li class="pl-1">
                                         <strong>Bebas Narkoba:</strong> Tidak sedang atau pernah mengonsumsi, menyimpan, maupun mengedarkan Narkotika, Psikotropika, dan Zat Adiktif lainnya (NAPZA).
                                     </li>
@@ -513,16 +511,16 @@
                             </div>
 
                             <!-- Paragraf Penutup Pernyataan -->
-                            <div class="mb-3 text-justify leading-relaxed">
+                            <div class="mb-2.5 text-justify leading-relaxed">
                                 <p>Demikian surat pernyataan ini saya buat dengan sebenarnya tanpa ada paksaan dari pihak mana pun. Apabila di kemudian hari terbukti pernyataan ini tidak benar, saya bersedia menerima sanksi sesuai dengan hukum dan ketentuan yang berlaku.</p>
                             </div>
 
-                            <!-- Tanda Tangan Alami Halaman 2 (Tidak Bold & Tidak Garis Bawah) -->
-                            <div class="flex justify-end mt-6">
+                            <!-- Tanda Tangan Alami Halaman 2 (Tanpa Bold & Tanpa Garis Bawah) -->
+                            <div class="flex justify-end mt-4">
                                 <div class="text-center w-60">
                                     <p id="sp-tempatTanggal">Barabai, 12 Oktober 2026</p>
                                     <p>Yang membuat pernyataan,</p>
-                                    <div class="h-20"></div>
+                                    <div class="h-16"></div>
                                     <p id="sp-namaTtd" class="text-slate-900">[Nama Lengkap]</p>
                                 </div>
                             </div>
@@ -543,7 +541,6 @@
         <span id="toastMsg">Pesan Notifikasi</span>
     </div>
 
-    <!-- MODAL DATABASE PELAMAR -->
     <div id="dbModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 no-print">
         <div class="bg-white w-full max-w-4xl rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
             <div class="bg-slate-900 text-white px-6 py-4 flex items-center justify-between">
@@ -1115,7 +1112,6 @@
         }
 
         window.addEventListener('DOMContentLoaded', () => {
-            // Initialize Flatpickr Datepicker DD/MM/YYYY with Indonesian locale
             if (typeof flatpickr !== 'undefined') {
                 const today = new Date();
                 const formattedToday = `${String(today.getDate()).padStart(2, '0')}/${String(today.getMonth() + 1).padStart(2, '0')}/${today.getFullYear()}`;
@@ -1310,7 +1306,6 @@
         }
 
         async function downloadPDF() {
-            // Otomatis simpan data ke database sebelum mengunduh PDF
             try {
                 if (typeof window.saveToDatabase === 'function') {
                     await window.saveToDatabase();
@@ -1319,19 +1314,49 @@
                 console.error("Save before PDF download error:", err);
             }
 
-            const element = document.getElementById('pdfContainer');
             const nama = document.getElementById('namaPelamar')?.value.trim() || 'Pelamar';
             const cleanName = nama.replace(/[^a-zA-Z0-9]+/g, '_').replace(/^_+|_+$/g, '');
 
-            showToast('Menyiapkan file PDF 2 halaman...', 'info');
+            showToast('Menyiapkan file PDF (Presisi Pas 2 Halaman)...', 'info');
 
-            const printArea = document.querySelector('.print-area');
-            if (printArea) printArea.scrollTop = 0;
-            window.scrollTo(0, 0);
+            const page1 = document.getElementById('letterPaper');
+            const page2 = document.getElementById('statementPaper');
 
-            // Temporarily remove space-y-8 margin gap for exact 2-page PDF capture
-            const originalClassName = element.className;
-            element.className = 'w-full flex flex-col items-center space-y-0 p-0 m-0';
+            if (!page1 || !page2) {
+                showToast('Halaman dokumen tidak ditemukan!', 'error');
+                return;
+            }
+
+            // Create an isolated, zero-margin container offscreen
+            const pdfWrapper = document.createElement('div');
+            pdfWrapper.style.width = '210mm';
+            pdfWrapper.style.margin = '0';
+            pdfWrapper.style.padding = '0';
+            pdfWrapper.style.background = '#ffffff';
+            pdfWrapper.style.position = 'fixed';
+            pdfWrapper.style.left = '-9999px';
+            pdfWrapper.style.top = '0';
+
+            const p1Clone = page1.cloneNode(true);
+            const p2Clone = page2.cloneNode(true);
+
+            // Configure clones for perfect 295mm page bounds
+            [p1Clone, p2Clone].forEach(el => {
+                el.style.width = '210mm';
+                el.style.height = '295mm';
+                el.style.maxHeight = '295mm';
+                el.style.margin = '0';
+                el.style.boxShadow = 'none';
+                el.style.boxSizing = 'border-box';
+                el.style.overflow = 'hidden';
+            });
+
+            p1Clone.style.pageBreakAfter = 'always';
+            p1Clone.style.breakAfter = 'page';
+
+            pdfWrapper.appendChild(p1Clone);
+            pdfWrapper.appendChild(p2Clone);
+            document.body.appendChild(pdfWrapper);
 
             const opt = {
                 margin:       0,
@@ -1342,25 +1367,23 @@
                     useCORS: true, 
                     allowTaint: true,
                     logging: false,
-                    scrollX: 0,
-                    scrollY: 0,
-                    backgroundColor: '#ffffff',
-                    letterRendering: true
+                    backgroundColor: '#ffffff'
                 },
                 jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
                 pagebreak:    { mode: ['css', 'legacy'] }
             };
 
             try {
-                await html2pdf().set(opt).from(element).save();
+                await html2pdf().set(opt).from(pdfWrapper).save();
                 showToast('Dokumen PDF (Presisi 2 Halaman) berhasil diunduh!');
             } catch (err) {
-                console.error(err);
+                console.error("PDF engine error:", err);
                 showToast('Gagal mengunduh PDF. Mengalihkan ke mode cetak...', 'error');
                 setTimeout(() => window.print(), 800);
             } finally {
-                // Restore original spacing
-                element.className = originalClassName;
+                if (pdfWrapper.parentNode) {
+                    pdfWrapper.parentNode.removeChild(pdfWrapper);
+                }
             }
         }
         window.downloadPDF = downloadPDF;
@@ -1389,4 +1412,5 @@
             }, 3000);
         }
     </script>
-<!-- ... existing code -->
+</body>
+</html>
