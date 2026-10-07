@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generator Surat Lamaran Kerja Otomatis</title>
+    <title>Generator Surat Lamaran Kerja Otomatis (Ukuran F4)</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -16,8 +16,9 @@
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- html2pdf.js library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <!-- html2canvas & jsPDF untuk Ekspor PDF Presisi 100% -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <!-- Flatpickr Datepicker CSS & JS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
@@ -48,7 +49,6 @@
     </script>
 
     <style>
-        /* Custom Scrollbar for app UI */
         ::-webkit-scrollbar {
             width: 6px;
             height: 6px;
@@ -64,19 +64,19 @@
             background: #94a3b8;
         }
 
-        /* Paper Preview Styling (Exact A4 Standard: 210mm x 297mm) */
-        .a4-paper {
-            width: 210mm;
-            min-height: 297mm;
-            height: 297mm !important;
-            max-height: 297mm !important;
-            padding: 12mm 18mm 12mm 18mm;
+        /* Paper Preview Styling (Standard F4 / Folio: 215mm x 330mm) */
+        .f4-paper {
+            width: 215mm;
+            min-height: 330mm;
+            height: 330mm !important;
+            max-height: 330mm !important;
+            padding: 15mm 20mm 15mm 20mm;
             margin: 0 auto;
             background-color: #ffffff !important;
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
             font-family: 'Times New Roman', Times, Georgia, serif !important;
             font-size: 11pt;
-            line-height: 1.35;
+            line-height: 1.4;
             color: #000000 !important;
             box-sizing: border-box !important;
             position: relative;
@@ -85,15 +85,14 @@
             display: block !important;
         }
 
-        /* Ensure all child text within paper is explicitly black */
-        .a4-paper * {
+        .f4-paper * {
             color: #000000 !important;
         }
 
-        /* CSS Print Stylesheet for Exact 2-Page Print */
+        /* CSS Print Stylesheet for Exact 2-Page Print on F4 Paper */
         @media print {
             @page {
-                size: A4 portrait;
+                size: 215mm 330mm portrait;
                 margin: 0 !important;
             }
             *, *:before, *:after {
@@ -104,7 +103,7 @@
                 background: #ffffff !important;
                 padding: 0 !important;
                 margin: 0 !important;
-                width: 210mm !important;
+                width: 215mm !important;
                 height: auto !important;
                 overflow: visible !important;
             }
@@ -115,21 +114,21 @@
                 padding: 0 !important;
                 margin: 0 !important;
                 box-shadow: none !important;
-                width: 210mm !important;
+                width: 215mm !important;
                 display: block !important;
                 gap: 0 !important;
             }
-            #pdfContainer > div, #pdfContainer > .a4-paper {
+            #pdfContainer > div, #pdfContainer > .f4-paper {
                 margin-top: 0 !important;
                 margin-bottom: 0 !important;
             }
-            .a4-paper {
+            .f4-paper {
                 box-shadow: none !important;
                 margin: 0 !important;
-                padding: 12mm 18mm 12mm 18mm !important;
-                width: 210mm !important;
-                height: 297mm !important;
-                max-height: 297mm !important;
+                padding: 15mm 20mm 15mm 20mm !important;
+                width: 215mm !important;
+                height: 330mm !important;
+                max-height: 330mm !important;
                 box-sizing: border-box !important;
                 overflow: hidden !important;
                 page-break-after: always !important;
@@ -138,7 +137,7 @@
                 break-inside: avoid !important;
                 display: block !important;
             }
-            .a4-paper:last-child {
+            .f4-paper:last-child {
                 page-break-after: avoid !important;
                 break-after: avoid !important;
             }
@@ -156,7 +155,7 @@
                         <i class="fa-solid fa-file-signature text-xl"></i>
                     </div>
                     <div>
-                        <h1 class="text-lg font-bold text-slate-900 leading-tight">Generator Surat Lamaran</h1>
+                        <h1 class="text-lg font-bold text-slate-900 leading-tight">Generator Surat Lamaran <span class="text-xs font-semibold px-2 py-0.5 bg-sky-100 text-sky-700 rounded-md ml-1">F4 / Folio</span></h1>
                         <p class="text-xs text-slate-500 hidden sm:block">Buat surat lamaran kerja resmi & rapi secara instan</p>
                     </div>
                 </div>
@@ -185,7 +184,7 @@
                 
                 <div class="bg-gradient-to-r from-sky-500 to-blue-600 rounded-2xl p-4 text-white shadow-lg shadow-sky-500/10 flex items-center justify-between">
                     <div class="space-y-1">
-                        <p class="text-xs font-medium text-sky-100 uppercase tracking-wider">Form Singkat</p>
+                        <p class="text-xs font-medium text-sky-100 uppercase tracking-wider">Form Singkat F4</p>
                         <h2 class="text-sm font-bold">Isi data pelamar, surat otomatis siap!</h2>
                     </div>
                     <div class="bg-white/10 p-2.5 rounded-xl backdrop-blur-sm">
@@ -291,12 +290,12 @@
                 <div class="p-4 bg-white rounded-2xl border border-slate-200/80 shadow-sm space-y-3">
                     <button onclick="downloadPDF()" class="w-full py-3 px-4 bg-gradient-to-r from-sky-600 to-blue-600 hover:from-sky-700 hover:to-blue-700 text-white font-bold rounded-xl shadow-lg shadow-sky-500/20 flex items-center justify-center gap-2 transition-all transform active:scale-[0.99]">
                         <i class="fa-solid fa-file-pdf text-lg"></i>
-                        <span>Download PDF Resmi</span>
+                        <span>Download PDF Resmi (F4)</span>
                     </button>
                     
                     <button onclick="handlePrintAndSave()" class="w-full py-3 px-4 bg-slate-800 hover:bg-slate-900 text-white font-bold rounded-xl shadow-md flex items-center justify-center gap-2 transition-all transform active:scale-[0.99]">
                         <i class="fa-solid fa-print text-lg"></i>
-                        <span>Cetak Langsung</span>
+                        <span>Cetak Langsung (F4)</span>
                     </button>
                 </div>
 
@@ -307,24 +306,24 @@
                 <div class="w-full mb-3 flex items-center justify-between no-print px-1">
                     <div class="flex items-center space-x-2">
                         <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                        <span class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Live Preview (Pas 2 Halaman A4 Presisi)</span>
+                        <span class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Live Preview (Pas 2 Halaman F4 Presisi)</span>
                     </div>
-                    <span class="text-xs text-slate-400">Ukuran Standar A4 (210 x 297 mm)</span>
+                    <span class="text-xs font-medium text-sky-700 bg-sky-50 px-2 py-0.5 rounded border border-sky-200">Ukuran Standar F4 / Folio (215 x 330 mm)</span>
                 </div>
 
                 <!-- PREVIEW CONTAINER / PRINT WRAPPER -->
                 <div class="w-full overflow-x-auto pb-6 print-area flex flex-col items-center gap-8">
                     <div id="pdfContainer" class="flex flex-col items-center gap-8 print:gap-0 w-full">
                         
-                        <!-- HALAMAN 1: SURAT LAMARAN KERJA -->
-                        <div id="letterPaper" class="a4-paper shadow-2xl rounded-sm">
+                        <!-- HALAMAN 1: SURAT LAMARAN KERJA (F4) -->
+                        <div id="letterPaper" class="f4-paper shadow-2xl rounded-sm">
                             <!-- Header Kanan (Tempat & Tanggal) -->
-                            <div style="text-align: right; margin-bottom: 10px;">
+                            <div style="text-align: right; margin-bottom: 12px;">
                                 <p id="pv-tempatTanggal" style="margin: 0;">Barabai, 12 Oktober 2026</p>
                             </div>
 
                             <!-- Lampiran & Perihal -->
-                            <table style="width: 100%; max-width: 320px; border-collapse: collapse; margin-bottom: 12px; font-size: 11pt;">
+                            <table style="width: 100%; max-width: 320px; border-collapse: collapse; margin-bottom: 14px; font-size: 11pt;">
                                 <tr>
                                     <td style="width: 85px; vertical-align: top; padding: 1px 0;">Lampiran</td>
                                     <td style="vertical-align: top; padding: 1px 0;">: <span id="pv-jumlahLampiran">4 (empat) berkas</span></td>
@@ -336,7 +335,7 @@
                             </table>
 
                             <!-- Penerima / Tujuan -->
-                            <div style="margin-bottom: 12px; line-height: 1.35;">
+                            <div style="margin-bottom: 14px; line-height: 1.4;">
                                 <p style="margin: 0;">Kepada Yth.</p>
                                 <p id="pv-penerima" style="margin: 0; font-weight: bold;">Kepala Dinas Kesehatan</p>
                                 <p id="pv-instansi" style="margin: 0; font-weight: bold;">Kab. Hulu Sungai Tengah</p>
@@ -345,151 +344,151 @@
                             </div>
 
                             <!-- Salam Pembuka -->
-                            <div style="margin-bottom: 10px;">
+                            <div style="margin-bottom: 12px;">
                                 <p style="margin: 0;">Dengan hormat,</p>
                             </div>
 
                             <!-- Sub-header Data Diri -->
-                            <div style="margin-bottom: 6px;">
+                            <div style="margin-bottom: 8px;">
                                 <p style="margin: 0;">Saya yang bertanda tangan dibawah ini:</p>
                             </div>
 
                             <!-- Data Diri Table List -->
-                            <table style="width: 100%; border-collapse: collapse; margin-left: 12px; margin-bottom: 12px; font-size: 11pt;">
+                            <table style="width: 100%; border-collapse: collapse; margin-left: 12px; margin-bottom: 14px; font-size: 11pt;">
                                 <tr>
-                                    <td style="width: 160px; padding: 2px 0; vertical-align: top;">1. Nama Lengkap</td>
-                                    <td style="width: 15px; padding: 2px 0; vertical-align: top;">:</td>
-                                    <td style="padding: 2px 0; vertical-align: top;"><span id="pv-nama">[Nama Lengkap]</span></td>
+                                    <td style="width: 160px; padding: 3px 0; vertical-align: top;">1. Nama Lengkap</td>
+                                    <td style="width: 15px; padding: 3px 0; vertical-align: top;">:</td>
+                                    <td style="padding: 3px 0; vertical-align: top;"><span id="pv-nama">[Nama Lengkap]</span></td>
                                 </tr>
                                 <tr>
-                                    <td style="width: 160px; padding: 2px 0; vertical-align: top;">2. Tempat, Tgl Lahir</td>
-                                    <td style="width: 15px; padding: 2px 0; vertical-align: top;">:</td>
-                                    <td style="padding: 2px 0; vertical-align: top;"><span id="pv-ttl">[Tempat, Tanggal Lahir]</span></td>
+                                    <td style="width: 160px; padding: 3px 0; vertical-align: top;">2. Tempat, Tgl Lahir</td>
+                                    <td style="width: 15px; padding: 3px 0; vertical-align: top;">:</td>
+                                    <td style="padding: 3px 0; vertical-align: top;"><span id="pv-ttl">[Tempat, Tanggal Lahir]</span></td>
                                 </tr>
                                 <tr>
-                                    <td style="width: 160px; padding: 2px 0; vertical-align: top;">3. Alamat Lengkap</td>
-                                    <td style="width: 15px; padding: 2px 0; vertical-align: top;">:</td>
-                                    <td style="padding: 2px 0; vertical-align: top;"><span id="pv-alamat">[Alamat Lengkap]</span></td>
+                                    <td style="width: 160px; padding: 3px 0; vertical-align: top;">3. Alamat Lengkap</td>
+                                    <td style="width: 15px; padding: 3px 0; vertical-align: top;">:</td>
+                                    <td style="padding: 3px 0; vertical-align: top;"><span id="pv-alamat">[Alamat Lengkap]</span></td>
                                 </tr>
                                 <tr>
-                                    <td style="width: 160px; padding: 2px 0; vertical-align: top;">4. Jenis Kelamin</td>
-                                    <td style="width: 15px; padding: 2px 0; vertical-align: top;">:</td>
-                                    <td style="padding: 2px 0; vertical-align: top;"><span id="pv-jk">Laki-laki</span></td>
+                                    <td style="width: 160px; padding: 3px 0; vertical-align: top;">4. Jenis Kelamin</td>
+                                    <td style="width: 15px; padding: 3px 0; vertical-align: top;">:</td>
+                                    <td style="padding: 3px 0; vertical-align: top;"><span id="pv-jk">Laki-laki</span></td>
                                 </tr>
                                 <tr>
-                                    <td style="width: 160px; padding: 2px 0; vertical-align: top;">5. Pendidikan Terakhir</td>
-                                    <td style="width: 15px; padding: 2px 0; vertical-align: top;">:</td>
-                                    <td style="padding: 2px 0; vertical-align: top;"><span id="pv-pendidikan">[Pendidikan Terakhir]</span></td>
+                                    <td style="width: 160px; padding: 3px 0; vertical-align: top;">5. Pendidikan Terakhir</td>
+                                    <td style="width: 15px; padding: 3px 0; vertical-align: top;">:</td>
+                                    <td style="padding: 3px 0; vertical-align: top;"><span id="pv-pendidikan">[Pendidikan Terakhir]</span></td>
                                 </tr>
                                 <tr>
-                                    <td style="width: 160px; padding: 2px 0; vertical-align: top;">6. No. Telepon / HP</td>
-                                    <td style="width: 15px; padding: 2px 0; vertical-align: top;">:</td>
-                                    <td style="padding: 2px 0; vertical-align: top;"><span id="pv-phone">-</span></td>
+                                    <td style="width: 160px; padding: 3px 0; vertical-align: top;">6. No. Telepon / HP</td>
+                                    <td style="width: 15px; padding: 3px 0; vertical-align: top;">:</td>
+                                    <td style="padding: 3px 0; vertical-align: top;"><span id="pv-phone">-</span></td>
                                 </tr>
                             </table>
 
                             <!-- Paragraf Permohonan -->
-                            <div style="margin-bottom: 10px; text-align: justify; line-height: 1.4;">
+                            <div style="margin-bottom: 12px; text-align: justify; line-height: 1.45;">
                                 <p style="margin: 0;">
                                     Dengan ini saya bermaksud untuk mengajukan permohonan kepada Bapak/Ibu, untuk dapat diterima menjadi pegawai kontrak di lingkup Dinas Kesehatan
                                 </p>
                             </div>
 
                             <!-- Paragraf Pertimbangan & Lampiran List -->
-                            <div style="margin-bottom: 10px;">
-                                <p style="margin: 0 0 4px 0;">Sebagai bahan pertimbangan Bapak/Ibu, bersama surat ini saya lampirkan:</p>
-                                <ol id="pv-attachmentList" class="list-decimal list-inside" style="padding-left: 16px; margin: 0; line-height: 1.35;">
+                            <div style="margin-bottom: 12px;">
+                                <p style="margin: 0 0 6px 0;">Sebagai bahan pertimbangan Bapak/Ibu, bersama surat ini saya lampirkan:</p>
+                                <ol id="pv-attachmentList" class="list-decimal list-inside" style="padding-left: 16px; margin: 0; line-height: 1.4;">
                                     <!-- Dynamic Rendered Attachments -->
                                 </ol>
                             </div>
 
                             <!-- Paragraf Penutup -->
-                            <div style="margin-bottom: 12px; text-align: justify; line-height: 1.4;">
+                            <div style="margin-bottom: 14px; text-align: justify; line-height: 1.45;">
                                 <p style="margin: 0;">Demikian surat lamaran kerja ini saya sampaikan. Atas perhatian dan kesempatan yang Bapak/Ibu berikan, saya ucapkan terima kasih.</p>
                             </div>
 
-                            <!-- Tanda Tangan Alami (Unbolded & No Underline) -->
-                            <div style="margin-top: 24px; margin-left: auto; margin-right: 0; width: 220px; text-align: center;">
+                            <!-- Tanda Tangan Alami -->
+                            <div style="margin-top: 28px; margin-left: auto; margin-right: 0; width: 220px; text-align: center;">
                                 <p style="margin: 0;">Hormat saya,</p>
-                                <div style="height: 70px;"></div>
+                                <div style="height: 80px;"></div>
                                 <p id="pv-namaTtd" style="margin: 0; color: #000000;">[Nama Lengkap]</p>
                             </div>
 
                         </div>
 
-                        <!-- HALAMAN 2: SURAT PERNYATAAN TENAGA KERJA -->
-                        <div id="statementPaper" class="a4-paper shadow-2xl rounded-sm">
+                        <!-- HALAMAN 2: SURAT PERNYATAAN TENAGA KERJA (F4) -->
+                        <div id="statementPaper" class="f4-paper shadow-2xl rounded-sm">
                             <!-- Judul Surat Pernyataan -->
-                            <div style="text-align: center; margin-bottom: 14px; padding-top: 4px;">
+                            <div style="text-align: center; margin-bottom: 16px; padding-top: 4px;">
                                 <h2 style="font-size: 11pt; font-weight: bold; text-transform: uppercase; text-decoration: underline; margin: 0;">SURAT PERNYATAAN TENAGA KERJA</h2>
                             </div>
 
                             <!-- Sub-header Data Diri -->
-                            <div style="margin-bottom: 8px;">
+                            <div style="margin-bottom: 10px;">
                                 <p style="margin: 0;">Yang bertanda tangan di bawah ini:</p>
                             </div>
 
                             <!-- Data Diri Pernyataan List -->
-                            <table style="width: 100%; border-collapse: collapse; margin-left: 12px; margin-bottom: 12px; font-size: 11pt;">
+                            <table style="width: 100%; border-collapse: collapse; margin-left: 12px; margin-bottom: 14px; font-size: 11pt;">
                                 <tr>
-                                    <td style="width: 180px; padding: 2px 0; vertical-align: top; font-weight: bold;">Nama Lengkap</td>
-                                    <td style="width: 15px; padding: 2px 0; vertical-align: top;">:</td>
-                                    <td style="padding: 2px 0; vertical-align: top;"><span id="sp-nama">[Nama Lengkap]</span></td>
+                                    <td style="width: 180px; padding: 3px 0; vertical-align: top; font-weight: bold;">Nama Lengkap</td>
+                                    <td style="width: 15px; padding: 3px 0; vertical-align: top;">:</td>
+                                    <td style="padding: 3px 0; vertical-align: top;"><span id="sp-nama">[Nama Lengkap]</span></td>
                                 </tr>
                                 <tr>
-                                    <td style="width: 180px; padding: 2px 0; vertical-align: top; font-weight: bold;">NIK</td>
-                                    <td style="width: 15px; padding: 2px 0; vertical-align: top;">:</td>
-                                    <td style="padding: 2px 0; vertical-align: top;"><span id="sp-nik">[Nomor Induk Kependudukan]</span></td>
+                                    <td style="width: 180px; padding: 3px 0; vertical-align: top; font-weight: bold;">NIK</td>
+                                    <td style="width: 15px; padding: 3px 0; vertical-align: top;">:</td>
+                                    <td style="padding: 3px 0; vertical-align: top;"><span id="sp-nik">[Nomor Induk Kependudukan]</span></td>
                                 </tr>
                                 <tr>
-                                    <td style="width: 180px; padding: 2px 0; vertical-align: top; font-weight: bold;">Tempat, Tanggal Lahir</td>
-                                    <td style="width: 15px; padding: 2px 0; vertical-align: top;">:</td>
-                                    <td style="padding: 2px 0; vertical-align: top;"><span id="sp-ttl">[Tempat, Tanggal Lahir]</span></td>
+                                    <td style="width: 180px; padding: 3px 0; vertical-align: top; font-weight: bold;">Tempat, Tanggal Lahir</td>
+                                    <td style="width: 15px; padding: 3px 0; vertical-align: top;">:</td>
+                                    <td style="padding: 3px 0; vertical-align: top;"><span id="sp-ttl">[Tempat, Tanggal Lahir]</span></td>
                                 </tr>
                                 <tr>
-                                    <td style="width: 180px; padding: 2px 0; vertical-align: top; font-weight: bold;">Alamat Lengkap</td>
-                                    <td style="width: 15px; padding: 2px 0; vertical-align: top;">:</td>
-                                    <td style="padding: 2px 0; vertical-align: top;"><span id="sp-alamat">[Alamat Lengkap]</span></td>
+                                    <td style="width: 180px; padding: 3px 0; vertical-align: top; font-weight: bold;">Alamat Lengkap</td>
+                                    <td style="width: 15px; padding: 3px 0; vertical-align: top;">:</td>
+                                    <td style="padding: 3px 0; vertical-align: top;"><span id="sp-alamat">[Alamat Lengkap]</span></td>
                                 </tr>
                                 <tr>
-                                    <td style="width: 180px; padding: 2px 0; vertical-align: top; font-weight: bold;">No. Telepon / HP</td>
-                                    <td style="width: 15px; padding: 2px 0; vertical-align: top;">:</td>
-                                    <td style="padding: 2px 0; vertical-align: top;"><span id="sp-phone">-</span></td>
+                                    <td style="width: 180px; padding: 3px 0; vertical-align: top; font-weight: bold;">No. Telepon / HP</td>
+                                    <td style="width: 15px; padding: 3px 0; vertical-align: top;">:</td>
+                                    <td style="padding: 3px 0; vertical-align: top;"><span id="sp-phone">-</span></td>
                                 </tr>
                             </table>
 
                             <!-- Kalimat Pernyataan & Poin-poin -->
-                            <div style="margin-bottom: 12px; text-align: justify; line-height: 1.4;">
-                                <p style="margin: 0 0 6px 0;">Dengan ini menyatakan dengan sesungguhnya bahwa saya:</p>
-                                <ol class="list-decimal list-outside" style="padding-left: 20px; margin: 0; line-height: 1.35;">
-                                    <li style="padding-left: 4px; margin-bottom: 3px;">
+                            <div style="margin-bottom: 14px; text-align: justify; line-height: 1.45;">
+                                <p style="margin: 0 0 8px 0;">Dengan ini menyatakan dengan sesungguhnya bahwa saya:</p>
+                                <ol class="list-decimal list-outside" style="padding-left: 20px; margin: 0; line-height: 1.4;">
+                                    <li style="padding-left: 4px; margin-bottom: 5px;">
                                         <strong>Bebas Narkoba:</strong> Tidak sedang atau pernah mengonsumsi, menyimpan, maupun mengedarkan Narkotika, Psikotropika, dan Zat Adiktif lainnya (NAPZA).
                                     </li>
-                                    <li style="padding-left: 4px; margin-bottom: 3px;">
+                                    <li style="padding-left: 4px; margin-bottom: 5px;">
                                         <strong>Rekam Jejak Hukum:</strong> Tidak pernah atau tidak sedang terlibat dalam tindakan kriminal maupun tindak pidana hukum apa pun.
                                     </li>
-                                    <li style="padding-left: 4px; margin-bottom: 3px;">
+                                    <li style="padding-left: 4px; margin-bottom: 5px;">
                                         <strong>Kebenaran Dokumen:</strong> Seluruh data, dokumen, serta informasi yang saya berikan kepada perusahaan adalah benar, sah, dan sesuai dengan kondisi asli.
                                     </li>
-                                    <li style="padding-left: 4px; margin-bottom: 3px;">
+                                    <li style="padding-left: 4px; margin-bottom: 5px;">
                                         <strong>Kepatuhan Aturan:</strong> Bersedia mematuhi seluruh peraturan, kode etik, serta ketentuan yang berlaku di Lingkungan Dinas Kesehatan.
                                     </li>
-                                    <li style="padding-left: 4px; margin-bottom: 3px;">
+                                    <li style="padding-left: 4px; margin-bottom: 5px;">
                                         <strong>Keterikatan Kerja:</strong> Tidak sedang terikat kontrak kerja atau hubungan dinas dengan instansi/perusahaan lain yang dapat mengganggu pelaksanaan tugas.
                                     </li>
                                 </ol>
                             </div>
 
                             <!-- Paragraf Penutup Pernyataan -->
-                            <div style="margin-bottom: 12px; text-align: justify; line-height: 1.4;">
+                            <div style="margin-bottom: 14px; text-align: justify; line-height: 1.45;">
                                 <p style="margin: 0;">Demikian surat pernyataan ini saya buat dengan sebenarnya tanpa ada paksaan dari pihak mana pun. Apabila di kemudian hari terbukti pernyataan ini tidak benar, saya bersedia menerima sanksi sesuai dengan hukum dan ketentuan yang berlaku.</p>
                             </div>
 
-                            <!-- Tanda Tangan Alami Halaman 2 (Unbolded & No Underline) -->
-                            <div style="margin-top: 24px; margin-left: auto; margin-right: 0; width: 220px; text-align: center;">
+                            <!-- Tanda Tangan Alami Halaman 2 -->
+                            <div style="margin-top: 28px; margin-left: auto; margin-right: 0; width: 220px; text-align: center;">
                                 <p id="sp-tempatTanggal" style="margin: 0;">Barabai, 12 Oktober 2026</p>
                                 <p style="margin: 0;">Yang membuat pernyataan,</p>
-                                <div style="height: 70px;"></div>
+                                <div style="height: 80px;"></div>
                                 <p id="sp-namaTtd" style="margin: 0; color: #000000;">[Nama Lengkap]</p>
                             </div>
 
@@ -622,7 +621,6 @@
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // CONFIGURATION PERMANEN: URL Google Apps Script Web App
         const DEFAULT_SHEETS_URL = "https://script.google.com/macros/s/AKfycbzX0epwj1vfI_ac0uRt58pH3lGnGww4-w3WevvfQ64SFSCfjqU1UdKGZsOcn3YdUM958Q/exec"; 
 
         window.getActiveWebhookUrl = function() {
@@ -672,7 +670,7 @@
                 }
             });
 
-            const papers = document.querySelectorAll('.a4-paper');
+            const papers = document.querySelectorAll('.f4-paper');
             let isResetting = false;
 
             const observer = new MutationObserver((mutations) => {
@@ -1286,7 +1284,7 @@
             const nama = document.getElementById('namaPelamar')?.value.trim() || 'Pelamar';
             const cleanName = nama.replace(/[^a-zA-Z0-9]+/g, '_').replace(/^_+|_+$/g, '');
 
-            showToast('Menyiapkan file PDF resmi (2 Halaman Presisi)...', 'info');
+            showToast('Menyiapkan file PDF F4 resmi (2 Halaman Presisi)...', 'info');
 
             const page1 = document.getElementById('letterPaper');
             const page2 = document.getElementById('statementPaper');
@@ -1303,10 +1301,11 @@
                     throw new Error("Pustaka PDF/Canvas belum siap.");
                 }
 
+                // Ukuran Kertas F4 Standard: 215mm x 330mm
                 const pdf = new JsPDFClass({
                     orientation: 'portrait',
                     unit: 'mm',
-                    format: 'a4',
+                    format: [215, 330],
                     compress: true
                 });
 
@@ -1315,25 +1314,32 @@
                     useCORS: true,
                     logging: false,
                     backgroundColor: '#ffffff',
-                    windowWidth: 1200,
                     scrollX: 0,
                     scrollY: 0
                 };
 
-                // 1. Capture Halaman 1 secara independen
+                // Remove shadow temporarily for accurate clean capture
+                page1.style.boxShadow = 'none';
+                page2.style.boxShadow = 'none';
+
+                // 1. Capture Halaman 1 secara independen ke slot F4 (215 x 330 mm)
                 const canvas1 = await html2canvas(page1, canvasOpts);
                 const imgData1 = canvas1.toDataURL('image/jpeg', 0.98);
-                pdf.addImage(imgData1, 'JPEG', 0, 0, 210, 297);
+                pdf.addImage(imgData1, 'JPEG', 0, 0, 215, 330);
 
-                // 2. Tambah Halaman Baru & Capture Halaman 2 secara independen
-                pdf.addPage('a4', 'portrait');
+                // 2. Tambah Halaman Baru & Capture Halaman 2 secara independen ke slot F4 (215 x 330 mm)
+                pdf.addPage([215, 330], 'portrait');
                 const canvas2 = await html2canvas(page2, canvasOpts);
                 const imgData2 = canvas2.toDataURL('image/jpeg', 0.98);
-                pdf.addImage(imgData2, 'JPEG', 0, 0, 210, 297);
+                pdf.addImage(imgData2, 'JPEG', 0, 0, 215, 330);
+
+                // Restore shadows
+                page1.style.boxShadow = '';
+                page2.style.boxShadow = '';
 
                 // 3. Simpan File PDF
-                pdf.save(`Surat_Lamaran_dan_Pernyataan_${cleanName}.pdf`);
-                showToast('Dokumen PDF berhasil diunduh!');
+                pdf.save(`Surat_Lamaran_dan_Pernyataan_F4_${cleanName}.pdf`);
+                showToast('Dokumen PDF F4 berhasil diunduh!');
             } catch (err) {
                 console.error("PDF engine error:", err);
                 showToast('Gagal mengunduh PDF. Mengalihkan ke dialog cetak...', 'error');
