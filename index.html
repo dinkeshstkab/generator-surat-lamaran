@@ -64,11 +64,12 @@
             background: #94a3b8;
         }
 
-        /* Paper Preview Styling (Exact A4 Standard: 210mm x 295mm) */
+        /* Paper Preview Styling (Exact A4 Standard: 210mm x 297mm) */
         .a4-paper {
             width: 210mm;
-            height: 295mm !important;
-            max-height: 295mm !important;
+            min-height: 297mm;
+            height: 297mm !important;
+            max-height: 297mm !important;
             padding: 12mm 18mm 12mm 18mm;
             margin: 0 auto;
             background-color: #ffffff !important;
@@ -87,24 +88,6 @@
         /* Ensure all child text within paper is explicitly black */
         .a4-paper * {
             color: #000000 !important;
-        }
-
-        /* Temp class when generating PDF to eliminate space gaps */
-        .pdf-export-mode {
-            gap: 0 !important;
-            margin: 0 !important;
-            padding: 0 !important;
-        }
-        .pdf-export-mode > div, .pdf-export-mode .a4-paper {
-            margin-top: 0 !important;
-            margin-bottom: 0 !important;
-            box-shadow: none !important;
-            page-break-after: always !important;
-            break-after: page !important;
-        }
-        .pdf-export-mode .a4-paper:last-child {
-            page-break-after: avoid !important;
-            break-after: avoid !important;
         }
 
         /* CSS Print Stylesheet for Exact 2-Page Print */
@@ -145,8 +128,8 @@
                 margin: 0 !important;
                 padding: 12mm 18mm 12mm 18mm !important;
                 width: 210mm !important;
-                height: 295mm !important;
-                max-height: 295mm !important;
+                height: 297mm !important;
+                max-height: 297mm !important;
                 box-sizing: border-box !important;
                 overflow: hidden !important;
                 page-break-after: always !important;
@@ -426,7 +409,7 @@
                             </div>
 
                             <!-- Tanda Tangan Alami (Unbolded & No Underline) -->
-                            <div style="margin-top: 20px; margin-left: auto; margin-right: 0; width: 220px; text-align: center;">
+                            <div style="margin-top: 24px; margin-left: auto; margin-right: 0; width: 220px; text-align: center;">
                                 <p style="margin: 0;">Hormat saya,</p>
                                 <div style="height: 70px;"></div>
                                 <p id="pv-namaTtd" style="margin: 0; color: #000000;">[Nama Lengkap]</p>
@@ -435,7 +418,7 @@
                         </div>
 
                         <!-- HALAMAN 2: SURAT PERNYATAAN TENAGA KERJA -->
-                        <div id="statementPaper" class="a4-paper shadow-2xl rounded-sm page-break">
+                        <div id="statementPaper" class="a4-paper shadow-2xl rounded-sm">
                             <!-- Judul Surat Pernyataan -->
                             <div style="text-align: center; margin-bottom: 14px; padding-top: 4px;">
                                 <h2 style="font-size: 11pt; font-weight: bold; text-transform: uppercase; text-decoration: underline; margin: 0;">SURAT PERNYATAAN TENAGA KERJA</h2>
@@ -503,7 +486,7 @@
                             </div>
 
                             <!-- Tanda Tangan Alami Halaman 2 (Unbolded & No Underline) -->
-                            <div style="margin-top: 20px; margin-left: auto; margin-right: 0; width: 220px; text-align: center;">
+                            <div style="margin-top: 24px; margin-left: auto; margin-right: 0; width: 220px; text-align: center;">
                                 <p id="sp-tempatTanggal" style="margin: 0;">Barabai, 12 Oktober 2026</p>
                                 <p style="margin: 0;">Yang membuat pernyataan,</p>
                                 <div style="height: 70px;"></div>
@@ -1305,41 +1288,56 @@
 
             showToast('Menyiapkan file PDF resmi (2 Halaman Presisi)...', 'info');
 
-            const pdfContainer = document.getElementById('pdfContainer');
-            if (!pdfContainer) {
+            const page1 = document.getElementById('letterPaper');
+            const page2 = document.getElementById('statementPaper');
+
+            if (!page1 || !page2) {
                 showToast('Halaman dokumen tidak ditemukan!', 'error');
                 return;
             }
 
-            // Enable PDF capture mode
-            pdfContainer.classList.add('pdf-export-mode');
+            try {
+                const JsPDFClass = (window.jspdf && window.jspdf.jsPDF) ? window.jspdf.jsPDF : window.jsPDF;
+                
+                if (!JsPDFClass || typeof html2canvas === 'undefined') {
+                    throw new Error("Pustaka PDF/Canvas belum siap.");
+                }
 
-            const opt = {
-                margin:       0,
-                filename:     `Surat_Lamaran_dan_Pernyataan_${cleanName}.pdf`,
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { 
-                    scale: 2, 
-                    useCORS: true, 
+                const pdf = new JsPDFClass({
+                    orientation: 'portrait',
+                    unit: 'mm',
+                    format: 'a4',
+                    compress: true
+                });
+
+                const canvasOpts = {
+                    scale: 2,
+                    useCORS: true,
                     logging: false,
                     backgroundColor: '#ffffff',
                     windowWidth: 1200,
                     scrollX: 0,
                     scrollY: 0
-                },
-                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
-                pagebreak:    { mode: ['css', 'legacy'] }
-            };
+                };
 
-            try {
-                await html2pdf().set(opt).from(pdfContainer).save();
+                // 1. Capture Halaman 1 secara independen
+                const canvas1 = await html2canvas(page1, canvasOpts);
+                const imgData1 = canvas1.toDataURL('image/jpeg', 0.98);
+                pdf.addImage(imgData1, 'JPEG', 0, 0, 210, 297);
+
+                // 2. Tambah Halaman Baru & Capture Halaman 2 secara independen
+                pdf.addPage('a4', 'portrait');
+                const canvas2 = await html2canvas(page2, canvasOpts);
+                const imgData2 = canvas2.toDataURL('image/jpeg', 0.98);
+                pdf.addImage(imgData2, 'JPEG', 0, 0, 210, 297);
+
+                // 3. Simpan File PDF
+                pdf.save(`Surat_Lamaran_dan_Pernyataan_${cleanName}.pdf`);
                 showToast('Dokumen PDF berhasil diunduh!');
             } catch (err) {
                 console.error("PDF engine error:", err);
                 showToast('Gagal mengunduh PDF. Mengalihkan ke dialog cetak...', 'error');
                 setTimeout(() => window.print(), 500);
-            } finally {
-                pdfContainer.classList.remove('pdf-export-mode');
             }
         }
         window.downloadPDF = downloadPDF;
