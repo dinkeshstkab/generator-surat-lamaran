@@ -354,7 +354,7 @@
 
                             <!-- Sub-header Data Diri -->
                             <div class="mb-2">
-                                <p>Saya yang bertanda tangan dibawah ini:</p>
+                                <p>Saya yang bertanda tangan dibawah ini::</p>
                             </div>
 
                             <!-- Data Diri Table List -->
@@ -363,21 +363,21 @@
                                     <div class="col-span-4 sm:col-span-3">1. Nama Lengkap</div>
                                     <div class="col-span-8 sm:col-span-9 flex">
                                         <span class="mr-2">:</span>
-                                        <span id="pv-nama" class="font-bold">Fakruraji</span>
+                                        <span id="pv-nama">[Nama Lengkap]</span>
                                     </div>
                                 </div>
                                 <div class="grid grid-cols-12">
                                     <div class="col-span-4 sm:col-span-3">2. Tempat, Tgl Lahir</div>
                                     <div class="col-span-8 sm:col-span-9 flex">
                                         <span class="mr-2">:</span>
-                                        <span id="pv-ttl">Barabai, 6 Desember 1996</span>
+                                        <span id="pv-ttl">[Tempat, Tanggal Lahir]</span>
                                     </div>
                                 </div>
                                 <div class="grid grid-cols-12">
                                     <div class="col-span-4 sm:col-span-3">3. Alamat Lengkap</div>
                                     <div class="col-span-8 sm:col-span-9 flex">
                                         <span class="mr-2">:</span>
-                                        <span id="pv-alamat">Jl. Benawa Tengah Komplek Guntur Permai, RT 006/ RW 004</span>
+                                        <span id="pv-alamat">[Alamat Lengkap]</span>
                                     </div>
                                 </div>
                                 <div class="grid grid-cols-12">
@@ -391,14 +391,14 @@
                                     <div class="col-span-4 sm:col-span-3">5. Pendidikan Terakhir</div>
                                     <div class="col-span-8 sm:col-span-9 flex">
                                         <span class="mr-2">:</span>
-                                        <span id="pv-pendidikan">S1</span>
+                                        <span id="pv-pendidikan">[Pendidikan Terakhir]</span>
                                     </div>
                                 </div>
                                 <div class="grid grid-cols-12">
                                     <div class="col-span-4 sm:col-span-3">6. No. Telepon / HP</div>
                                     <div class="col-span-8 sm:col-span-9 flex">
                                         <span class="mr-2">:</span>
-                                        <span id="pv-phone"></span>
+                                        <span id="pv-phone">-</span>
                                     </div>
                                 </div>
                             </div>
@@ -428,7 +428,7 @@
                                 <div class="text-center w-60">
                                     <p>Hormat saya,</p>
                                     <div class="h-24"></div>
-                                    <p id="pv-namaTtd" class="text-slate-900">Fakruraji</p>
+                                    <p id="pv-namaTtd" class="text-slate-900">[Nama Lengkap]</p>
                                 </div>
                             </div>
 
@@ -452,7 +452,7 @@
                                     <div class="col-span-5 sm:col-span-4 font-medium">Nama Lengkap</div>
                                     <div class="col-span-7 sm:col-span-8 flex">
                                         <span class="mr-2">:</span>
-                                        <span id="sp-nama" class="font-bold">Fakruraji</span>
+                                        <span id="sp-nama">[Nama Lengkap]</span>
                                     </div>
                                 </div>
                                 <div class="grid grid-cols-12">
@@ -466,21 +466,21 @@
                                     <div class="col-span-5 sm:col-span-4 font-medium">Tempat, Tanggal Lahir</div>
                                     <div class="col-span-7 sm:col-span-8 flex">
                                         <span class="mr-2">:</span>
-                                        <span id="sp-ttl">Barabai, 6 Desember 1996</span>
+                                        <span id="sp-ttl">[Tempat, Tanggal Lahir]</span>
                                     </div>
                                 </div>
                                 <div class="grid grid-cols-12">
                                     <div class="col-span-5 sm:col-span-4 font-medium">Alamat Lengkap</div>
                                     <div class="col-span-7 sm:col-span-8 flex">
                                         <span class="mr-2">:</span>
-                                        <span id="sp-alamat">Jl. Benawa Tengah Komplek Guntur Permai, RT 006/ RW 004</span>
+                                        <span id="sp-alamat">[Alamat Lengkap]</span>
                                     </div>
                                 </div>
                                 <div class="grid grid-cols-12">
                                     <div class="col-span-5 sm:col-span-4 font-medium">No. Telepon / HP</div>
                                     <div class="col-span-7 sm:col-span-8 flex">
                                         <span class="mr-2">:</span>
-                                        <span id="sp-phone"></span>
+                                        <span id="sp-phone">-</span>
                                     </div>
                                 </div>
                             </div>
@@ -518,7 +518,7 @@
                                     <p id="sp-tempatTanggal">Barabai, 12 Oktober 2026</p>
                                     <p>Yang membuat pernyataan,</p>
                                     <div class="h-24"></div>
-                                    <p id="sp-namaTtd" class="text-slate-900">Fakruraji</p>
+                                    <p id="sp-namaTtd" class="text-slate-900">[Nama Lengkap]</p>
                                 </div>
                             </div>
 
@@ -1209,14 +1209,14 @@
             
             const autoLampiran = getAutoJumlahLampiran();
 
-            const namaPelamar = document.getElementById('namaPelamar')?.value || 'Fakruraji';
-            const nikPelamar = document.getElementById('nikPelamar')?.value || '[Nomor Induk Kependudukan]';
+            const namaPelamar = document.getElementById('namaPelamar')?.value.trim() || '[Nama Lengkap]';
+            const nikPelamar = document.getElementById('nikPelamar')?.value.trim() || '[Nomor Induk Kependudukan]';
             
             const tempatLahir = document.getElementById('tempatLahirPelamar')?.value.trim() || '';
             const tglLahirRaw = document.getElementById('tglLahirPelamar')?.value || '';
             const tglLahirFormatted = formatIndonesianDate(tglLahirRaw);
 
-            let ttlPelamar = 'Barabai, 6 Desember 1996';
+            let ttlPelamar = '[Tempat, Tanggal Lahir]';
             if (tempatLahir || tglLahirFormatted) {
                 if (tempatLahir && tglLahirFormatted) {
                     ttlPelamar = `${tempatLahir}, ${tglLahirFormatted}`;
@@ -1227,10 +1227,10 @@
                 }
             }
 
-            const alamatPelamar = document.getElementById('alamatPelamar')?.value || 'Jl. Benawa Tengah Komplek Guntur Permai, RT 006/ RW 004';
+            const alamatPelamar = document.getElementById('alamatPelamar')?.value.trim() || '[Alamat Lengkap]';
             const jkPelamar = document.getElementById('jkPelamar')?.value || 'Laki-laki';
-            const pendidikanPelamar = document.getElementById('pendidikanPelamar')?.value || 'S1';
-            const phonePelamar = document.getElementById('phonePelamar')?.value || '';
+            const pendidikanPelamar = document.getElementById('pendidikanPelamar')?.value.trim() || '[Pendidikan Terakhir]';
+            const phonePelamar = document.getElementById('phonePelamar')?.value.trim() || '-';
 
             if (document.getElementById('pv-tempatTanggal')) document.getElementById('pv-tempatTanggal').innerText = `${tempatSurat}, ${tanggalFormatted}`;
             if (document.getElementById('pv-jumlahLampiran')) document.getElementById('pv-jumlahLampiran').innerText = autoLampiran;
@@ -1376,5 +1376,4 @@
             }, 3000);
         }
     </script>
-</body>
-</html>
+<!-- ... existing code -->
