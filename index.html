@@ -93,7 +93,7 @@
             color: #000000 !important;
         }
 
-        /* CSS Print Stylesheet for 100% 1:1 Perfect 2-Page Print */
+        /* CSS Print Stylesheet for Exact 2-Page Print */
         @media print {
             @page {
                 size: A4 portrait;
@@ -104,7 +104,7 @@
                 padding: 0 !important;
                 margin: 0 !important;
                 width: 210mm !important;
-                height: 100% !important;
+                height: auto !important;
                 overflow: visible !important;
             }
             .no-print {
@@ -128,7 +128,7 @@
                 box-sizing: border-box !important;
                 overflow: hidden !important;
                 
-                /* Force Exact Page Breaks */
+                /* Force Exact Page Breaks for 2 pages max */
                 page-break-after: always !important;
                 break-after: page !important;
                 page-break-inside: avoid !important;
@@ -141,8 +141,7 @@
             .a4-paper:last-child {
                 page-break-after: avoid !important;
                 break-after: avoid !important;
-                page-break-after: auto !important;
-                break-after: auto !important;
+                page-break-after: none !important;
             }
         }
     </style>
@@ -424,12 +423,12 @@
                                 <p>Demikian surat lamaran kerja ini saya sampaikan. Atas perhatian dan kesempatan yang Bapak/Ibu berikan, saya ucapkan terima kasih.</p>
                             </div>
 
-                            <!-- Tanda Tangan Alami Mengikuti Alur Surat (Posisi Presisi di Bawah Penutup) -->
+                            <!-- Tanda Tangan Alami Mengikuti Alur Surat (Tidak Bold & Tidak Garis Bawah) -->
                             <div class="flex justify-end mt-10">
                                 <div class="text-center w-60">
                                     <p>Hormat saya,</p>
                                     <div class="h-24"></div>
-                                    <p id="pv-namaTtd" class="font-bold underline decoration-1 text-slate-900">Fakruraji</p>
+                                    <p id="pv-namaTtd" class="text-slate-900">Fakruraji</p>
                                 </div>
                             </div>
 
@@ -438,7 +437,7 @@
                         <!-- HALAMAN 2: SURAT PERNYATAAN TENAGA KERJA -->
                         <div id="statementPaper" class="a4-paper shadow-2xl rounded-sm page-break">
                             <!-- Judul Surat Pernyataan -->
-                            <div class="text-center mb-6 pt-2">
+                            <div class="text-center mb-8 pt-4">
                                 <h2 class="text-base font-bold tracking-wide uppercase underline decoration-1">SURAT PERNYATAAN TENAGA KERJA</h2>
                             </div>
 
@@ -513,13 +512,13 @@
                                 <p>Demikian surat pernyataan ini saya buat dengan sebenarnya tanpa ada paksaan dari pihak mana pun. Apabila di kemudian hari terbukti pernyataan ini tidak benar, saya bersedia menerima sanksi sesuai dengan hukum dan ketentuan yang berlaku.</p>
                             </div>
 
-                            <!-- Tanda Tangan Alami Halaman 2 -->
+                            <!-- Tanda Tangan Alami Halaman 2 (Tidak Bold & Tidak Garis Bawah) -->
                             <div class="flex justify-end mt-10">
                                 <div class="text-center w-60">
                                     <p id="sp-tempatTanggal">Barabai, 12 Oktober 2026</p>
                                     <p>Yang membuat pernyataan,</p>
                                     <div class="h-24"></div>
-                                    <p id="sp-namaTtd" class="font-bold underline decoration-1 text-slate-900">Fakruraji</p>
+                                    <p id="sp-namaTtd" class="text-slate-900">Fakruraji</p>
                                 </div>
                             </div>
 
@@ -1340,7 +1339,7 @@
                     letterRendering: true
                 },
                 jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
-                pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
+                pagebreak:    { mode: ['avoid-all', 'css'] }
             };
 
             html2pdf().set(opt).from(element).save().then(() => {
