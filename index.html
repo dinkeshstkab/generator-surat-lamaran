@@ -85,10 +85,11 @@
 
         /* CSS Print Stylesheet for direct printing */
         @media print {
-            html, body, main, div {
+            html, body {
                 background: white !important;
                 padding: 0 !important;
                 margin: 0 !important;
+                width: 210mm !important;
             }
             .no-print {
                 display: none !important;
@@ -103,6 +104,7 @@
             }
             .a4-paper {
                 box-shadow: none !important;
+                margin: 0 !important;
                 padding: 12mm 15mm 12mm 20mm !important;
                 width: 210mm !important;
                 height: 296.5mm !important; /* Presisi tinggi untuk mencegah overflow sub-piksel */
@@ -160,7 +162,7 @@
     <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
             
-            <!-- LEFT COLUMN: FORM INPUTS (Lg 4 Cols) -->
+            <!-- LEFT COLUMN: FORM INPUTS (Lg 4 Cols - Expanded preview space) -->
             <div class="lg:col-span-4 space-y-6 no-print">
                 
                 <!-- Notice Banner -->
@@ -286,7 +288,7 @@
 
             </div>
 
-            <!-- RIGHT COLUMN: LIVE PREVIEW (Lg 8 Cols) -->
+            <!-- RIGHT COLUMN: LIVE PREVIEW (Lg 8 Cols - Wider workspace) -->
             <div class="lg:col-span-8 flex flex-col items-center">
                 
                 <div class="w-full mb-3 flex items-center justify-between no-print px-1">
@@ -337,7 +339,7 @@
 
                                 <!-- Sub-header Data Diri -->
                                 <div class="mb-1.5">
-                                    <p>Saya yang bertanda tangan dibawah ini:</p>
+                                    <p>Saya yang bertanda tangan dibawah ini::</p>
                                 </div>
 
                                 <!-- Data Diri Table List -->
@@ -1294,7 +1296,16 @@
             showToast('Form telah dikosongkan.');
         }
 
-        function downloadPDF() {
+        async function downloadPDF() {
+            // Otomatis simpan data ke database sebelum mengunduh PDF
+            try {
+                if (typeof window.saveToDatabase === 'function') {
+                    await window.saveToDatabase();
+                }
+            } catch (err) {
+                console.error("Save before PDF download error:", err);
+            }
+
             const element = document.getElementById('pdfContainer');
             const nama = document.getElementById('namaPelamar')?.value.trim() || 'Pelamar';
             const cleanName = nama.replace(/[^a-zA-Z0-9]+/g, '_').replace(/^_+|_+$/g, '');
@@ -1331,6 +1342,7 @@
                 setTimeout(() => window.print(), 800);
             });
         }
+        window.downloadPDF = downloadPDF;
 
         function showToast(message, type = 'success') {
             const toast = document.getElementById('toast');
